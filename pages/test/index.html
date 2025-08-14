@@ -6,12 +6,8 @@
     <title>Digital Arch - ITのチカラで社会への架け橋となる</title>
     <meta name="description" content="Digital Archは、Webデザイン、グラフィックデザイン、デジタルマーケティング、ブランディング、SNS管理などの包括的なITソリューションを提供します。">
     
-    <!-- 最先端Web技術スタック -->
+    <!-- GSAP for smooth animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/3.0.1/simplex-noise.min.js"></script>
     
     <style>
         * {
@@ -38,38 +34,7 @@
             /* Wave Animation Properties */
             --mouse-x: 50%;
             --mouse-y: 50%;
-            --mouse-angle: 0deg;
             --wave-intensity: 1;
-            --wave-speed: 1;
-            --ripple-scale: 1;
-            --ripple-opacity: 0.6;
-            --liquid-distortion: 0;
-            --blur-amount: 0px;
-            --brightness: 1;
-        }
-        
-        @property --wave-intensity {
-            syntax: '<number>';
-            initial-value: 1;
-            inherits: false;
-        }
-        
-        @property --wave-speed {
-            syntax: '<number>';
-            initial-value: 1;
-            inherits: false;
-        }
-        
-        @property --ripple-scale {
-            syntax: '<number>';
-            initial-value: 1;
-            inherits: false;
-        }
-        
-        @property --liquid-distortion {
-            syntax: '<number>';
-            initial-value: 0;
-            inherits: false;
         }
         
         body {
@@ -181,55 +146,6 @@
             z-index: 0;
         }
         
-        /* WebGL Canvas */
-        #webgl-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.8;
-        }
-        
-        /* Hand Tracking Canvas */
-        #hand-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none;
-            opacity: 0.6;
-        }
-        
-        /* AI Status Indicator */
-        .ai-status {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #00ff41;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-family: 'Courier New', monospace;
-            z-index: 1000;
-            border: 1px solid #00ff41;
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
-        }
-        
-        .ai-status.active {
-            animation: aiPulse 2s infinite;
-        }
-        
-        @keyframes aiPulse {
-            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.8); }
-        }
-        
         .hero-wave {
             position: absolute;
             width: 120%;
@@ -239,10 +155,9 @@
                 rgba(99, 102, 241, calc(0.15 * var(--wave-intensity))) 25%, 
                 rgba(139, 92, 246, calc(0.1 * var(--wave-intensity))) 50%, 
                 transparent 70%);
-            filter: blur(var(--blur-amount)) brightness(var(--brightness));
-            animation: waveFlow calc(6s / var(--wave-speed)) ease-in-out infinite;
+            animation: waveFlow 6s ease-in-out infinite;
             transform-origin: var(--mouse-x) var(--mouse-y);
-            will-change: transform, filter;
+            will-change: transform;
         }
         
         .hero-wave:nth-child(2) {
@@ -267,25 +182,6 @@
             transform: scale(0.9) rotate(-30deg);
         }
         
-        /* New Ripple Layers */
-        .hero-ripple {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: conic-gradient(from var(--mouse-angle) at var(--mouse-x) var(--mouse-y), 
-                transparent 0deg,
-                rgba(79, 70, 229, calc(0.1 * var(--wave-intensity))) 60deg,
-                transparent 120deg,
-                rgba(99, 102, 241, calc(0.08 * var(--wave-intensity))) 180deg,
-                transparent 240deg,
-                rgba(139, 92, 246, calc(0.06 * var(--wave-intensity))) 300deg,
-                transparent 360deg);
-            animation: rippleRotate calc(20s / var(--wave-speed)) linear infinite;
-            opacity: var(--ripple-opacity);
-            transform: scale(var(--ripple-scale));
-            will-change: transform, opacity;
-        }
-        
         .hero-liquid {
             position: absolute;
             width: 150%;
@@ -299,23 +195,8 @@
                     rgba(99, 102, 241, calc(0.08 * var(--wave-intensity))) 0%, transparent 35%),
                 radial-gradient(circle at calc(var(--mouse-x) - 25%) calc(var(--mouse-y) + 25%), 
                     rgba(139, 92, 246, calc(0.06 * var(--wave-intensity))) 0%, transparent 30%);
-            filter: blur(calc(2px + var(--liquid-distortion) * 3px));
-            animation: liquidFlow calc(15s / var(--wave-speed)) ease-in-out infinite;
-            will-change: transform, filter;
-        }
-        
-        .hero-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(90deg, rgba(79, 70, 229, 0.03) 1px, transparent 1px),
-                linear-gradient(rgba(79, 70, 229, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            transform: perspective(1000px) rotateX(20deg);
-            animation: gridFloat 15s ease-in-out infinite;
+            animation: liquidFlow 15s ease-in-out infinite;
+            will-change: transform;
         }
         
         .hero-orbs {
@@ -361,46 +242,18 @@
         @keyframes waveFlow {
             0% {
                 transform: translateX(-20px) translateY(-15px) rotate(0deg) scaleX(1) scaleY(0.8);
-                filter: blur(0px) hue-rotate(0deg);
             }
             25% {
                 transform: translateX(15px) translateY(-25px) rotate(90deg) scaleX(1.2) scaleY(1.1);
-                filter: blur(1px) hue-rotate(45deg);
             }
             50% {
                 transform: translateX(10px) translateY(20px) rotate(180deg) scaleX(0.9) scaleY(1.3);
-                filter: blur(2px) hue-rotate(90deg);
             }
             75% {
                 transform: translateX(-15px) translateY(15px) rotate(270deg) scaleX(1.1) scaleY(0.9);
-                filter: blur(1px) hue-rotate(135deg);
             }
             100% {
                 transform: translateX(-20px) translateY(-15px) rotate(360deg) scaleX(1) scaleY(0.8);
-                filter: blur(0px) hue-rotate(180deg);
-            }
-        }
-        
-        @keyframes rippleRotate {
-            0% {
-                transform: rotate(0deg) scale(1);
-                opacity: 0.6;
-            }
-            25% {
-                transform: rotate(90deg) scale(1.1);
-                opacity: 0.8;
-            }
-            50% {
-                transform: rotate(180deg) scale(0.9);
-                opacity: 0.7;
-            }
-            75% {
-                transform: rotate(270deg) scale(1.05);
-                opacity: 0.9;
-            }
-            100% {
-                transform: rotate(360deg) scale(1);
-                opacity: 0.6;
             }
         }
         
@@ -428,15 +281,6 @@
             100% {
                 transform: translateX(0) translateY(0) rotate(360deg) skewX(0deg);
                 border-radius: 50% 60% 70% 40%;
-            }
-        }
-        
-        @keyframes gridFloat {
-            0%, 100% {
-                transform: perspective(1000px) rotateX(20deg) translateY(0px);
-            }
-            50% {
-                transform: perspective(1000px) rotateX(25deg) translateY(-10px);
             }
         }
         
@@ -549,12 +393,6 @@
             box-shadow: var(--shadow-lg);
             border: 1px solid var(--border-color);
             text-align: center;
-        }
-        
-        .hero-visual img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
         }
         
         .visual-placeholder {
@@ -955,96 +793,7 @@
             }
         }
         
-        /* Animated Background */
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-        
-        .particle {
-            position: absolute;
-            background: rgba(79, 70, 229, 0.1);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: float 6s infinite ease-in-out;
-        }
-        
-        .particle:nth-child(odd) {
-            background: rgba(99, 102, 241, 0.08);
-            animation-direction: reverse;
-        }
-        
-        .morphing-shape {
-            position: absolute;
-            background: linear-gradient(45deg, rgba(79, 70, 229, 0.1), rgba(99, 102, 241, 0.1));
-            border-radius: 50%;
-            animation: morph 8s infinite ease-in-out;
-        }
-        
-        .floating-element {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(79, 70, 229, 0.2);
-            border-radius: 50%;
-            animation: float 10s infinite ease-in-out;
-        }
-        
-        /* Keyframe Animations */
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-                opacity: 0.7;
-            }
-            25% {
-                transform: translateY(-20px) rotate(90deg);
-                opacity: 1;
-            }
-            50% {
-                transform: translateY(-40px) rotate(180deg);
-                opacity: 0.8;
-            }
-            75% {
-                transform: translateY(-20px) rotate(270deg);
-                opacity: 1;
-            }
-        }
-        
-        @keyframes morph {
-            0%, 100% {
-                border-radius: 50% 50% 50% 50%;
-                transform: rotate(0deg) scale(1);
-            }
-            25% {
-                border-radius: 60% 40% 60% 40%;
-                transform: rotate(90deg) scale(1.1);
-            }
-            50% {
-                border-radius: 40% 60% 40% 60%;
-                transform: rotate(180deg) scale(0.9);
-            }
-            75% {
-                border-radius: 60% 40% 60% 40%;
-                transform: rotate(270deg) scale(1.1);
-            }
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.8;
-            }
-            50% {
-                transform: scale(1.05);
-                opacity: 1;
-            }
-        }
-        
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -1056,22 +805,8 @@
             }
         }
         
-        /* Interactive Elements */
-        .interactive-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .interactive-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .pulse-on-hover:hover {
-            animation: pulse 2s infinite;
-        }
-        
         .fade-in {
-            animation: fadeInUp 0.8s ease-out;
+            animation: fadeInUp 0.6s ease-out;
         }
         
         .service-card:nth-child(1) { animation-delay: 0.1s; }
@@ -1080,28 +815,9 @@
         .service-card:nth-child(4) { animation-delay: 0.4s; }
         .service-card:nth-child(5) { animation-delay: 0.5s; }
         .service-card:nth-child(6) { animation-delay: 0.6s; }
-        
-        /* Cursor following effect */
-        .cursor-follower {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            background: rgba(79, 70, 229, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease;
-            mix-blend-mode: difference;
-        }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="animated-bg" id="animatedBg"></div>
-    
-    <!-- Cursor Follower -->
-    <div class="cursor-follower" id="cursorFollower"></div>
-    
     <!-- Header -->
     <header>
         <nav>
@@ -1123,23 +839,12 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <!-- AI Status Indicator -->
-        <div class="ai-status" id="ai-status">🤖 AI ENGINE OFFLINE</div>
-        
-        <!-- WebGL Fluid Simulation -->
-        <canvas id="webgl-canvas"></canvas>
-        
-        <!-- Hand Tracking Canvas -->
-        <canvas id="hand-canvas"></canvas>
-        
         <!-- Interactive Hero Background -->
         <div class="hero-bg">
             <div class="hero-liquid"></div>
-            <div class="hero-ripple"></div>
             <div class="hero-wave"></div>
             <div class="hero-wave"></div>
             <div class="hero-wave"></div>
-            <div class="hero-grid"></div>
             <div class="hero-orbs">
                 <div class="hero-orb"></div>
                 <div class="hero-orb"></div>
@@ -1247,33 +952,33 @@
                 <p>包括的なITソリューションをご提供</p>
             </div>
             <div class="services-grid">
-                <div class="service-card fade-in interactive-card">
-                    <div class="service-icon pulse-on-hover">🎨</div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🎨</div>
                     <h3>Webデザイン</h3>
                     <p>ユーザビリティとデザインを両立した、レスポンシブWebサイトの制作。最新のトレンドと技術を取り入れた魅力的なWebサイトを提供します。</p>
                 </div>
-                <div class="service-card fade-in interactive-card">
-                    <div class="service-icon pulse-on-hover">📱</div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">📱</div>
                     <h3>グラフィックデザイン</h3>
                     <p>ブランドアイデンティティから印刷物まで、視覚的インパクトのあるデザインを制作。お客様のメッセージを効果的に伝えるビジュアルを創造します。</p>
                 </div>
-                <div class="service-card fade-in interactive-card">
-                    <div class="service-icon pulse-on-hover">📈</div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">📈</div>
                     <h3>デジタルマーケティング</h3>
                     <p>SEO、SEM、SNS運用など多角的なアプローチで、お客様のオンラインプレゼンスを強化。データに基づいた戦略的なマーケティングを展開します。</p>
                 </div>
-                <div class="service-card fade-in interactive-card">
-                    <div class="service-icon pulse-on-hover">🏷️</div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🏷️</div>
                     <h3>ブランディング</h3>
                     <p>企業や商品の価値を最大化するブランド戦略の策定から実行まで。一貫したブランドメッセージでお客様の競争力を向上させます。</p>
                 </div>
-                <div class="service-card fade-in interactive-card">
-                    <div class="service-icon pulse-on-hover">💬</div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">💬</div>
                     <h3>SNS管理</h3>
                     <p>各種ソーシャルメディアプラットフォームでの戦略的な情報発信と顧客とのエンゲージメント向上。効果的なSNSマーケティングを実現します。</p>
                 </div>
-                <div class="service-card fade-in interactive-card">
-                    <div class="service-icon pulse-on-hover">⚙️</div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">⚙️</div>
                     <h3>システム開発</h3>
                     <p>お客様のビジネス要件に応じたカスタムシステムの設計・開発。効率的で安全性の高いソリューションを提供します。</p>
                 </div>
@@ -1384,97 +1089,6 @@
     </footer>
 
     <script>
-        // Create animated background particles
-        function createAnimatedBackground() {
-            const bg = document.getElementById('animatedBg');
-            const particleCount = 15;
-            
-            // Create floating particles
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                // Random size and position
-                const size = Math.random() * 60 + 20;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                
-                bg.appendChild(particle);
-            }
-            
-            // Create morphing shapes
-            for (let i = 0; i < 5; i++) {
-                const shape = document.createElement('div');
-                shape.className = 'morphing-shape';
-                
-                const size = Math.random() * 100 + 50;
-                shape.style.width = size + 'px';
-                shape.style.height = size + 'px';
-                shape.style.left = Math.random() * 100 + '%';
-                shape.style.top = Math.random() * 100 + '%';
-                shape.style.animationDelay = Math.random() * 8 + 's';
-                
-                bg.appendChild(shape);
-            }
-            
-            // Create floating elements
-            for (let i = 0; i < 8; i++) {
-                const element = document.createElement('div');
-                element.className = 'floating-element';
-                
-                const size = Math.random() * 40 + 10;
-                element.style.width = size + 'px';
-                element.style.height = size + 'px';
-                element.style.left = Math.random() * 100 + '%';
-                element.style.top = Math.random() * 100 + '%';
-                element.style.animationDelay = Math.random() * 10 + 's';
-                element.style.animationDuration = (Math.random() * 6 + 8) + 's';
-                
-                bg.appendChild(element);
-            }
-        }
-
-        // Cursor following effect
-        function initCursorFollower() {
-            const cursorFollower = document.getElementById('cursorFollower');
-            let mouseX = 0, mouseY = 0;
-            let followerX = 0, followerY = 0;
-            
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
-            
-            function animateFollower() {
-                followerX += (mouseX - followerX) * 0.1;
-                followerY += (mouseY - followerY) * 0.1;
-                
-                cursorFollower.style.left = followerX - 10 + 'px';
-                cursorFollower.style.top = followerY - 10 + 'px';
-                
-                requestAnimationFrame(animateFollower);
-            }
-            
-            animateFollower();
-            
-            // Add hover effects for interactive elements
-            document.querySelectorAll('.interactive-card, .pulse-on-hover, a, button').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    cursorFollower.style.transform = 'scale(2)';
-                    cursorFollower.style.background = 'rgba(79, 70, 229, 0.5)';
-                });
-                
-                el.addEventListener('mouseleave', () => {
-                    cursorFollower.style.transform = 'scale(1)';
-                    cursorFollower.style.background = 'rgba(79, 70, 229, 0.3)';
-                });
-            });
-        }
-
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1500,7 +1114,7 @@
             navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
 
-        // Enhanced Intersection Observer for animations
+        // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1511,17 +1125,6 @@
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
-                    
-                    // Add stagger effect for cards
-                    if (entry.target.classList.contains('service-card')) {
-                        const cards = document.querySelectorAll('.service-card');
-                        cards.forEach((card, index) => {
-                            setTimeout(() => {
-                                card.style.opacity = '1';
-                                card.style.transform = 'translateY(0)';
-                            }, index * 100);
-                        });
-                    }
                 }
             });
         }, observerOptions);
@@ -1530,75 +1133,38 @@
         document.querySelectorAll('.service-card, .skill-item, .about-text, .contact-info').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
             observer.observe(el);
         });
 
-        // Enhanced header background on scroll
+        // Header background on scroll
         window.addEventListener('scroll', function() {
             const header = document.querySelector('header');
-            const scrolled = window.scrollY;
-            
-            if (scrolled > 100) {
+            if (window.scrollY > 100) {
                 header.style.background = 'rgba(255, 255, 255, 0.98)';
-                header.style.backdropFilter = 'blur(20px)';
             } else {
                 header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.backdropFilter = 'blur(10px)';
             }
         });
 
-        // Parallax effect for background elements
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const particles = document.querySelectorAll('.particle');
-            const shapes = document.querySelectorAll('.morphing-shape');
-            
-            particles.forEach((particle, index) => {
-                const speed = 0.5 + (index * 0.1);
-                particle.style.transform = `translateY(${scrolled * speed}px)`;
-            });
-            
-            shapes.forEach((shape, index) => {
-                const speed = 0.3 + (index * 0.05);
-                shape.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
-            });
-        });
-
-        // Form submission with enhanced animation
+        // Form submission
         const contactForm = document.querySelector('form');
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Add success animation
-            const button = this.querySelector('button');
-            button.style.transform = 'scale(0.95)';
-            button.innerHTML = '送信中...';
-            
-            setTimeout(() => {
-                button.style.transform = 'scale(1)';
-                button.innerHTML = '送信完了！';
-                alert('お問い合わせありがとうございます。\n内容を確認の上、3営業日以内にご連絡させていただきます。');
-                
-                setTimeout(() => {
-                    button.innerHTML = '送信する';
-                }, 2000);
-            }, 1000);
+            alert('お問い合わせありがとうございます。\n内容を確認の上、3営業日以内にご連絡させていただきます。');
         });
 
         // GSAP-Powered Interactive Hero Background
         function initInteractiveHeroBackground() {
             if (!window.gsap) {
-                console.warn('GSAP not loaded, falling back to basic animations');
+                console.warn('GSAP not loaded, using fallback animations');
                 return;
             }
             
             const hero = document.querySelector('.hero');
             const heroWaves = document.querySelectorAll('.hero-wave');
-            const heroGrid = document.querySelector('.hero-grid');
             const heroOrbs = document.querySelectorAll('.hero-orb');
             const heroLiquid = document.querySelector('.hero-liquid');
-            const heroRipple = document.querySelector('.hero-ripple');
             
             let mouseX = 0.5;
             let mouseY = 0.5;
@@ -1607,22 +1173,7 @@
             let lastMouseX = 0.5;
             let lastMouseY = 0.5;
             
-            // GSAP Timeline for smooth transitions
-            const waveTimeline = gsap.timeline({ paused: true });
-            const resetTimeline = gsap.timeline({ paused: true });
-            
-            // Initialize GSAP properties
-            gsap.set(':root', {
-                '--wave-intensity': 1,
-                '--wave-speed': 1,
-                '--ripple-scale': 1,
-                '--ripple-opacity': 0.6,
-                '--liquid-distortion': 0,
-                '--blur-amount': '0px',
-                '--brightness': 1
-            });
-            
-            // Track mouse movement with GSAP smooth interpolation
+            // Track mouse movement with smooth interpolation
             hero.addEventListener('mousemove', (e) => {
                 const rect = hero.getBoundingClientRect();
                 const newMouseX = (e.clientX - rect.left) / rect.width;
@@ -1639,13 +1190,7 @@
                 lastMouseY = newMouseY;
                 
                 // Calculate dynamic values
-                const angle = Math.atan2(mouseY - 0.5, mouseX - 0.5) * (180 / Math.PI);
-                const waveIntensity = Math.min(1 + velocity * 15, 3);
-                const waveSpeed = Math.min(1 + velocity * 10, 4);
-                const rippleScale = 1 + velocity * 8;
-                const liquidDistortion = Math.min(velocity * 20, 5);
-                const blurAmount = Math.min(velocity * 40, 8);
-                const brightness = 1 + velocity * 3;
+                const waveIntensity = Math.min(1 + velocity * 8, 2.5);
                 
                 // Smooth GSAP animations to CSS variables
                 gsap.to(':root', {
@@ -1653,21 +1198,14 @@
                     ease: "power2.out",
                     '--mouse-x': (mouseX * 100) + '%',
                     '--mouse-y': (mouseY * 100) + '%',
-                    '--mouse-angle': angle + 'deg',
-                    '--wave-intensity': waveIntensity,
-                    '--wave-speed': waveSpeed,
-                    '--ripple-scale': rippleScale,
-                    '--ripple-opacity': Math.min(0.3 + velocity * 10, 1),
-                    '--liquid-distortion': liquidDistortion,
-                    '--blur-amount': blurAmount + 'px',
-                    '--brightness': brightness
+                    '--wave-intensity': waveIntensity
                 });
                 
                 // Individual wave transformations with GSAP
                 heroWaves.forEach((wave, index) => {
                     const factor = (index + 1) * 0.5;
-                    const scale = 1 + velocity * factor * 2;
-                    const rotation = velocity * factor * 30;
+                    const scale = 1 + velocity * factor * 1.5;
+                    const rotation = velocity * factor * 20;
                     
                     gsap.to(wave, {
                         duration: 0.4,
@@ -1680,9 +1218,9 @@
                 
                 // Liquid distortion with elastic easing
                 if (heroLiquid) {
-                    const distortionX = (mouseX - 0.5) * 60;
-                    const distortionY = (mouseY - 0.5) * 40;
-                    const scaleValue = 1 + velocity * 6;
+                    const distortionX = (mouseX - 0.5) * 40;
+                    const distortionY = (mouseY - 0.5) * 30;
+                    const scaleValue = 1 + velocity * 3;
                     
                     gsap.to(heroLiquid, {
                         duration: 0.6,
@@ -1690,29 +1228,17 @@
                         x: distortionX,
                         y: distortionY,
                         scale: scaleValue,
-                        skewX: mouseVelocityX * 25,
-                        skewY: mouseVelocityY * 20
+                        skewX: mouseVelocityX * 15,
+                        skewY: mouseVelocityY * 12
                     });
                 }
                 
-                // 3D Grid transformation
-                const tiltX = (mouseY - 0.5) * 20;
-                const tiltY = (mouseX - 0.5) * -20;
-                
-                gsap.to(heroGrid, {
-                    duration: 0.5,
-                    ease: "power2.out",
-                    rotationX: 20 + tiltX,
-                    rotationY: tiltY,
-                    transformPerspective: 1000
-                });
-                
                 // Orbs with wave-like motion
                 heroOrbs.forEach((orb, index) => {
-                    const factor = (index + 1) * 0.5;
-                    const offsetX = (mouseX - 0.5) * 50 * factor;
-                    const offsetY = (mouseY - 0.5) * 35 * factor;
-                    const scaleValue = 1 + factor * 0.2 + velocity * 4;
+                    const factor = (index + 1) * 0.3;
+                    const offsetX = (mouseX - 0.5) * 30 * factor;
+                    const offsetY = (mouseY - 0.5) * 25 * factor;
+                    const scaleValue = 1 + factor * 0.1 + velocity * 2;
                     
                     gsap.to(orb, {
                         duration: 0.8,
@@ -1731,14 +1257,7 @@
                     ease: "power2.out",
                     '--mouse-x': '50%',
                     '--mouse-y': '50%',
-                    '--mouse-angle': '0deg',
-                    '--wave-intensity': 1,
-                    '--wave-speed': 1,
-                    '--ripple-scale': 1,
-                    '--ripple-opacity': 0.6,
-                    '--liquid-distortion': 0,
-                    '--blur-amount': '0px',
-                    '--brightness': 1
+                    '--wave-intensity': 1
                 });
                 
                 gsap.to(heroWaves, {
@@ -1761,13 +1280,6 @@
                     });
                 }
                 
-                gsap.to(heroGrid, {
-                    duration: 1,
-                    ease: "power2.out",
-                    rotationX: 20,
-                    rotationY: 0
-                });
-                
                 gsap.to(heroOrbs, {
                     duration: 1.2,
                     ease: "elastic.out(1, 0.4)",
@@ -1785,13 +1297,13 @@
                 ambientTimeline.to(wave, {
                     duration: 6 + index * 2,
                     ease: "sine.inOut",
-                    x: "+=20",
-                    y: "+=15",
-                    rotation: "+=10",
-                    scale: 1.1,
+                    x: "+=15",
+                    y: "+=10",
+                    rotation: "+=5",
+                    scale: 1.05,
                     yoyo: true,
                     repeat: -1
-                }, index * 0.5);
+                }, index * 0.3);
             });
             
             // Breathing orbs with GSAP
@@ -1799,398 +1311,18 @@
                 gsap.to(orb, {
                     duration: 3 + index,
                     ease: "sine.inOut",
-                    scale: 1.2,
-                    rotation: 360,
+                    scale: 1.15,
+                    rotation: 180,
                     yoyo: true,
                     repeat: -1,
-                    delay: index * 0.8
+                    delay: index * 0.5
                 });
             });
         }
-
-        // Enhanced parallax for hero section
-        function initHeroParallax() {
-            const hero = document.querySelector('.hero');
-            const heroElements = {
-                waves: document.querySelectorAll('.hero-wave'),
-                grid: document.querySelector('.hero-grid'),
-                orbs: document.querySelectorAll('.hero-orb')
-            };
-            
-            function updateParallax() {
-                const scrolled = window.pageYOffset;
-                const heroHeight = hero.offsetHeight;
-                const scrollProgress = Math.min(scrolled / heroHeight, 1);
-                
-                // Parallax waves
-                heroElements.waves.forEach((wave, index) => {
-                    const speed = 0.3 + (index * 0.1);
-                    const yPos = scrolled * speed;
-                    const scale = 1 + scrollProgress * 0.2;
-                    wave.style.transform = `translateY(${yPos}px) scale(${scale})`;
-                });
-                
-                // Grid parallax with perspective change
-                const gridY = scrolled * 0.2;
-                const perspective = 1000 + (scrollProgress * 500);
-                const rotateX = 20 + (scrollProgress * 15);
-                heroElements.grid.style.transform = `perspective(${perspective}px) rotateX(${rotateX}deg) translateY(${gridY}px)`;
-                
-                // Orbs with depth movement
-                heroElements.orbs.forEach((orb, index) => {
-                    const speed = 0.1 + (index * 0.05);
-                    const yPos = scrolled * speed;
-                    const scale = 1 - (scrollProgress * 0.3);
-                    const opacity = 1 - (scrollProgress * 0.5);
-                    orb.style.transform = `translateY(${yPos}px) scale(${Math.max(scale, 0.3)})`;
-                    orb.style.opacity = Math.max(opacity, 0.2);
-                });
-            }
-            
-            window.addEventListener('scroll', updateParallax);
-        }
-
-        // 🚀 革新的AI WebGL エンジン
-        class AdvancedWebGLFluidEngine {
-            constructor() {
-                this.scene = null;
-                this.camera = null;
-                this.renderer = null;
-                this.fluidMesh = null;
-                this.aiModel = null;
-                this.handLandmarks = [];
-                this.audioContext = null;
-                this.frequencyData = null;
-                this.noise = null;
-                this.time = 0;
-                this.isAIActive = false;
-            }
-
-            async init() {
-                await this.initWebGL();
-                await this.initAI();
-                await this.initAudio();
-                await this.initHandTracking();
-                this.startRender();
-                this.updateAIStatus('🧠 AI ENGINE ACTIVE');
-            }
-
-            async initWebGL() {
-                if (!window.THREE) return;
-                
-                const canvas = document.getElementById('webgl-canvas');
-                const hero = document.querySelector('.hero');
-                
-                this.scene = new THREE.Scene();
-                this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-                this.renderer = new THREE.WebGLRenderer({ 
-                    canvas: canvas,
-                    alpha: true,
-                    antialias: true 
-                });
-                
-                this.renderer.setSize(hero.offsetWidth, hero.offsetHeight);
-                
-                // 流体シミュレーション シェーダー
-                const fluidVertexShader = \`
-                    varying vec2 vUv;
-                    void main() {
-                        vUv = uv;
-                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                    }
-                \`;
-                
-                const fluidFragmentShader = \`
-                    uniform float u_time;
-                    uniform vec2 u_mouse;
-                    uniform vec2 u_resolution;
-                    uniform float u_intensity;
-                    uniform float u_ai_influence;
-                    uniform float u_audio_level;
-                    uniform vec3 u_hand_positions[10];
-                    varying vec2 vUv;
-                    
-                    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                    vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                    vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
-                    
-                    float snoise(vec2 v) {
-                        const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-                        vec2 i = floor(v + dot(v, C.yy));
-                        vec2 x0 = v - i + dot(i, C.xx);
-                        vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-                        vec4 x12 = x0.xyxy + C.xxzz;
-                        x12.xy -= i1;
-                        i = mod289(i);
-                        vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
-                        vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-                        m = m*m; m = m*m;
-                        vec3 x = 2.0 * fract(p * C.www) - 1.0;
-                        vec3 h = abs(x) - 0.5;
-                        vec3 ox = floor(x + 0.5);
-                        vec3 a0 = x - ox;
-                        m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-                        vec3 g;
-                        g.x = a0.x * x0.x + h.x * x0.y;
-                        g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-                        return 130.0 * dot(m, g);
-                    }
-                    
-                    void main() {
-                        vec2 st = gl_FragCoord.xy / u_resolution.xy;
-                        vec2 mouse = u_mouse / u_resolution.xy;
-                        
-                        // 基本的な流体計算
-                        float dist = distance(st, mouse);
-                        float wave = sin(dist * 20.0 - u_time * 3.0) * 0.5 + 0.5;
-                        
-                        // AIによる複雑なパターン生成
-                        float aiNoise = snoise(st * 5.0 + u_time * 0.5) * u_ai_influence;
-                        float audioWave = sin(st.y * 30.0 + u_time * u_audio_level) * 0.2;
-                        
-                        // ハンドトラッキング影響
-                        float handInfluence = 0.0;
-                        for(int i = 0; i < 5; i++) {
-                            if(u_hand_positions[i].z > 0.0) {
-                                float handDist = distance(st, u_hand_positions[i].xy);
-                                handInfluence += exp(-handDist * 10.0) * 0.3;
-                            }
-                        }
-                        
-                        // 最終的な流体効果
-                        float fluid = wave * u_intensity + aiNoise + audioWave + handInfluence;
-                        vec3 color1 = vec3(0.31, 0.27, 0.9);
-                        vec3 color2 = vec3(0.39, 0.40, 0.94);
-                        vec3 color3 = vec3(0.54, 0.36, 0.97);
-                        
-                        vec3 finalColor = mix(mix(color1, color2, fluid), color3, fluid * 0.5);
-                        
-                        gl_FragColor = vec4(finalColor, fluid * 0.8);
-                    }
-                \`;
-                
-                const geometry = new THREE.PlaneGeometry(2, 2);
-                const material = new THREE.ShaderMaterial({
-                    vertexShader: fluidVertexShader,
-                    fragmentShader: fluidFragmentShader,
-                    uniforms: {
-                        u_time: { value: 0 },
-                        u_mouse: { value: new THREE.Vector2() },
-                        u_resolution: { value: new THREE.Vector2(hero.offsetWidth, hero.offsetHeight) },
-                        u_intensity: { value: 1.0 },
-                        u_ai_influence: { value: 0.5 },
-                        u_audio_level: { value: 0.0 },
-                        u_hand_positions: { value: Array(10).fill(new THREE.Vector3()) }
-                    },
-                    transparent: true,
-                    blending: THREE.AdditiveBlending
-                });
-                
-                this.fluidMesh = new THREE.Mesh(geometry, material);
-                this.scene.add(this.fluidMesh);
-                
-                this.isAIActive = true;
-            }
-
-            async initAI() {
-                if (!window.tf) return;
-                
-                try {
-                    // 簡易的なパターン予測モデル
-                    this.aiModel = tf.sequential({
-                        layers: [
-                            tf.layers.dense({ inputShape: [4], units: 16, activation: 'relu' }),
-                            tf.layers.dense({ units: 8, activation: 'relu' }),
-                            tf.layers.dense({ units: 2, activation: 'linear' })
-                        ]
-                    });
-                    
-                    // ランダムデータで簡易トレーニング
-                    const xs = tf.randomNormal([100, 4]);
-                    const ys = tf.randomNormal([100, 2]);
-                    
-                    this.aiModel.compile({
-                        optimizer: 'adam',
-                        loss: 'meanSquaredError'
-                    });
-                    
-                    await this.aiModel.fit(xs, ys, { epochs: 5, verbose: 0 });
-                    this.updateAIStatus('🧠 AI MODEL LOADED');
-                } catch (error) {
-                    console.warn('AI initialization failed:', error);
-                }
-            }
-
-            async initAudio() {
-                try {
-                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const analyser = this.audioContext.createAnalyser();
-                    analyser.fftSize = 256;
-                    this.frequencyData = new Uint8Array(analyser.frequencyBinCount);
-                    
-                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                        const source = this.audioContext.createMediaStreamSource(stream);
-                        source.connect(analyser);
-                        this.analyser = analyser;
-                        this.updateAIStatus('🎵 AUDIO REACTIVE');
-                    }
-                } catch (error) {
-                    console.log('Audio not available:', error);
-                }
-            }
-
-            async initHandTracking() {
-                if (!window.Hands) return;
-                
-                try {
-                    const hands = new Hands({
-                        locateFile: (file) => \`https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/\${file}\`
-                    });
-                    
-                    hands.setOptions({
-                        maxNumHands: 2,
-                        modelComplexity: 1,
-                        minDetectionConfidence: 0.5,
-                        minTrackingConfidence: 0.5
-                    });
-                    
-                    hands.onResults((results) => {
-                        this.handLandmarks = results.multiHandLandmarks || [];
-                        this.drawHandTracking();
-                    });
-                    
-                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                        const video = document.createElement('video');
-                        video.srcObject = stream;
-                        video.addEventListener('loadedmetadata', () => {
-                            video.play();
-                            const sendFrame = () => {
-                                hands.send({ image: video });
-                                requestAnimationFrame(sendFrame);
-                            };
-                            sendFrame();
-                        });
-                        this.updateAIStatus('👋 HAND TRACKING ACTIVE');
-                    }
-                } catch (error) {
-                    console.log('Hand tracking not available:', error);
-                }
-            }
-
-            drawHandTracking() {
-                const canvas = document.getElementById('hand-canvas');
-                const ctx = canvas.getContext('2d');
-                const hero = document.querySelector('.hero');
-                
-                canvas.width = hero.offsetWidth;
-                canvas.height = hero.offsetHeight;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                this.handLandmarks.forEach((landmarks) => {
-                    landmarks.forEach((landmark, index) => {
-                        const x = landmark.x * canvas.width;
-                        const y = landmark.y * canvas.height;
-                        
-                        ctx.beginPath();
-                        ctx.arc(x, y, 3, 0, 2 * Math.PI);
-                        ctx.fillStyle = \`hsl(\${index * 15}, 100%, 60%)\`;
-                        ctx.fill();
-                        
-                        // WebGLに手の位置を送信
-                        if (this.fluidMesh && index < 10) {
-                            this.fluidMesh.material.uniforms.u_hand_positions.value[index].set(
-                                x / canvas.width, 1.0 - y / canvas.height, 1.0
-                            );
-                        }
-                    });
-                });
-            }
-
-            startRender() {
-                const animate = () => {
-                    requestAnimationFrame(animate);
-                    
-                    this.time += 0.016;
-                    
-                    if (this.fluidMesh) {
-                        // オーディオレベル更新
-                        if (this.analyser) {
-                            this.analyser.getByteFrequencyData(this.frequencyData);
-                            const audioLevel = Array.from(this.frequencyData).reduce((a, b) => a + b) / this.frequencyData.length / 255;
-                            this.fluidMesh.material.uniforms.u_audio_level.value = audioLevel;
-                        }
-                        
-                        // AI予測更新
-                        if (this.aiModel) {
-                            const input = tf.tensor2d([[this.time, Math.sin(this.time), Math.cos(this.time), Math.random()]]);
-                            const prediction = this.aiModel.predict(input);
-                            const values = await prediction.data();
-                            this.fluidMesh.material.uniforms.u_ai_influence.value = Math.abs(values[0]);
-                        }
-                        
-                        this.fluidMesh.material.uniforms.u_time.value = this.time;
-                    }
-                    
-                    if (this.renderer && this.scene && this.camera) {
-                        this.renderer.render(this.scene, this.camera);
-                    }
-                };
-                animate();
-            }
-
-            updateMousePosition(x, y) {
-                if (this.fluidMesh) {
-                    this.fluidMesh.material.uniforms.u_mouse.value.set(x, y);
-                }
-            }
-
-            updateAIStatus(status) {
-                const statusEl = document.getElementById('ai-status');
-                if (statusEl) {
-                    statusEl.textContent = status;
-                    statusEl.classList.add('active');
-                }
-            }
-        }
-
-        // 革新的エンジンの初期化
-        let webglEngine = null;
 
         // Initialize everything when DOM is loaded
-        document.addEventListener('DOMContentLoaded', async function() {
-            // 従来の初期化
-            createAnimatedBackground();
-            initCursorFollower();
+        document.addEventListener('DOMContentLoaded', function() {
             initInteractiveHeroBackground();
-            initHeroParallax();
-            
-            // 🚀 革新的WebGLエンジン起動
-            webglEngine = new AdvancedWebGLFluidEngine();
-            await webglEngine.init();
-            
-            // マウス連動
-            const hero = document.querySelector('.hero');
-            hero.addEventListener('mousemove', (e) => {
-                if (webglEngine) {
-                    const rect = hero.getBoundingClientRect();
-                    webglEngine.updateMousePosition(e.clientX - rect.left, e.clientY - rect.top);
-                }
-            });
-            
-            // Add random movement to hero visual placeholder
-            const heroVisual = document.querySelector('.hero-visual');
-            if (heroVisual) {
-                setInterval(() => {
-                    const placeholder = heroVisual.querySelector('.visual-placeholder');
-                    if (placeholder) {
-                        const randomX = Math.sin(Date.now() * 0.001) * 5;
-                        const randomY = Math.cos(Date.now() * 0.0015) * 3;
-                        placeholder.style.transform = \`translate(\${randomX}px, \${randomY}px)\`;
-                    }
-                }, 50);
-            }
         });
     </script>
 </body>
