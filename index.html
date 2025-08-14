@@ -349,6 +349,8 @@
             min-height: 200px;
             display: flex;
             flex-direction: column;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
         
         .service-card::before {
@@ -758,13 +760,23 @@
             ease: 'power3.out'
         });
         
-        gsap.from('.service-card', {
-            scrollTrigger: '.services',
-            y: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: 'power3.out'
+        // サービスカードのアニメーション（一時的に簡略化）
+        const serviceCards = document.querySelectorAll('.service-card');
+        serviceCards.forEach(card => {
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+        });
+        
+        // GSAPアニメーションをシンプルに
+        gsap.to('.service-card', {
+            scrollTrigger: {
+                trigger: '.services',
+                start: 'top 80%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.1
         });
         
         // 統計数字のカウントアップ（強化版）
