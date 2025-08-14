@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Arch - ITのチカラで社会への架け橋となる</title>
+    <meta name="description" content="Digital Archは、Webデザイン、グラフィックデザイン、デジタルマーケティング、ブランディング、SNS管理などの包括的なITソリューションを提供します。">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #4f46e5;
+            --text-primary: #1f1f1f;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-accent: #f3f4f6;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: var(--text-primary);
+        }
+        
+        p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+        }
+        
+        .mobile-menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 1px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 24px 80px;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .hero-text h1 {
+            font-size: 56px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        
+        .hero-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .primary-button {
+            background: var(--secondary-color);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: inline-block;
+        }
+        
+        .primary-button:hover {
+            background: #3730a3;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .secondary-button {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 14px 28px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: inline-block;
+        }
+        
+        .secondary-button:hover {
+            background: var(--hover-bg);
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        
+        /* Hero Visual */
+        .hero-visual {
+            background: white;
+            border-radius: 16px;
+            padding: 48px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        
+        .hero-visual img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        
+        .visual-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, var(--bg-accent) 0%, var(--bg-secondary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--text-light);
+            border: 2px dashed var(--border-color);
+        }
+        
+        /* About Section */
+        .about {
+            padding: 100px 24px;
+            background: var(--bg-primary);
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .section-header h2 {
+            font-size: 42px;
+            margin-bottom: 16px;
+            font-weight: 800;
+        }
+        
+        .section-header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .about-text h3 {
+            font-size: 32px;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+        
+        .about-text p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 100px 24px;
+            background: var(--bg-secondary);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 80px;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--secondary-color);
+        }
+        
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #6366f1 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 32px;
+        }
+        
+        .service-card h3 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+        
+        .service-card p {
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        
+        /* Skills Section */
+        .skills {
+            padding: 100px 24px;
+            background: var(--bg-primary);
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 80px;
+        }
+        
+        .skill-item {
+            background: var(--bg-secondary);
+            padding: 32px 24px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-item:hover {
+            background: white;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+        
+        .skill-item h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .skill-item p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        /* Works Section */
+        .works {
+            padding: 100px 24px;
+            background: var(--bg-secondary);
+        }
+        
+        .coming-soon {
+            text-align: center;
+            padding: 80px 0;
+        }
+        
+        .coming-soon h3 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+        
+        .coming-soon p {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+        
+        /* Contact Section */
+        .contact {
+            padding: 100px 24px;
+            background: var(--bg-primary);
+        }
+        
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            margin-top: 80px;
+        }
+        
+        .contact-info h3 {
+            font-size: 24px;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+        
+        .contact-info p {
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+        
+        .contact-form {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+        
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        /* Company Info Section */
+        .company-info {
+            padding: 100px 24px;
+            background: var(--bg-secondary);
+        }
+        
+        .company-details {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 48px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+        
+        .company-details h3 {
+            font-size: 28px;
+            margin-bottom: 32px;
+            font-weight: 800;
+            text-align: center;
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            width: 140px;
+            flex-shrink: 0;
+            color: var(--text-primary);
+        }
+        
+        .info-value {
+            color: var(--text-secondary);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 48px 24px 24px;
+            text-align: center;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        
+        .footer-text {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 24px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .skills-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .hero {
+                padding: 100px 16px 60px;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            .hero-text h1 {
+                font-size: 40px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .section-header h2 {
+                font-size: 32px;
+            }
+            
+            .company-details {
+                padding: 32px 24px;
+            }
+            
+            .info-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .info-label {
+                width: auto;
+                font-weight: 700;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-text h1 {
+                font-size: 32px;
+            }
+            
+            .hero-subtitle {
+                font-size: 18px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(5) { animation-delay: 0.5s; }
+        .service-card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">Digital Arch</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#works">Works</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-subtitle">ITのチカラで社会への架け橋となる</div>
+                    <h1>
+                        デジタル変革で<br>
+                        未来を創造する
+                    </h1>
+                    <p class="hero-description">
+                        Webデザイン、グラフィックデザイン、デジタルマーケティング、ブランディング、SNS管理など、包括的なITソリューションでお客様のビジネス成長をサポートします。
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#contact" class="primary-button">お問い合わせ</a>
+                        <a href="#services" class="secondary-button">サービス詳細</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="visual-placeholder">
+                        🚀 デジタル革新
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>About Us</h2>
+                <p>私たちについて</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>デジタル技術で社会に貢献</h3>
+                    <p>Digital Archは、最新のIT技術を駆使して、企業や個人のデジタル変革をサポートしています。私たちの使命は、技術の力で社会と人々を結ぶ架け橋となることです。</p>
+                    <p>創造性と技術力を融合させ、お客様のビジョンを現実に変えるソリューションを提供します。小さなアイデアから大きなプロジェクトまで、あらゆる規模のニーズにお応えします。</p>
+                    <p>私たちと一緒に、デジタルの未来を築きませんか？</p>
+                </div>
+                <div class="hero-visual">
+                    <div class="visual-placeholder">
+                        💡 About Image
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Skills</h2>
+                <p>私たちの技術領域</p>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <h4>Web Development</h4>
+                    <p>モダンな技術スタック</p>
+                </div>
+                <div class="skill-item">
+                    <h4>UI/UX Design</h4>
+                    <p>ユーザー中心設計</p>
+                </div>
+                <div class="skill-item">
+                    <h4>Digital Marketing</h4>
+                    <p>効果的な集客戦略</p>
+                </div>
+                <div class="skill-item">
+                    <h4>Brand Strategy</h4>
+                    <p>ブランド価値向上</p>
+                </div>
+                <div class="skill-item">
+                    <h4>SEO/SEM</h4>
+                    <p>検索エンジン最適化</p>
+                </div>
+                <div class="skill-item">
+                    <h4>SNS Management</h4>
+                    <p>ソーシャルメディア運用</p>
+                </div>
+                <div class="skill-item">
+                    <h4>Content Creation</h4>
+                    <p>魅力的なコンテンツ制作</p>
+                </div>
+                <div class="skill-item">
+                    <h4>Analytics</h4>
+                    <p>データ分析・改善提案</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Services</h2>
+                <p>包括的なITソリューションをご提供</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">🎨</div>
+                    <h3>Webデザイン</h3>
+                    <p>ユーザビリティとデザインを両立した、レスポンシブWebサイトの制作。最新のトレンドと技術を取り入れた魅力的なWebサイトを提供します。</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">📱</div>
+                    <h3>グラフィックデザイン</h3>
+                    <p>ブランドアイデンティティから印刷物まで、視覚的インパクトのあるデザインを制作。お客様のメッセージを効果的に伝えるビジュアルを創造します。</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">📈</div>
+                    <h3>デジタルマーケティング</h3>
+                    <p>SEO、SEM、SNS運用など多角的なアプローチで、お客様のオンラインプレゼンスを強化。データに基づいた戦略的なマーケティングを展開します。</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🏷️</div>
+                    <h3>ブランディング</h3>
+                    <p>企業や商品の価値を最大化するブランド戦略の策定から実行まで。一貫したブランドメッセージでお客様の競争力を向上させます。</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">💬</div>
+                    <h3>SNS管理</h3>
+                    <p>各種ソーシャルメディアプラットフォームでの戦略的な情報発信と顧客とのエンゲージメント向上。効果的なSNSマーケティングを実現します。</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">⚙️</div>
+                    <h3>システム開発</h3>
+                    <p>お客様のビジネス要件に応じたカスタムシステムの設計・開発。効率的で安全性の高いソリューションを提供します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Works Section -->
+    <section class="works" id="works">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Works</h2>
+                <p>私たちの実績をご紹介</p>
+            </div>
+            <div class="coming-soon">
+                <h3>Coming soon...</h3>
+                <p>近日中に実績事例を公開予定です。お楽しみに！</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Contact</h2>
+                <p>お気軽にお問い合わせください</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>お問い合わせ</h3>
+                    <p><strong>Email:</strong> info@digital-arch.co.jp</p>
+                    <p><strong>Tel:</strong> 03-1234-5678</p>
+                    <p><strong>営業時間:</strong> 平日 9:00-18:00</p>
+                    <p><strong>住所:</strong> 東京都渋谷区xxx-xx-xx</p>
+                    <br>
+                    <p>プロジェクトのご相談、お見積りのご依頼など、どんな些細なことでもお気軽にお声かけください。お客様のニーズに応じた最適なソリューションをご提案いたします。</p>
+                </div>
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">お名前 *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">メールアドレス *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">会社名</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">お問い合わせ内容 *</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="primary-button" style="width: 100%;">送信する</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company Info Section -->
+    <section class="company-info">
+        <div class="section-container">
+            <div class="company-details">
+                <h3>会社情報</h3>
+                <div class="info-row">
+                    <div class="info-label">会社名</div>
+                    <div class="info-value">株式会社Digital Arch</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">代表取締役</div>
+                    <div class="info-value">山田 太郎</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">設立</div>
+                    <div class="info-value">2020年4月1日</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">資本金</div>
+                    <div class="info-value">1,000万円</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">所在地</div>
+                    <div class="info-value">〒150-0000 東京都渋谷区xxx-xx-xx</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">事業内容</div>
+                    <div class="info-value">Webサイト制作、グラフィックデザイン、デジタルマーケティング、ブランディング支援、SNS運用代行</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">従業員数</div>
+                    <div class="info-value">15名</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">Digital Arch</div>
+        <div class="footer-text">ITのチカラで社会への架け橋となる</div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Digital Arch. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = target.offsetTop - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuToggle.addEventListener('click', function() {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.service-card, .skill-item, .about-text, .contact-info').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+
+        // Form submission
+        const contactForm = document.querySelector('form');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('お問い合わせありがとうございます。\n内容を確認の上、3営業日以内にご連絡させていただきます。');
+        });
+    </script>
+</body>
+</html>
