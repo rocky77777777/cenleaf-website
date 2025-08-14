@@ -6,8 +6,12 @@
     <title>Digital Arch - ITのチカラで社会への架け橋となる</title>
     <meta name="description" content="Digital Archは、Webデザイン、グラフィックデザイン、デジタルマーケティング、ブランディング、SNS管理などの包括的なITソリューションを提供します。">
     
-    <!-- GSAP CDN -->
+    <!-- 最先端Web技術スタック -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/3.0.1/simplex-noise.min.js"></script>
     
     <style>
         * {
@@ -175,6 +179,55 @@
             height: 100%;
             pointer-events: none;
             z-index: 0;
+        }
+        
+        /* WebGL Canvas */
+        #webgl-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        
+        /* Hand Tracking Canvas */
+        #hand-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
+        /* AI Status Indicator */
+        .ai-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff41;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            z-index: 1000;
+            border: 1px solid #00ff41;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+        
+        .ai-status.active {
+            animation: aiPulse 2s infinite;
+        }
+        
+        @keyframes aiPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.8); }
         }
         
         .hero-wave {
@@ -1070,6 +1123,15 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <!-- AI Status Indicator -->
+        <div class="ai-status" id="ai-status">🤖 AI ENGINE OFFLINE</div>
+        
+        <!-- WebGL Fluid Simulation -->
+        <canvas id="webgl-canvas"></canvas>
+        
+        <!-- Hand Tracking Canvas -->
+        <canvas id="hand-canvas"></canvas>
+        
         <!-- Interactive Hero Background -->
         <div class="hero-bg">
             <div class="hero-liquid"></div>
@@ -1788,12 +1850,334 @@
             window.addEventListener('scroll', updateParallax);
         }
 
+        // 🚀 革新的AI WebGL エンジン
+        class AdvancedWebGLFluidEngine {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.fluidMesh = null;
+                this.aiModel = null;
+                this.handLandmarks = [];
+                this.audioContext = null;
+                this.frequencyData = null;
+                this.noise = null;
+                this.time = 0;
+                this.isAIActive = false;
+            }
+
+            async init() {
+                await this.initWebGL();
+                await this.initAI();
+                await this.initAudio();
+                await this.initHandTracking();
+                this.startRender();
+                this.updateAIStatus('🧠 AI ENGINE ACTIVE');
+            }
+
+            async initWebGL() {
+                if (!window.THREE) return;
+                
+                const canvas = document.getElementById('webgl-canvas');
+                const hero = document.querySelector('.hero');
+                
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: canvas,
+                    alpha: true,
+                    antialias: true 
+                });
+                
+                this.renderer.setSize(hero.offsetWidth, hero.offsetHeight);
+                
+                // 流体シミュレーション シェーダー
+                const fluidVertexShader = \`
+                    varying vec2 vUv;
+                    void main() {
+                        vUv = uv;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                \`;
+                
+                const fluidFragmentShader = \`
+                    uniform float u_time;
+                    uniform vec2 u_mouse;
+                    uniform vec2 u_resolution;
+                    uniform float u_intensity;
+                    uniform float u_ai_influence;
+                    uniform float u_audio_level;
+                    uniform vec3 u_hand_positions[10];
+                    varying vec2 vUv;
+                    
+                    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+                    
+                    float snoise(vec2 v) {
+                        const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                        vec2 i = floor(v + dot(v, C.yy));
+                        vec2 x0 = v - i + dot(i, C.xx);
+                        vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                        vec4 x12 = x0.xyxy + C.xxzz;
+                        x12.xy -= i1;
+                        i = mod289(i);
+                        vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+                        vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                        m = m*m; m = m*m;
+                        vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                        vec3 h = abs(x) - 0.5;
+                        vec3 ox = floor(x + 0.5);
+                        vec3 a0 = x - ox;
+                        m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+                        vec3 g;
+                        g.x = a0.x * x0.x + h.x * x0.y;
+                        g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                        return 130.0 * dot(m, g);
+                    }
+                    
+                    void main() {
+                        vec2 st = gl_FragCoord.xy / u_resolution.xy;
+                        vec2 mouse = u_mouse / u_resolution.xy;
+                        
+                        // 基本的な流体計算
+                        float dist = distance(st, mouse);
+                        float wave = sin(dist * 20.0 - u_time * 3.0) * 0.5 + 0.5;
+                        
+                        // AIによる複雑なパターン生成
+                        float aiNoise = snoise(st * 5.0 + u_time * 0.5) * u_ai_influence;
+                        float audioWave = sin(st.y * 30.0 + u_time * u_audio_level) * 0.2;
+                        
+                        // ハンドトラッキング影響
+                        float handInfluence = 0.0;
+                        for(int i = 0; i < 5; i++) {
+                            if(u_hand_positions[i].z > 0.0) {
+                                float handDist = distance(st, u_hand_positions[i].xy);
+                                handInfluence += exp(-handDist * 10.0) * 0.3;
+                            }
+                        }
+                        
+                        // 最終的な流体効果
+                        float fluid = wave * u_intensity + aiNoise + audioWave + handInfluence;
+                        vec3 color1 = vec3(0.31, 0.27, 0.9);
+                        vec3 color2 = vec3(0.39, 0.40, 0.94);
+                        vec3 color3 = vec3(0.54, 0.36, 0.97);
+                        
+                        vec3 finalColor = mix(mix(color1, color2, fluid), color3, fluid * 0.5);
+                        
+                        gl_FragColor = vec4(finalColor, fluid * 0.8);
+                    }
+                \`;
+                
+                const geometry = new THREE.PlaneGeometry(2, 2);
+                const material = new THREE.ShaderMaterial({
+                    vertexShader: fluidVertexShader,
+                    fragmentShader: fluidFragmentShader,
+                    uniforms: {
+                        u_time: { value: 0 },
+                        u_mouse: { value: new THREE.Vector2() },
+                        u_resolution: { value: new THREE.Vector2(hero.offsetWidth, hero.offsetHeight) },
+                        u_intensity: { value: 1.0 },
+                        u_ai_influence: { value: 0.5 },
+                        u_audio_level: { value: 0.0 },
+                        u_hand_positions: { value: Array(10).fill(new THREE.Vector3()) }
+                    },
+                    transparent: true,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                this.fluidMesh = new THREE.Mesh(geometry, material);
+                this.scene.add(this.fluidMesh);
+                
+                this.isAIActive = true;
+            }
+
+            async initAI() {
+                if (!window.tf) return;
+                
+                try {
+                    // 簡易的なパターン予測モデル
+                    this.aiModel = tf.sequential({
+                        layers: [
+                            tf.layers.dense({ inputShape: [4], units: 16, activation: 'relu' }),
+                            tf.layers.dense({ units: 8, activation: 'relu' }),
+                            tf.layers.dense({ units: 2, activation: 'linear' })
+                        ]
+                    });
+                    
+                    // ランダムデータで簡易トレーニング
+                    const xs = tf.randomNormal([100, 4]);
+                    const ys = tf.randomNormal([100, 2]);
+                    
+                    this.aiModel.compile({
+                        optimizer: 'adam',
+                        loss: 'meanSquaredError'
+                    });
+                    
+                    await this.aiModel.fit(xs, ys, { epochs: 5, verbose: 0 });
+                    this.updateAIStatus('🧠 AI MODEL LOADED');
+                } catch (error) {
+                    console.warn('AI initialization failed:', error);
+                }
+            }
+
+            async initAudio() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const analyser = this.audioContext.createAnalyser();
+                    analyser.fftSize = 256;
+                    this.frequencyData = new Uint8Array(analyser.frequencyBinCount);
+                    
+                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        const source = this.audioContext.createMediaStreamSource(stream);
+                        source.connect(analyser);
+                        this.analyser = analyser;
+                        this.updateAIStatus('🎵 AUDIO REACTIVE');
+                    }
+                } catch (error) {
+                    console.log('Audio not available:', error);
+                }
+            }
+
+            async initHandTracking() {
+                if (!window.Hands) return;
+                
+                try {
+                    const hands = new Hands({
+                        locateFile: (file) => \`https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/\${file}\`
+                    });
+                    
+                    hands.setOptions({
+                        maxNumHands: 2,
+                        modelComplexity: 1,
+                        minDetectionConfidence: 0.5,
+                        minTrackingConfidence: 0.5
+                    });
+                    
+                    hands.onResults((results) => {
+                        this.handLandmarks = results.multiHandLandmarks || [];
+                        this.drawHandTracking();
+                    });
+                    
+                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        const video = document.createElement('video');
+                        video.srcObject = stream;
+                        video.addEventListener('loadedmetadata', () => {
+                            video.play();
+                            const sendFrame = () => {
+                                hands.send({ image: video });
+                                requestAnimationFrame(sendFrame);
+                            };
+                            sendFrame();
+                        });
+                        this.updateAIStatus('👋 HAND TRACKING ACTIVE');
+                    }
+                } catch (error) {
+                    console.log('Hand tracking not available:', error);
+                }
+            }
+
+            drawHandTracking() {
+                const canvas = document.getElementById('hand-canvas');
+                const ctx = canvas.getContext('2d');
+                const hero = document.querySelector('.hero');
+                
+                canvas.width = hero.offsetWidth;
+                canvas.height = hero.offsetHeight;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                this.handLandmarks.forEach((landmarks) => {
+                    landmarks.forEach((landmark, index) => {
+                        const x = landmark.x * canvas.width;
+                        const y = landmark.y * canvas.height;
+                        
+                        ctx.beginPath();
+                        ctx.arc(x, y, 3, 0, 2 * Math.PI);
+                        ctx.fillStyle = \`hsl(\${index * 15}, 100%, 60%)\`;
+                        ctx.fill();
+                        
+                        // WebGLに手の位置を送信
+                        if (this.fluidMesh && index < 10) {
+                            this.fluidMesh.material.uniforms.u_hand_positions.value[index].set(
+                                x / canvas.width, 1.0 - y / canvas.height, 1.0
+                            );
+                        }
+                    });
+                });
+            }
+
+            startRender() {
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    
+                    this.time += 0.016;
+                    
+                    if (this.fluidMesh) {
+                        // オーディオレベル更新
+                        if (this.analyser) {
+                            this.analyser.getByteFrequencyData(this.frequencyData);
+                            const audioLevel = Array.from(this.frequencyData).reduce((a, b) => a + b) / this.frequencyData.length / 255;
+                            this.fluidMesh.material.uniforms.u_audio_level.value = audioLevel;
+                        }
+                        
+                        // AI予測更新
+                        if (this.aiModel) {
+                            const input = tf.tensor2d([[this.time, Math.sin(this.time), Math.cos(this.time), Math.random()]]);
+                            const prediction = this.aiModel.predict(input);
+                            const values = await prediction.data();
+                            this.fluidMesh.material.uniforms.u_ai_influence.value = Math.abs(values[0]);
+                        }
+                        
+                        this.fluidMesh.material.uniforms.u_time.value = this.time;
+                    }
+                    
+                    if (this.renderer && this.scene && this.camera) {
+                        this.renderer.render(this.scene, this.camera);
+                    }
+                };
+                animate();
+            }
+
+            updateMousePosition(x, y) {
+                if (this.fluidMesh) {
+                    this.fluidMesh.material.uniforms.u_mouse.value.set(x, y);
+                }
+            }
+
+            updateAIStatus(status) {
+                const statusEl = document.getElementById('ai-status');
+                if (statusEl) {
+                    statusEl.textContent = status;
+                    statusEl.classList.add('active');
+                }
+            }
+        }
+
+        // 革新的エンジンの初期化
+        let webglEngine = null;
+
         // Initialize everything when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 従来の初期化
             createAnimatedBackground();
             initCursorFollower();
             initInteractiveHeroBackground();
             initHeroParallax();
+            
+            // 🚀 革新的WebGLエンジン起動
+            webglEngine = new AdvancedWebGLFluidEngine();
+            await webglEngine.init();
+            
+            // マウス連動
+            const hero = document.querySelector('.hero');
+            hero.addEventListener('mousemove', (e) => {
+                if (webglEngine) {
+                    const rect = hero.getBoundingClientRect();
+                    webglEngine.updateMousePosition(e.clientX - rect.left, e.clientY - rect.top);
+                }
+            });
             
             // Add random movement to hero visual placeholder
             const heroVisual = document.querySelector('.hero-visual');
@@ -1803,7 +2187,7 @@
                     if (placeholder) {
                         const randomX = Math.sin(Date.now() * 0.001) * 5;
                         const randomY = Math.cos(Date.now() * 0.0015) * 3;
-                        placeholder.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                        placeholder.style.transform = \`translate(\${randomX}px, \${randomY}px)\`;
                     }
                 }, 50);
             }
