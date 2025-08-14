@@ -658,6 +658,120 @@
             color: rgba(255, 255, 255, 0.5);
         }
         
+        /* 新しいアニメーション効果 */
+        .profile-photo {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .profile-photo:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.5) !important;
+            border-width: 6px !important;
+        }
+        
+        .service-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center bottom;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(5deg);
+            transition: transform 0.3s ease;
+        }
+        
+        /* CTAボタンのパルス効果 */
+        .cta-button {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .primary-button {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 0 10px rgba(255, 107, 107, 0.3);
+            }
+            100% {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 0 20px rgba(255, 107, 107, 0);
+            }
+        }
+        
+        /* スクロールフェードイン */
+        .scroll-fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .scroll-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scroll-fade-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .scroll-fade-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .scroll-fade-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .scroll-fade-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* 統計の強化されたカウントアップ */
+        .stat-number {
+            position: relative;
+        }
+        
+        .stat-number.counting {
+            animation: countPulse 0.1s ease-in-out;
+        }
+        
+        @keyframes countPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         /* レスポンシブ */
         .mobile-menu-toggle {
             display: none;
@@ -791,32 +905,32 @@
             <p>お客様のニーズに合わせた最適なソリューションをご提供します</p>
         </div>
         <div class="services-grid">
-            <div class="service-card">
+            <div class="service-card scroll-fade-in">
                 <div class="service-icon">🎥</div>
                 <h3>オートウェビナー構築</h3>
                 <p>UTAGEとAIシナリオで365日自動開催。手動開催の拘束から解放され、月120回の自動配信でCVR2.8倍を実現。</p>
             </div>
-            <div class="service-card">
+            <div class="service-card scroll-fade-in">
                 <div class="service-icon">🤖</div>
                 <h3>AI活用コンサルティング</h3>
                 <p>ChatGPT・Claude・Geminiを活用した業務効率化。資料作成時間70%削減、リード獲得単価1/3を実現。</p>
             </div>
-            <div class="service-card">
+            <div class="service-card scroll-fade-in">
                 <div class="service-icon">📈</div>
                 <h3>セールスファネル最適化</h3>
                 <p>LTV設計＋ステップメール自動化＋多チャネル連携で、平均購入単価1.5倍、リピート率40%→68%を達成。</p>
             </div>
-            <div class="service-card">
+            <div class="service-card scroll-fade-in">
                 <div class="service-icon">📝</div>
                 <h3>コンテンツマーケティング</h3>
                 <p>AIを活用した記事作成・ブログ運営の効率化。SEO対策と組み合わせて集客を自動化します。</p>
             </div>
-            <div class="service-card">
+            <div class="service-card scroll-fade-in">
                 <div class="service-icon">🔄</div>
                 <h3>業務自動化支援</h3>
                 <p>Zapier・Make等のツールを活用し、定型業務を自動化。人的ミスを削減し、生産性を向上させます。</p>
             </div>
-            <div class="service-card">
+            <div class="service-card scroll-fade-in">
                 <div class="service-icon">📊</div>
                 <h3>データ分析・改善提案</h3>
                 <p>Google Analytics等のデータを基に、具体的な改善施策をご提案。PDCAサイクルを高速で回します。</p>
@@ -831,13 +945,13 @@
             <p>須崎純一のプロフィール</p>
         </div>
         <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: center;">
-            <div style="text-align: center;">
-                <img src="images/profile/suzaki.jpg" alt="須崎純一" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; margin: 0 auto 2rem; display: block; box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3); border: 4px solid var(--accent-color);">
+            <div style="text-align: center;" class="scroll-fade-left">
+                <img src="images/profile/suzaki.jpg" alt="須崎純一" class="profile-photo" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; margin: 0 auto 2rem; display: block; box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3); border: 4px solid var(--accent-color);">
                 <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-dark);">須崎純一</h3>
                 <p style="color: var(--text-light); font-size: 1rem;">すざき じゅんいち</p>
                 <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.5rem;">1981年12月1日生まれ</p>
             </div>
-            <div style="background: var(--bg-light); padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+            <div style="background: var(--bg-light); padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);" class="scroll-fade-right">
                 <h4 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--primary-color);">オートウェビナーとAIで、個人・小規模ビジネスの「集客〜販売」を自動運転化する人</h4>
                 
                 <div style="margin-bottom: 2rem;">
@@ -915,19 +1029,19 @@
             <p>お客様と共に歩んできた、私たちの成果をご紹介します</p>
         </div>
         <div class="stats-grid">
-            <div class="stat-card">
+            <div class="stat-card scroll-fade-in">
                 <div class="stat-number">230+</div>
                 <div class="stat-label">導入企業・個人事業主</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card scroll-fade-in">
                 <div class="stat-number">3.2倍</div>
                 <div class="stat-label">平均CVR向上率</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card scroll-fade-in">
                 <div class="stat-number">65%</div>
                 <div class="stat-label">平均作業時間削減</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card scroll-fade-in">
                 <div class="stat-number">98%</div>
                 <div class="stat-label">顧客満足度</div>
             </div>
@@ -1011,7 +1125,24 @@
             });
         });
 
-        // 数字のカウントアップアニメーション
+        // 強化されたスクロールアニメーション
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // すべてのスクロールアニメーション要素を監視
+        document.querySelectorAll('.scroll-fade-in, .scroll-fade-left, .scroll-fade-right').forEach(el => {
+            fadeObserver.observe(el);
+        });
+
+        // 数字のカウントアップアニメーション（強化版）
         const observerOptions = {
             threshold: 0.5,
             rootMargin: '0px'
@@ -1033,6 +1164,11 @@
                     
                     const counter = setInterval(() => {
                         currentNumber += increment;
+                        
+                        // パルス効果を追加
+                        statNumber.classList.add('counting');
+                        setTimeout(() => statNumber.classList.remove('counting'), 100);
+                        
                         if (currentNumber >= targetNumber) {
                             currentNumber = targetNumber;
                             clearInterval(counter);
@@ -1062,7 +1198,7 @@
                                 statNumber.textContent = Math.floor(currentNumber);
                             }
                         }
-                    }, 30);
+                    }, 50);
                     
                     observer.unobserve(statNumber);
                 }
