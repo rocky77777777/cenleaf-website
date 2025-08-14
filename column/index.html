@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コラム - CENLEAF | AI活用と自動化の最新情報</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #f9fafb;
+            color: #111827;
+            line-height: 1.7;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .article-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .article-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+        
+        .article-content {
+            padding: 30px;
+        }
+        
+        .article-date {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .article-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #111827;
+            line-height: 1.3;
+        }
+        
+        .article-excerpt {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .article-tag {
+            display: inline-block;
+            background: #f3f4f6;
+            color: #4b5563;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .read-more {
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.3s ease;
+        }
+        
+        .read-more:hover {
+            gap: 10px;
+        }
+        
+        .nav {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6366f1;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #6366f1;
+        }
+        
+        .featured-badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+            
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="/" class="logo">CENLEAF</a>
+            <ul class="nav-links">
+                <li><a href="/">ホーム</a></li>
+                <li><a href="/column/">コラム</a></li>
+                <li><a href="/midori/">緑のページ</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <div class="header-content">
+            <h1>CENLEAF コラム</h1>
+            <p class="subtitle">AI活用と自動化で、ビジネスを次のステージへ</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2 style="font-size: 32px; margin-bottom: 20px;">最新記事</h2>
+        
+        <div class="articles-grid">
+            <article class="article-card">
+                <div class="featured-badge">注目</div>
+                <div class="article-image">🤖</div>
+                <div class="article-content">
+                    <div class="article-date">2025年8月14日</div>
+                    <h3 class="article-title">ChatGPT×Claudeの使い分けで業務効率3倍に</h3>
+                    <p class="article-excerpt">
+                        複数のAIツールを適材適所で使い分けることで、驚くほどの効率化が実現できます。実際の活用事例とともに、最適な使い分け方法をご紹介します。
+                    </p>
+                    <div>
+                        <span class="article-tag">AI活用</span>
+                        <span class="article-tag">ChatGPT</span>
+                        <span class="article-tag">Claude</span>
+                    </div>
+                    <a href="#" class="read-more">続きを読む →</a>
+                </div>
+            </article>
+
+            <article class="article-card">
+                <div class="article-image">🎥</div>
+                <div class="article-content">
+                    <div class="article-date">2025年8月12日</div>
+                    <h3 class="article-title">オートウェビナーで月120回の自動セミナー開催</h3>
+                    <p class="article-excerpt">
+                        UTAGEを活用したオートウェビナーシステムの構築方法を詳しく解説。24時間365日、自動でセミナーを開催し続ける仕組みの作り方とは。
+                    </p>
+                    <div>
+                        <span class="article-tag">オートウェビナー</span>
+                        <span class="article-tag">UTAGE</span>
+                        <span class="article-tag">自動化</span>
+                    </div>
+                    <a href="#" class="read-more">続きを読む →</a>
+                </div>
+            </article>
+
+            <article class="article-card">
+                <div class="article-image">📈</div>
+                <div class="article-content">
+                    <div class="article-date">2025年8月10日</div>
+                    <h3 class="article-title">LTV最大化のためのファネル設計術</h3>
+                    <p class="article-excerpt">
+                        顧客生涯価値（LTV）を最大化するセールスファネルの設計方法。リピート率を40%から68%に改善した実例をもとに解説します。
+                    </p>
+                    <div>
+                        <span class="article-tag">セールスファネル</span>
+                        <span class="article-tag">LTV</span>
+                        <span class="article-tag">マーケティング</span>
+                    </div>
+                    <a href="#" class="read-more">続きを読む →</a>
+                </div>
+            </article>
+
+            <article class="article-card">
+                <div class="article-image">🔄</div>
+                <div class="article-content">
+                    <div class="article-date">2025年8月8日</div>
+                    <h3 class="article-title">Zapierで実現する究極の業務自動化</h3>
+                    <p class="article-excerpt">
+                        複数のツールを連携させて、定型業務を完全自動化。Zapierを使った自動化フローの構築方法と、実際の導入事例をご紹介します。
+                    </p>
+                    <div>
+                        <span class="article-tag">Zapier</span>
+                        <span class="article-tag">自動化</span>
+                        <span class="article-tag">業務効率化</span>
+                    </div>
+                    <a href="#" class="read-more">続きを読む →</a>
+                </div>
+            </article>
+
+            <article class="article-card">
+                <div class="article-image">📝</div>
+                <div class="article-content">
+                    <div class="article-date">2025年8月6日</div>
+                    <h3 class="article-title">AIで記事作成時間を70%削減する方法</h3>
+                    <p class="article-excerpt">
+                        AIツールを活用したコンテンツ作成の効率化テクニック。質を保ちながら、作成時間を大幅に短縮する具体的な手順を公開します。
+                    </p>
+                    <div>
+                        <span class="article-tag">コンテンツ作成</span>
+                        <span class="article-tag">AI活用</span>
+                        <span class="article-tag">効率化</span>
+                    </div>
+                    <a href="#" class="read-more">続きを読む →</a>
+                </div>
+            </article>
+
+            <article class="article-card">
+                <div class="article-image">📊</div>
+                <div class="article-content">
+                    <div class="article-date">2025年8月4日</div>
+                    <h3 class="article-title">データドリブンな意思決定のススメ</h3>
+                    <p class="article-excerpt">
+                        Google Analyticsのデータを活用して、確実に成果を出す改善施策の立て方。数字に基づいた意思決定プロセスを詳しく解説します。
+                    </p>
+                    <div>
+                        <span class="article-tag">データ分析</span>
+                        <span class="article-tag">Google Analytics</span>
+                        <span class="article-tag">改善施策</span>
+                    </div>
+                    <a href="#" class="read-more">続きを読む →</a>
+                </div>
+            </article>
+        </div>
+    </div>
+</body>
+</html>
