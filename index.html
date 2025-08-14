@@ -37,7 +37,7 @@
             background: var(--dark-bg);
             color: white;
             overflow-x: hidden;
-            cursor: none;
+            cursor: auto;
         }
         
         /* カスタムカーソル */
@@ -441,18 +441,51 @@
         }
         
         /* レスポンシブ */
+        /* モバイル対応改善 */
         @media (max-width: 768px) {
+            body {
+                cursor: auto !important;
+            }
+            
+            .cursor, .cursor-trail {
+                display: none !important;
+            }
+            
             .profile-container {
                 grid-template-columns: 1fr;
                 text-align: center;
+                gap: 30px;
+            }
+            
+            .profile-photo {
+                width: 250px;
+                height: 250px;
             }
             
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
             
             .nav-menu {
-                display: none;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                font-size: 0.9rem;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -698,7 +731,7 @@
             backSpeed: 60,
             backDelay: 2000,
             loop: true,
-            showCursor: true,
+            showCursor: false,
             cursorChar: '|'
         });
         
