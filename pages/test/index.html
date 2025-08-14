@@ -123,12 +123,155 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Interactive Hero Background */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .hero-wave {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                rgba(79, 70, 229, 0.15) 0%, 
+                rgba(99, 102, 241, 0.1) 25%, 
+                rgba(139, 92, 246, 0.05) 50%, 
+                transparent 70%);
+            transition: all 0.3s ease;
+            animation: gentleFloat 8s ease-in-out infinite;
+        }
+        
+        .hero-wave:nth-child(2) {
+            background: radial-gradient(circle at calc(var(--mouse-x, 50%) + 10%) calc(var(--mouse-y, 50%) + 10%), 
+                rgba(99, 102, 241, 0.1) 0%, 
+                rgba(139, 92, 246, 0.08) 30%, 
+                transparent 60%);
+            animation-delay: -2s;
+            animation-duration: 10s;
+        }
+        
+        .hero-wave:nth-child(3) {
+            background: radial-gradient(circle at calc(var(--mouse-x, 50%) - 5%) calc(var(--mouse-y, 50%) - 5%), 
+                rgba(139, 92, 246, 0.12) 0%, 
+                rgba(79, 70, 229, 0.06) 35%, 
+                transparent 65%);
+            animation-delay: -4s;
+            animation-duration: 12s;
+        }
+        
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, rgba(79, 70, 229, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(79, 70, 229, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(1000px) rotateX(20deg);
+            animation: gridFloat 15s ease-in-out infinite;
+        }
+        
+        .hero-orbs {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), rgba(79, 70, 229, 0.1));
+            filter: blur(1px);
+            animation: orbFloat 6s ease-in-out infinite;
+        }
+        
+        .hero-orb:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .hero-orb:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 15%;
+            animation-delay: -2s;
+        }
+        
+        .hero-orb:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            right: 30%;
+            animation-delay: -4s;
+        }
+        
+        @keyframes gentleFloat {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translate(-10px, -15px) rotate(1deg) scale(1.02);
+            }
+            50% {
+                transform: translate(5px, -10px) rotate(-0.5deg) scale(0.98);
+            }
+            75% {
+                transform: translate(-5px, 10px) rotate(0.5deg) scale(1.01);
+            }
+        }
+        
+        @keyframes gridFloat {
+            0%, 100% {
+                transform: perspective(1000px) rotateX(20deg) translateY(0px);
+            }
+            50% {
+                transform: perspective(1000px) rotateX(25deg) translateY(-10px);
+            }
+        }
+        
+        @keyframes orbFloat {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) scale(1);
+                opacity: 0.6;
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px) scale(1.1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-15px) translateX(-5px) scale(0.9);
+                opacity: 0.7;
+            }
+            75% {
+                transform: translateY(10px) translateX(-10px) scale(1.05);
+                opacity: 0.9;
+            }
         }
         
         .hero-container {
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
+            position: relative;
+            z-index: 10;
         }
         
         .hero-content {
@@ -787,6 +930,19 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <!-- Interactive Hero Background -->
+        <div class="hero-bg">
+            <div class="hero-wave"></div>
+            <div class="hero-wave"></div>
+            <div class="hero-wave"></div>
+            <div class="hero-grid"></div>
+            <div class="hero-orbs">
+                <div class="hero-orb"></div>
+                <div class="hero-orb"></div>
+                <div class="hero-orb"></div>
+            </div>
+        </div>
+        
         <div class="hero-container">
             <div class="hero-content">
                 <div class="hero-text">
@@ -1226,10 +1382,123 @@
             }, 1000);
         });
 
+        // Interactive Hero Background
+        function initInteractiveHeroBackground() {
+            const hero = document.querySelector('.hero');
+            const heroWaves = document.querySelectorAll('.hero-wave');
+            const heroGrid = document.querySelector('.hero-grid');
+            const heroOrbs = document.querySelectorAll('.hero-orb');
+            
+            let mouseX = 0.5;
+            let mouseY = 0.5;
+            
+            // Track mouse movement within hero section
+            hero.addEventListener('mousemove', (e) => {
+                const rect = hero.getBoundingClientRect();
+                mouseX = (e.clientX - rect.left) / rect.width;
+                mouseY = (e.clientY - rect.top) / rect.height;
+                
+                // Update CSS variables for wave gradients
+                document.documentElement.style.setProperty('--mouse-x', (mouseX * 100) + '%');
+                document.documentElement.style.setProperty('--mouse-y', (mouseY * 100) + '%');
+                
+                // Apply 3D transform to grid based on mouse position
+                const tiltX = (mouseY - 0.5) * 10;
+                const tiltY = (mouseX - 0.5) * -10;
+                heroGrid.style.transform = `perspective(1000px) rotateX(${20 + tiltX}deg) rotateY(${tiltY}deg)`;
+                
+                // Move orbs based on mouse position
+                heroOrbs.forEach((orb, index) => {
+                    const factor = (index + 1) * 0.3;
+                    const offsetX = (mouseX - 0.5) * 30 * factor;
+                    const offsetY = (mouseY - 0.5) * 20 * factor;
+                    orb.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${1 + factor * 0.1})`;
+                });
+            });
+            
+            // Reset position when mouse leaves hero
+            hero.addEventListener('mouseleave', () => {
+                document.documentElement.style.setProperty('--mouse-x', '50%');
+                document.documentElement.style.setProperty('--mouse-y', '50%');
+                
+                heroGrid.style.transform = 'perspective(1000px) rotateX(20deg) rotateY(0deg)';
+                
+                heroOrbs.forEach((orb) => {
+                    orb.style.transform = 'translate(0px, 0px) scale(1)';
+                });
+            });
+            
+            // Add subtle wave movement on scroll
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.2;
+                
+                heroWaves.forEach((wave, index) => {
+                    const speed = (index + 1) * 0.5;
+                    wave.style.transform = `translateY(${rate * speed}px) scale(${1 + scrolled * 0.0001})`;
+                });
+            });
+            
+            // Add breathing effect to orbs
+            setInterval(() => {
+                heroOrbs.forEach((orb, index) => {
+                    const delay = index * 1000;
+                    const scale = 1 + Math.sin((Date.now() + delay) * 0.002) * 0.1;
+                    const currentTransform = orb.style.transform || 'translate(0px, 0px) scale(1)';
+                    const baseTransform = currentTransform.replace(/scale\([^)]*\)/, '');
+                    orb.style.transform = `${baseTransform} scale(${scale})`;
+                });
+            }, 50);
+        }
+
+        // Enhanced parallax for hero section
+        function initHeroParallax() {
+            const hero = document.querySelector('.hero');
+            const heroElements = {
+                waves: document.querySelectorAll('.hero-wave'),
+                grid: document.querySelector('.hero-grid'),
+                orbs: document.querySelectorAll('.hero-orb')
+            };
+            
+            function updateParallax() {
+                const scrolled = window.pageYOffset;
+                const heroHeight = hero.offsetHeight;
+                const scrollProgress = Math.min(scrolled / heroHeight, 1);
+                
+                // Parallax waves
+                heroElements.waves.forEach((wave, index) => {
+                    const speed = 0.3 + (index * 0.1);
+                    const yPos = scrolled * speed;
+                    const scale = 1 + scrollProgress * 0.2;
+                    wave.style.transform = `translateY(${yPos}px) scale(${scale})`;
+                });
+                
+                // Grid parallax with perspective change
+                const gridY = scrolled * 0.2;
+                const perspective = 1000 + (scrollProgress * 500);
+                const rotateX = 20 + (scrollProgress * 15);
+                heroElements.grid.style.transform = `perspective(${perspective}px) rotateX(${rotateX}deg) translateY(${gridY}px)`;
+                
+                // Orbs with depth movement
+                heroElements.orbs.forEach((orb, index) => {
+                    const speed = 0.1 + (index * 0.05);
+                    const yPos = scrolled * speed;
+                    const scale = 1 - (scrollProgress * 0.3);
+                    const opacity = 1 - (scrollProgress * 0.5);
+                    orb.style.transform = `translateY(${yPos}px) scale(${Math.max(scale, 0.3)})`;
+                    orb.style.opacity = Math.max(opacity, 0.2);
+                });
+            }
+            
+            window.addEventListener('scroll', updateParallax);
+        }
+
         // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             createAnimatedBackground();
             initCursorFollower();
+            initInteractiveHeroBackground();
+            initHeroParallax();
             
             // Add random movement to hero visual placeholder
             const heroVisual = document.querySelector('.hero-visual');
