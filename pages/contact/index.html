@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ - CENLEAF | AI活用×オンライン自動化コンサルティング</title>
+    <meta name="description" content="CENLEAFへのお問い合わせページ。無料相談も承っております。AI活用やオートウェビナーについてお気軽にご相談ください。">
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="nav-container">
+            <a href="/" class="logo">CENLEAF</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/">ホーム</a></li>
+                <li class="nav-item"><a href="/pages/about/">会社概要</a></li>
+                <li class="nav-item"><a href="/pages/services/">サービス</a></li>
+                <li class="nav-item"><a href="/pages/column/">コラム</a></li>
+                <li class="nav-item"><a href="/midori/">みどり</a></li>
+                <li class="nav-item"><a href="/pages/contact/">お問い合わせ</a></li>
+            </ul>
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 80px 20px;">
+            <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 20px;">お問い合わせ</h1>
+                <p style="font-size: 20px; opacity: 0.9;">AI活用×オンライン自動化について、お気軽にご相談ください</p>
+            </div>
+        </section>
+
+        <!-- Contact Form -->
+        <section style="padding: 80px 20px;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="background: white; border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+                    <h2 style="font-size: 28px; font-weight: 600; margin-bottom: 10px; color: var(--primary-color); text-align: center;">無料相談お申し込み</h2>
+                    <p style="text-align: center; color: var(--text-secondary); margin-bottom: 40px;">以下のフォームにご記入いただき、送信ボタンを押してください</p>
+                    
+                    <form action="#" method="POST" style="space-y: 25px;">
+                        <!-- お名前 -->
+                        <div style="margin-bottom: 25px;">
+                            <label for="name" style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+                                お名前 <span style="color: #ef4444; font-size: 14px;">*必須</span>
+                            </label>
+                            <input type="text" id="name" name="name" required
+                                   style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 16px; transition: border-color 0.2s ease;"
+                                   onfocus="this.style.borderColor='var(--primary-color)'"
+                                   onblur="this.style.borderColor='var(--border-color)'"
+                                   placeholder="山田太郎">
+                        </div>
+
+                        <!-- メールアドレス -->
+                        <div style="margin-bottom: 25px;">
+                            <label for="email" style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+                                メールアドレス <span style="color: #ef4444; font-size: 14px;">*必須</span>
+                            </label>
+                            <input type="email" id="email" name="email" required
+                                   style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 16px; transition: border-color 0.2s ease;"
+                                   onfocus="this.style.borderColor='var(--primary-color)'"
+                                   onblur="this.style.borderColor='var(--border-color)'"
+                                   placeholder="yamada@example.com">
+                        </div>
+
+                        <!-- 電話番号 -->
+                        <div style="margin-bottom: 25px;">
+                            <label for="phone" style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+                                電話番号 <span style="color: var(--text-secondary); font-size: 14px;">任意</span>
+                            </label>
+                            <input type="tel" id="phone" name="phone"
+                                   style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 16px; transition: border-color 0.2s ease;"
+                                   onfocus="this.style.borderColor='var(--primary-color)'"
+                                   onblur="this.style.borderColor='var(--border-color)'"
+                                   placeholder="090-1234-5678">
+                        </div>
+
+                        <!-- 会社名・屋号 -->
+                        <div style="margin-bottom: 25px;">
+                            <label for="company" style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+                                会社名・屋号 <span style="color: var(--text-secondary); font-size: 14px;">任意</span>
+                            </label>
+                            <input type="text" id="company" name="company"
+                                   style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 16px; transition: border-color 0.2s ease;"
+                                   onfocus="this.style.borderColor='var(--primary-color)'"
+                                   onblur="this.style.borderColor='var(--border-color)'"
+                                   placeholder="株式会社サンプル">
+                        </div>
+
+                        <!-- 相談内容 -->
+                        <div style="margin-bottom: 25px;">
+                            <label for="inquiry_type" style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+                                相談内容 <span style="color: #ef4444; font-size: 14px;">*必須</span>
+                            </label>
+                            <select id="inquiry_type" name="inquiry_type" required
+                                    style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 16px; background: white;"
+                                    onfocus="this.style.borderColor='var(--primary-color)'"
+                                    onblur="this.style.borderColor='var(--border-color)'">
+                                <option value="">選択してください</option>
+                                <option value="webinar">オートウェビナー構築について</option>
+                                <option value="ai">AI活用コンサルティングについて</option>
+                                <option value="marketing">デジタルマーケティング支援について</option>
+                                <option value="other">その他</option>
+                            </select>
+                        </div>
+
+                        <!-- お問い合わせ内容 -->
+                        <div style="margin-bottom: 30px;">
+                            <label for="message" style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+                                お問い合わせ内容 <span style="color: #ef4444; font-size: 14px;">*必須</span>
+                            </label>
+                            <textarea id="message" name="message" rows="6" required
+                                      style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 16px; resize: vertical; transition: border-color 0.2s ease;"
+                                      onfocus="this.style.borderColor='var(--primary-color)'"
+                                      onblur="this.style.borderColor='var(--border-color)'"
+                                      placeholder="具体的なご相談内容やご質問をお書きください。現在の課題や達成したい目標なども併せてお聞かせいただけますと、より具体的なご提案ができます。"></textarea>
+                        </div>
+
+                        <!-- プライバシーポリシー -->
+                        <div style="margin-bottom: 30px;">
+                            <label style="display: flex; align-items: flex-start; cursor: pointer;">
+                                <input type="checkbox" id="privacy" name="privacy" required
+                                       style="margin-right: 10px; margin-top: 2px;">
+                                <span style="font-size: 14px; color: var(--text-secondary); line-height: 1.5;">
+                                    <span style="color: #ef4444;">*必須</span> 
+                                    個人情報の取り扱いについて同意します。ご入力いただいた個人情報は、お問い合わせへの回答およびサービスのご案内にのみ使用し、第三者に開示することはございません。
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- 送信ボタン -->
+                        <div style="text-align: center;">
+                            <button type="submit" 
+                                    style="background: var(--primary-color); color: white; padding: 16px 40px; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);"
+                                    onmouseover="this.style.background='var(--primary-dark)'; this.style.transform='translateY(-2px)'"
+                                    onmouseout="this.style.background='var(--primary-color)'; this.style.transform='translateY(0)'">
+                                <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
+                                送信する
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Info -->
+        <section style="background: var(--bg-secondary); padding: 80px 20px;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h2 style="font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 60px; color: var(--primary-color);">その他のお問い合わせ方法</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+                    <!-- Email -->
+                    <div style="background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                        <div style="background: var(--primary-color); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                            <i class="fas fa-envelope" style="color: white; font-size: 24px;"></i>
+                        </div>
+                        <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">メール</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">お気軽にメールでご連絡ください</p>
+                        <a href="mailto:contact@cenleaf.com" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">contact@cenleaf.com</a>
+                    </div>
+
+                    <!-- Response Time -->
+                    <div style="background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                        <div style="background: var(--accent-color); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                            <i class="fas fa-clock" style="color: white; font-size: 24px;"></i>
+                        </div>
+                        <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">回答時間</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">通常24時間以内にご返信いたします</p>
+                        <span style="color: var(--accent-color); font-weight: 600;">営業時間: 平日 9:00-18:00</span>
+                    </div>
+
+                    <!-- Free Consultation -->
+                    <div style="background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                        <div style="background: var(--secondary-color); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                            <i class="fas fa-comments" style="color: white; font-size: 24px;"></i>
+                        </div>
+                        <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">無料相談</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">初回相談は無料です</p>
+                        <span style="color: var(--secondary-color); font-weight: 600;">お気軽にご相談ください</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section style="padding: 80px 20px;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h2 style="font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 60px; color: var(--primary-color);">よくあるご質問</h2>
+                
+                <div style="space-y: 20px;">
+                    <div style="background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 25px; margin-bottom: 20px;">
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary);">
+                            <i class="fas fa-question-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                            相談料金はかかりますか？
+                        </h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6; padding-left: 30px;">
+                            初回相談は完全無料です。お気軽にご相談ください。
+                        </p>
+                    </div>
+                    
+                    <div style="background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 25px; margin-bottom: 20px;">
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary);">
+                            <i class="fas fa-question-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                            どのような業界に対応していますか？
+                        </h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6; padding-left: 30px;">
+                            講師・コンサルタント、士業、保険代理店、小規模事業者など幅広い業界に対応しています。
+                        </p>
+                    </div>
+                    
+                    <div style="background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 25px;">
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary);">
+                            <i class="fas fa-question-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                            遠方からでも対応可能ですか？
+                        </h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6; padding-left: 30px;">
+                            はい、オンラインでの対応が可能ですので、全国どちらからでもご利用いただけます。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 CENLEAF. All rights reserved.</p>
+            <p>AI活用×オンライン自動化で「いつかやりたいを今やろう」</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/navigation.js"></script>
+</body>
+</html>

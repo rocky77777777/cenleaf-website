@@ -4,325 +4,233 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>コラム - CENLEAF | AI活用と自動化の最新情報</title>
+    <meta name="description" content="CENLEAFのコラムページ。AI活用と自動化に関する最新情報や実用的なノウハウをお届けします。">
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
-            background: #f9fafb;
-            color: #111827;
-            line-height: 1.7;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-        }
-        
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-        
-        .subtitle {
-            font-size: 20px;
-            opacity: 0.95;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-        
-        .articles-grid {
+        .article-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 40px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
         
         .article-card {
             background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-            transition: all 0.3s ease;
-            cursor: pointer;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
         .article-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
         
         .article-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-        }
-        
-        .article-content {
-            padding: 30px;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 20px;
         }
         
         .article-date {
-            color: #6b7280;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 10px;
         }
         
         .article-title {
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 600;
             margin-bottom: 15px;
-            color: #111827;
-            line-height: 1.3;
+            color: var(--text-primary);
+            line-height: 1.4;
         }
         
         .article-excerpt {
-            color: #4b5563;
+            color: var(--text-secondary);
             line-height: 1.6;
             margin-bottom: 20px;
         }
         
         .article-tag {
             display: inline-block;
-            background: #f3f4f6;
-            color: #4b5563;
-            padding: 6px 12px;
-            border-radius: 20px;
+            background: var(--bg-secondary);
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 15px;
             font-size: 12px;
+            font-weight: 500;
             margin-right: 8px;
             margin-bottom: 8px;
         }
         
         .read-more {
-            color: #6366f1;
-            font-weight: 600;
+            color: var(--primary-color);
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: gap 0.3s ease;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 15px;
+            transition: color 0.2s ease;
         }
         
         .read-more:hover {
-            gap: 10px;
-        }
-        
-        .nav {
-            background: white;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: #6366f1;
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: #4b5563;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        
-        .nav-links a:hover {
-            color: #6366f1;
-        }
-        
-        .featured-badge {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 32px;
-            }
-            
-            .articles-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .nav-links {
-                display: none;
-            }
+            color: var(--primary-dark);
         }
     </style>
 </head>
 <body>
-    <nav class="nav">
-        <div class="nav-content">
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="nav-container">
             <a href="/" class="logo">CENLEAF</a>
-            <ul class="nav-links">
-                <li><a href="/">ホーム</a></li>
-                <li><a href="/column/">コラム</a></li>
-                <li><a href="/midori/">緑のページ</a></li>
-                <li><a href="#contact">お問い合わせ</a></li>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/">ホーム</a></li>
+                <li class="nav-item"><a href="/pages/about/">会社概要</a></li>
+                <li class="nav-item"><a href="/pages/services/">サービス</a></li>
+                <li class="nav-item"><a href="/pages/column/">コラム</a></li>
+                <li class="nav-item"><a href="/midori/">みどり</a></li>
+                <li class="nav-item"><a href="/pages/contact/">お問い合わせ</a></li>
             </ul>
-        </div>
-    </nav>
-
-    <header>
-        <div class="header-content">
-            <h1>CENLEAF コラム</h1>
-            <p class="subtitle">AI活用と自動化で、ビジネスを次のステージへ</p>
-        </div>
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
     </header>
 
-    <div class="container">
-        <h2 style="font-size: 32px; margin-bottom: 20px;">最新記事</h2>
-        
-        <div class="articles-grid">
-            <article class="article-card">
-                <div class="featured-badge">注目</div>
-                <div class="article-image">🤖</div>
-                <div class="article-content">
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 80px 20px;">
+            <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 20px;">コラム</h1>
+                <p style="font-size: 20px; opacity: 0.9;">AI活用と自動化に関する最新情報・実践ノウハウ</p>
+            </div>
+        </section>
+
+        <!-- Articles Grid -->
+        <section style="padding: 80px 20px;">
+            <div class="article-grid">
+                <article class="article-card">
+                    <div class="article-image">🤖</div>
                     <div class="article-date">2025年8月14日</div>
-                    <h3 class="article-title">ChatGPT×Claudeの使い分けで業務効率3倍に</h3>
+                    <h3 class="article-title">AI研修講師やって気づいた「知ってる」と「できる」の致命的な差</h3>
                     <p class="article-excerpt">
-                        複数のAIツールを適材適所で使い分けることで、驚くほどの効率化が実現できます。実際の活用事例とともに、最適な使い分け方法をご紹介します。
+                        毎回同じパターンを見て、ちょっと切なくなります。ChatGPT使ってますって言う人の9割が基本機能しか使ってない現実とは...
                     </p>
                     <div>
                         <span class="article-tag">AI活用</span>
                         <span class="article-tag">ChatGPT</span>
-                        <span class="article-tag">Claude</span>
+                        <span class="article-tag">研修</span>
                     </div>
                     <a href="#" class="read-more">続きを読む →</a>
-                </div>
-            </article>
+                </article>
 
-            <article class="article-card">
-                <div class="article-image">🎥</div>
-                <div class="article-content">
-                    <div class="article-date">2025年8月12日</div>
-                    <h3 class="article-title">オートウェビナーで月120回の自動セミナー開催</h3>
+                <article class="article-card">
+                    <div class="article-image">🍶</div>
+                    <div class="article-date">2025年8月14日</div>
+                    <h3 class="article-title">【悲報】日本酒のうんちくで「早く飲ませろ！」って思った話</h3>
                     <p class="article-excerpt">
-                        UTAGEを活用したオートウェビナーシステムの構築方法を詳しく解説。24時間365日、自動でセミナーを開催し続ける仕組みの作り方とは。
+                        高級な日本酒バーで15分のうんちく大会。これ、ビジネスでもやってませんか？お客さんが求めてるのは価値の体験なのに...
                     </p>
                     <div>
-                        <span class="article-tag">オートウェビナー</span>
-                        <span class="article-tag">UTAGE</span>
-                        <span class="article-tag">自動化</span>
-                    </div>
-                    <a href="#" class="read-more">続きを読む →</a>
-                </div>
-            </article>
-
-            <article class="article-card">
-                <div class="article-image">📈</div>
-                <div class="article-content">
-                    <div class="article-date">2025年8月10日</div>
-                    <h3 class="article-title">LTV最大化のためのファネル設計術</h3>
-                    <p class="article-excerpt">
-                        顧客生涯価値（LTV）を最大化するセールスファネルの設計方法。リピート率を40%から68%に改善した実例をもとに解説します。
-                    </p>
-                    <div>
-                        <span class="article-tag">セールスファネル</span>
-                        <span class="article-tag">LTV</span>
+                        <span class="article-tag">ビジネス</span>
                         <span class="article-tag">マーケティング</span>
+                        <span class="article-tag">顧客体験</span>
                     </div>
                     <a href="#" class="read-more">続きを読む →</a>
-                </div>
-            </article>
+                </article>
 
-            <article class="article-card">
-                <div class="article-image">🔄</div>
-                <div class="article-content">
-                    <div class="article-date">2025年8月8日</div>
-                    <h3 class="article-title">Zapierで実現する究極の業務自動化</h3>
+                <article class="article-card">
+                    <div class="article-image">📈</div>
+                    <div class="article-date">2025年8月14日</div>
+                    <h3 class="article-title">ブログPVが1日3万あっても売上ゼロだった黒歴史</h3>
                     <p class="article-excerpt">
-                        複数のツールを連携させて、定型業務を完全自動化。Zapierを使った自動化フローの構築方法と、実際の導入事例をご紹介します。
+                        2018年、1日3万PVのブログを運営していたのに通帳の残高は14,827円。PVより大事な「たった1つの数字」とは...
                     </p>
                     <div>
-                        <span class="article-tag">Zapier</span>
-                        <span class="article-tag">自動化</span>
-                        <span class="article-tag">業務効率化</span>
+                        <span class="article-tag">ブログ運営</span>
+                        <span class="article-tag">コンバージョン</span>
+                        <span class="article-tag">失敗談</span>
                     </div>
                     <a href="#" class="read-more">続きを読む →</a>
-                </div>
-            </article>
+                </article>
 
-            <article class="article-card">
-                <div class="article-image">📝</div>
-                <div class="article-content">
-                    <div class="article-date">2025年8月6日</div>
-                    <h3 class="article-title">AIで記事作成時間を70%削減する方法</h3>
+                <article class="article-card">
+                    <div class="article-image">🏝️</div>
+                    <div class="article-date">2025年8月14日</div>
+                    <h3 class="article-title">石垣島で1ヶ月暮らして分かった「田舎でビジネス」の理想と現実</h3>
                     <p class="article-excerpt">
-                        AIツールを活用したコンテンツ作成の効率化テクニック。質を保ちながら、作成時間を大幅に短縮する具体的な手順を公開します。
+                        南国でのんびりパソコンカタカタ。ノマドワーカーの理想形のはずが...Wi-Fi速度は東京の20分の1、でも得られたものとは
                     </p>
                     <div>
-                        <span class="article-tag">コンテンツ作成</span>
-                        <span class="article-tag">AI活用</span>
-                        <span class="article-tag">効率化</span>
+                        <span class="article-tag">ノマドワーク</span>
+                        <span class="article-tag">地方移住</span>
+                        <span class="article-tag">働き方</span>
                     </div>
                     <a href="#" class="read-more">続きを読む →</a>
-                </div>
-            </article>
+                </article>
 
-            <article class="article-card">
-                <div class="article-image">📊</div>
-                <div class="article-content">
-                    <div class="article-date">2025年8月4日</div>
-                    <h3 class="article-title">データドリブンな意思決定のススメ</h3>
+                <article class="article-card">
+                    <div class="article-image">🎬</div>
+                    <div class="article-date">2025年8月14日</div>
+                    <h3 class="article-title">イオンシネマで学んだ「1000円の価値」の考え方</h3>
                     <p class="article-excerpt">
-                        Google Analyticsのデータを活用して、確実に成果を出す改善施策の立て方。数字に基づいた意思決定プロセスを詳しく解説します。
+                        平日昼間1,000円の映画。時給換算したらマイナス29,000円？でもその映画で人生が変わることもある。投資と消費の境界線とは
                     </p>
                     <div>
-                        <span class="article-tag">データ分析</span>
-                        <span class="article-tag">Google Analytics</span>
-                        <span class="article-tag">改善施策</span>
+                        <span class="article-tag">時間管理</span>
+                        <span class="article-tag">投資思考</span>
+                        <span class="article-tag">価値観</span>
                     </div>
                     <a href="#" class="read-more">続きを読む →</a>
-                </div>
-            </article>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-image">💳</div>
+                    <div class="article-date">2025年8月14日</div>
+                    <h3 class="article-title">クレカ明細見たら知らない請求が月3万円もあった話</h3>
+                    <p class="article-excerpt">
+                        知らない請求、合計月3万円超え。ZOOMを5アカウント契約、使ってないAdobe CC...サブスク地獄から抜け出す方法
+                    </p>
+                    <div>
+                        <span class="article-tag">節約</span>
+                        <span class="article-tag">サブスク整理</span>
+                        <span class="article-tag">家計管理</span>
+                    </div>
+                    <a href="#" class="read-more">続きを読む →</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 80px 20px;">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h2 style="font-size: 36px; font-weight: 700; margin-bottom: 20px;">AI活用の相談はお気軽に</h2>
+                <p style="font-size: 18px; opacity: 0.9; margin-bottom: 40px;">
+                    コラムでご紹介した内容について、具体的なご相談も承っています
+                </p>
+                <a href="/pages/contact/" class="btn btn-secondary" style="background: white; color: var(--primary-color); padding: 15px 30px; font-size: 18px; border-radius: 10px; text-decoration: none; display: inline-block; font-weight: 600;">
+                    無料相談を申し込む
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 CENLEAF. All rights reserved.</p>
+            <p>AI活用×オンライン自動化で「いつかやりたいを今やろう」</p>
         </div>
-    </div>
+    </footer>
+
+    <script src="../../assets/js/navigation.js"></script>
 </body>
 </html>
