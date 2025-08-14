@@ -1,0 +1,66 @@
+# WordPress Core
+/wp-admin/
+/wp-includes/
+/index.php
+/license.txt
+/readme.html
+/wp-*.php
+/xmlrpc.php
+
+# Configuration
+wp-config.php
+.htaccess
+
+# Content
+/wp-content/uploads/
+/wp-content/blogs.dir/
+/wp-content/upgrade/
+/wp-content/backup-db/
+/wp-content/backups/
+/wp-content/cache/
+/wp-content/advanced-cache.php
+/wp-content/wp-cache-config.php
+/wp-content/languages/
+
+# WordPress Plugins (管理したいプラグインは除外から外す)
+# /wp-content/plugins/
+
+# WordPress Themes (管理したいテーマは除外から外す)
+# /wp-content/themes/twenty*/
+
+# Development
+node_modules/
+*.log
+*.sql
+*.sqlite
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Backup
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+
+# Compressed
+*.zip
+*.tar.gz
+*.rar
+*.7z
