@@ -330,7 +330,7 @@
         
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 25px;
             max-width: 1400px;
             margin: 0 auto;
@@ -447,6 +447,14 @@
         }
         
         /* レスポンシブ */
+        /* タブレット対応 */
+        @media (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+        
         /* モバイル対応改善 */
         @media (max-width: 768px) {
             body {
