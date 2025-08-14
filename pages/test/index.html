@@ -142,31 +142,71 @@
             position: absolute;
             width: 120%;
             height: 120%;
-            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-                rgba(79, 70, 229, 0.15) 0%, 
-                rgba(99, 102, 241, 0.1) 25%, 
-                rgba(139, 92, 246, 0.05) 50%, 
+            background: radial-gradient(ellipse at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                rgba(79, 70, 229, 0.2) 0%, 
+                rgba(99, 102, 241, 0.15) 25%, 
+                rgba(139, 92, 246, 0.1) 50%, 
                 transparent 70%);
-            transition: all 0.3s ease;
-            animation: gentleFloat 8s ease-in-out infinite;
+            transition: all 0.1s ease;
+            animation: waveFlow 6s ease-in-out infinite;
+            transform-origin: var(--mouse-x, 50%) var(--mouse-y, 50%);
         }
         
         .hero-wave:nth-child(2) {
-            background: radial-gradient(circle at calc(var(--mouse-x, 50%) + 10%) calc(var(--mouse-y, 50%) + 10%), 
-                rgba(99, 102, 241, 0.1) 0%, 
-                rgba(139, 92, 246, 0.08) 30%, 
-                transparent 60%);
+            background: radial-gradient(ellipse at calc(var(--mouse-x, 50%) + 15%) calc(var(--mouse-y, 50%) - 10%), 
+                rgba(99, 102, 241, 0.15) 0%, 
+                rgba(139, 92, 246, 0.12) 30%, 
+                rgba(168, 85, 247, 0.08) 60%,
+                transparent 70%);
+            animation: waveFlow 8s ease-in-out infinite reverse;
             animation-delay: -2s;
-            animation-duration: 10s;
+            transform: scale(1.1) rotate(45deg);
         }
         
         .hero-wave:nth-child(3) {
-            background: radial-gradient(circle at calc(var(--mouse-x, 50%) - 5%) calc(var(--mouse-y, 50%) - 5%), 
-                rgba(139, 92, 246, 0.12) 0%, 
-                rgba(79, 70, 229, 0.06) 35%, 
-                transparent 65%);
+            background: radial-gradient(ellipse at calc(var(--mouse-x, 50%) - 10%) calc(var(--mouse-y, 50%) + 15%), 
+                rgba(139, 92, 246, 0.18) 0%, 
+                rgba(79, 70, 229, 0.1) 35%, 
+                rgba(99, 102, 241, 0.06) 65%,
+                transparent 75%);
+            animation: waveFlow 10s ease-in-out infinite;
             animation-delay: -4s;
-            animation-duration: 12s;
+            transform: scale(0.9) rotate(-30deg);
+        }
+        
+        /* New Ripple Layers */
+        .hero-ripple {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from var(--mouse-angle, 0deg) at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                transparent 0deg,
+                rgba(79, 70, 229, 0.1) 60deg,
+                transparent 120deg,
+                rgba(99, 102, 241, 0.08) 180deg,
+                transparent 240deg,
+                rgba(139, 92, 246, 0.06) 300deg,
+                transparent 360deg);
+            animation: rippleRotate 20s linear infinite;
+            transition: all 0.2s ease;
+        }
+        
+        .hero-liquid {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: 
+                radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                    rgba(79, 70, 229, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at calc(var(--mouse-x, 50%) + 30%) calc(var(--mouse-y, 50%) - 20%), 
+                    rgba(99, 102, 241, 0.08) 0%, transparent 35%),
+                radial-gradient(circle at calc(var(--mouse-x, 50%) - 25%) calc(var(--mouse-y, 50%) + 25%), 
+                    rgba(139, 92, 246, 0.06) 0%, transparent 30%);
+            filter: blur(2px);
+            animation: liquidFlow 15s ease-in-out infinite;
+            transition: transform 0.2s ease;
         }
         
         .hero-grid {
@@ -223,18 +263,76 @@
             animation-delay: -4s;
         }
         
-        @keyframes gentleFloat {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
+        @keyframes waveFlow {
+            0% {
+                transform: translateX(-20px) translateY(-15px) rotate(0deg) scaleX(1) scaleY(0.8);
+                filter: blur(0px) hue-rotate(0deg);
             }
             25% {
-                transform: translate(-10px, -15px) rotate(1deg) scale(1.02);
+                transform: translateX(15px) translateY(-25px) rotate(90deg) scaleX(1.2) scaleY(1.1);
+                filter: blur(1px) hue-rotate(45deg);
             }
             50% {
-                transform: translate(5px, -10px) rotate(-0.5deg) scale(0.98);
+                transform: translateX(10px) translateY(20px) rotate(180deg) scaleX(0.9) scaleY(1.3);
+                filter: blur(2px) hue-rotate(90deg);
             }
             75% {
-                transform: translate(-5px, 10px) rotate(0.5deg) scale(1.01);
+                transform: translateX(-15px) translateY(15px) rotate(270deg) scaleX(1.1) scaleY(0.9);
+                filter: blur(1px) hue-rotate(135deg);
+            }
+            100% {
+                transform: translateX(-20px) translateY(-15px) rotate(360deg) scaleX(1) scaleY(0.8);
+                filter: blur(0px) hue-rotate(180deg);
+            }
+        }
+        
+        @keyframes rippleRotate {
+            0% {
+                transform: rotate(0deg) scale(1);
+                opacity: 0.6;
+            }
+            25% {
+                transform: rotate(90deg) scale(1.1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: rotate(180deg) scale(0.9);
+                opacity: 0.7;
+            }
+            75% {
+                transform: rotate(270deg) scale(1.05);
+                opacity: 0.9;
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+                opacity: 0.6;
+            }
+        }
+        
+        @keyframes liquidFlow {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg) skewX(0deg);
+                border-radius: 50% 60% 70% 40%;
+            }
+            20% {
+                transform: translateX(-10px) translateY(-15px) rotate(72deg) skewX(5deg);
+                border-radius: 60% 40% 50% 80%;
+            }
+            40% {
+                transform: translateX(5px) translateY(-20px) rotate(144deg) skewX(-3deg);
+                border-radius: 40% 70% 60% 50%;
+            }
+            60% {
+                transform: translateX(15px) translateY(10px) rotate(216deg) skewX(8deg);
+                border-radius: 70% 50% 40% 60%;
+            }
+            80% {
+                transform: translateX(-5px) translateY(20px) rotate(288deg) skewX(-6deg);
+                border-radius: 50% 80% 70% 40%;
+            }
+            100% {
+                transform: translateX(0) translateY(0) rotate(360deg) skewX(0deg);
+                border-radius: 50% 60% 70% 40%;
             }
         }
         
@@ -932,6 +1030,8 @@
     <section class="hero" id="home">
         <!-- Interactive Hero Background -->
         <div class="hero-bg">
+            <div class="hero-liquid"></div>
+            <div class="hero-ripple"></div>
             <div class="hero-wave"></div>
             <div class="hero-wave"></div>
             <div class="hero-wave"></div>
@@ -1382,44 +1482,108 @@
             }, 1000);
         });
 
-        // Interactive Hero Background
+        // Enhanced Interactive Hero Background with Wave Effects
         function initInteractiveHeroBackground() {
             const hero = document.querySelector('.hero');
             const heroWaves = document.querySelectorAll('.hero-wave');
             const heroGrid = document.querySelector('.hero-grid');
             const heroOrbs = document.querySelectorAll('.hero-orb');
+            const heroLiquid = document.querySelector('.hero-liquid');
+            const heroRipple = document.querySelector('.hero-ripple');
             
             let mouseX = 0.5;
             let mouseY = 0.5;
+            let mouseVelocityX = 0;
+            let mouseVelocityY = 0;
+            let lastMouseX = 0.5;
+            let lastMouseY = 0.5;
             
-            // Track mouse movement within hero section
+            // Track mouse movement with velocity for wave effects
             hero.addEventListener('mousemove', (e) => {
                 const rect = hero.getBoundingClientRect();
-                mouseX = (e.clientX - rect.left) / rect.width;
-                mouseY = (e.clientY - rect.top) / rect.height;
+                const newMouseX = (e.clientX - rect.left) / rect.width;
+                const newMouseY = (e.clientY - rect.top) / rect.height;
+                
+                // Calculate mouse velocity for wave intensity
+                mouseVelocityX = newMouseX - lastMouseX;
+                mouseVelocityY = newMouseY - lastMouseY;
+                
+                mouseX = newMouseX;
+                mouseY = newMouseY;
+                lastMouseX = newMouseX;
+                lastMouseY = newMouseY;
                 
                 // Update CSS variables for wave gradients
                 document.documentElement.style.setProperty('--mouse-x', (mouseX * 100) + '%');
                 document.documentElement.style.setProperty('--mouse-y', (mouseY * 100) + '%');
                 
+                // Calculate angle for ripple rotation
+                const angle = Math.atan2(mouseY - 0.5, mouseX - 0.5) * (180 / Math.PI);
+                document.documentElement.style.setProperty('--mouse-angle', angle + 'deg');
+                
+                // Apply velocity-based wave transforms
+                heroWaves.forEach((wave, index) => {
+                    const velocityFactor = Math.sqrt(mouseVelocityX * mouseVelocityX + mouseVelocityY * mouseVelocityY) * 10;
+                    const waveScale = 1 + velocityFactor * (index + 1) * 0.1;
+                    const waveRotate = velocityFactor * (index + 1) * 15;
+                    
+                    wave.style.transform = `scale(${waveScale}) rotate(${waveRotate}deg)`;
+                    wave.style.filter = `blur(${velocityFactor * 2}px) brightness(${1 + velocityFactor * 0.2})`;
+                });
+                
+                // Liquid distortion based on mouse movement
+                if (heroLiquid) {
+                    const distortionX = (mouseX - 0.5) * 50;
+                    const distortionY = (mouseY - 0.5) * 30;
+                    const velocityScale = 1 + Math.abs(mouseVelocityX + mouseVelocityY) * 5;
+                    
+                    heroLiquid.style.transform = `translate(${distortionX}px, ${distortionY}px) scale(${velocityScale}) skew(${mouseVelocityX * 20}deg, ${mouseVelocityY * 15}deg)`;
+                }
+                
+                // Ripple intensity based on movement
+                if (heroRipple) {
+                    const rippleIntensity = Math.min(Math.abs(mouseVelocityX + mouseVelocityY) * 20, 2);
+                    heroRipple.style.opacity = 0.3 + rippleIntensity * 0.7;
+                    heroRipple.style.transform = `scale(${1 + rippleIntensity * 0.5}) rotate(${angle}deg)`;
+                }
+                
                 // Apply 3D transform to grid based on mouse position
-                const tiltX = (mouseY - 0.5) * 10;
-                const tiltY = (mouseX - 0.5) * -10;
+                const tiltX = (mouseY - 0.5) * 15;
+                const tiltY = (mouseX - 0.5) * -15;
                 heroGrid.style.transform = `perspective(1000px) rotateX(${20 + tiltX}deg) rotateY(${tiltY}deg)`;
                 
-                // Move orbs based on mouse position
+                // Move orbs with wave-like motion
                 heroOrbs.forEach((orb, index) => {
-                    const factor = (index + 1) * 0.3;
-                    const offsetX = (mouseX - 0.5) * 30 * factor;
-                    const offsetY = (mouseY - 0.5) * 20 * factor;
-                    orb.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${1 + factor * 0.1})`;
+                    const factor = (index + 1) * 0.4;
+                    const waveOffsetX = Math.sin((Date.now() * 0.001) + (index * 2)) * 10;
+                    const waveOffsetY = Math.cos((Date.now() * 0.0015) + (index * 1.5)) * 8;
+                    const offsetX = (mouseX - 0.5) * 40 * factor + waveOffsetX;
+                    const offsetY = (mouseY - 0.5) * 30 * factor + waveOffsetY;
+                    const scale = 1 + factor * 0.15 + Math.abs(mouseVelocityX + mouseVelocityY) * 2;
+                    
+                    orb.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
                 });
             });
             
-            // Reset position when mouse leaves hero
+            // Reset to gentle wave state when mouse leaves
             hero.addEventListener('mouseleave', () => {
                 document.documentElement.style.setProperty('--mouse-x', '50%');
                 document.documentElement.style.setProperty('--mouse-y', '50%');
+                document.documentElement.style.setProperty('--mouse-angle', '0deg');
+                
+                heroWaves.forEach((wave) => {
+                    wave.style.transform = 'scale(1) rotate(0deg)';
+                    wave.style.filter = 'blur(0px) brightness(1)';
+                });
+                
+                if (heroLiquid) {
+                    heroLiquid.style.transform = 'translate(0px, 0px) scale(1) skew(0deg, 0deg)';
+                }
+                
+                if (heroRipple) {
+                    heroRipple.style.opacity = '0.6';
+                    heroRipple.style.transform = 'scale(1) rotate(0deg)';
+                }
                 
                 heroGrid.style.transform = 'perspective(1000px) rotateX(20deg) rotateY(0deg)';
                 
@@ -1428,26 +1592,39 @@
                 });
             });
             
-            // Add subtle wave movement on scroll
-            window.addEventListener('scroll', () => {
-                const scrolled = window.pageYOffset;
-                const rate = scrolled * -0.2;
+            // Continuous wave animation
+            function animateWaves() {
+                const time = Date.now() * 0.001;
                 
                 heroWaves.forEach((wave, index) => {
-                    const speed = (index + 1) * 0.5;
-                    wave.style.transform = `translateY(${rate * speed}px) scale(${1 + scrolled * 0.0001})`;
+                    const waveOffset = time + (index * 2);
+                    const x = Math.sin(waveOffset * 0.5) * 15;
+                    const y = Math.cos(waveOffset * 0.3) * 10;
+                    const rotate = Math.sin(waveOffset * 0.2) * 5;
+                    const scale = 1 + Math.sin(waveOffset * 0.4) * 0.1;
+                    
+                    if (!hero.matches(':hover')) {
+                        wave.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg) scale(${scale})`;
+                    }
                 });
-            });
+                
+                requestAnimationFrame(animateWaves);
+            }
             
-            // Add breathing effect to orbs
+            animateWaves();
+            
+            // Add breathing effect to orbs with wave motion
             setInterval(() => {
-                heroOrbs.forEach((orb, index) => {
-                    const delay = index * 1000;
-                    const scale = 1 + Math.sin((Date.now() + delay) * 0.002) * 0.1;
-                    const currentTransform = orb.style.transform || 'translate(0px, 0px) scale(1)';
-                    const baseTransform = currentTransform.replace(/scale\([^)]*\)/, '');
-                    orb.style.transform = `${baseTransform} scale(${scale})`;
-                });
+                if (!hero.matches(':hover')) {
+                    heroOrbs.forEach((orb, index) => {
+                        const delay = index * 1000;
+                        const time = Date.now() + delay;
+                        const scale = 1 + Math.sin(time * 0.002) * 0.15;
+                        const waveX = Math.sin(time * 0.001) * 5;
+                        const waveY = Math.cos(time * 0.0015) * 3;
+                        orb.style.transform = `translate(${waveX}px, ${waveY}px) scale(${scale})`;
+                    });
+                }
             }, 50);
         }
 
