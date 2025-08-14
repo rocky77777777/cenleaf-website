@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy Test - CENLEAF</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .timestamp {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        .success {
+            color: #10b981;
+            font-size: 48px;
+            margin: 20px 0;
+        }
+        p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success">✅</div>
+        <h1>デプロイテスト成功！</h1>
+        <div class="timestamp">
+            <strong>更新日時:</strong><br>
+            2025年8月14日 14:50<br>
+            <strong>ファイル:</strong> deploy-test.html
+        </div>
+        <p>
+            このページが表示されていれば、<br>
+            GitHub Actions → Xサーバーへの<br>
+            自動デプロイが正常に動作しています。
+        </p>
+        <p style="margin-top: 30px;">
+            <strong>デプロイパス:</strong><br>
+            /cenleaf.com/public_html/
+        </p>
+    </div>
+</body>
+</html>
