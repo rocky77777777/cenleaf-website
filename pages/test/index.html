@@ -6,6 +6,9 @@
     <title>Digital Arch - ITのチカラで社会への架け橋となる</title>
     <meta name="description" content="Digital Archは、Webデザイン、グラフィックデザイン、デジタルマーケティング、ブランディング、SNS管理などの包括的なITソリューションを提供します。">
     
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -27,6 +30,42 @@
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            
+            /* Wave Animation Properties */
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+            --mouse-angle: 0deg;
+            --wave-intensity: 1;
+            --wave-speed: 1;
+            --ripple-scale: 1;
+            --ripple-opacity: 0.6;
+            --liquid-distortion: 0;
+            --blur-amount: 0px;
+            --brightness: 1;
+        }
+        
+        @property --wave-intensity {
+            syntax: '<number>';
+            initial-value: 1;
+            inherits: false;
+        }
+        
+        @property --wave-speed {
+            syntax: '<number>';
+            initial-value: 1;
+            inherits: false;
+        }
+        
+        @property --ripple-scale {
+            syntax: '<number>';
+            initial-value: 1;
+            inherits: false;
+        }
+        
+        @property --liquid-distortion {
+            syntax: '<number>';
+            initial-value: 0;
+            inherits: false;
         }
         
         body {
@@ -142,14 +181,15 @@
             position: absolute;
             width: 120%;
             height: 120%;
-            background: radial-gradient(ellipse at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-                rgba(79, 70, 229, 0.2) 0%, 
-                rgba(99, 102, 241, 0.15) 25%, 
-                rgba(139, 92, 246, 0.1) 50%, 
+            background: radial-gradient(ellipse at var(--mouse-x) var(--mouse-y), 
+                rgba(79, 70, 229, calc(0.2 * var(--wave-intensity))) 0%, 
+                rgba(99, 102, 241, calc(0.15 * var(--wave-intensity))) 25%, 
+                rgba(139, 92, 246, calc(0.1 * var(--wave-intensity))) 50%, 
                 transparent 70%);
-            transition: all 0.1s ease;
-            animation: waveFlow 6s ease-in-out infinite;
-            transform-origin: var(--mouse-x, 50%) var(--mouse-y, 50%);
+            filter: blur(var(--blur-amount)) brightness(var(--brightness));
+            animation: waveFlow calc(6s / var(--wave-speed)) ease-in-out infinite;
+            transform-origin: var(--mouse-x) var(--mouse-y);
+            will-change: transform, filter;
         }
         
         .hero-wave:nth-child(2) {
@@ -179,16 +219,18 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background: conic-gradient(from var(--mouse-angle, 0deg) at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+            background: conic-gradient(from var(--mouse-angle) at var(--mouse-x) var(--mouse-y), 
                 transparent 0deg,
-                rgba(79, 70, 229, 0.1) 60deg,
+                rgba(79, 70, 229, calc(0.1 * var(--wave-intensity))) 60deg,
                 transparent 120deg,
-                rgba(99, 102, 241, 0.08) 180deg,
+                rgba(99, 102, 241, calc(0.08 * var(--wave-intensity))) 180deg,
                 transparent 240deg,
-                rgba(139, 92, 246, 0.06) 300deg,
+                rgba(139, 92, 246, calc(0.06 * var(--wave-intensity))) 300deg,
                 transparent 360deg);
-            animation: rippleRotate 20s linear infinite;
-            transition: all 0.2s ease;
+            animation: rippleRotate calc(20s / var(--wave-speed)) linear infinite;
+            opacity: var(--ripple-opacity);
+            transform: scale(var(--ripple-scale));
+            will-change: transform, opacity;
         }
         
         .hero-liquid {
@@ -198,15 +240,15 @@
             top: -25%;
             left: -25%;
             background: 
-                radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-                    rgba(79, 70, 229, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at calc(var(--mouse-x, 50%) + 30%) calc(var(--mouse-y, 50%) - 20%), 
-                    rgba(99, 102, 241, 0.08) 0%, transparent 35%),
-                radial-gradient(circle at calc(var(--mouse-x, 50%) - 25%) calc(var(--mouse-y, 50%) + 25%), 
-                    rgba(139, 92, 246, 0.06) 0%, transparent 30%);
-            filter: blur(2px);
-            animation: liquidFlow 15s ease-in-out infinite;
-            transition: transform 0.2s ease;
+                radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
+                    rgba(79, 70, 229, calc(0.1 * var(--wave-intensity))) 0%, transparent 40%),
+                radial-gradient(circle at calc(var(--mouse-x) + 30%) calc(var(--mouse-y) - 20%), 
+                    rgba(99, 102, 241, calc(0.08 * var(--wave-intensity))) 0%, transparent 35%),
+                radial-gradient(circle at calc(var(--mouse-x) - 25%) calc(var(--mouse-y) + 25%), 
+                    rgba(139, 92, 246, calc(0.06 * var(--wave-intensity))) 0%, transparent 30%);
+            filter: blur(calc(2px + var(--liquid-distortion) * 3px));
+            animation: liquidFlow calc(15s / var(--wave-speed)) ease-in-out infinite;
+            will-change: transform, filter;
         }
         
         .hero-grid {
@@ -1482,8 +1524,13 @@
             }, 1000);
         });
 
-        // Enhanced Interactive Hero Background with Wave Effects
+        // GSAP-Powered Interactive Hero Background
         function initInteractiveHeroBackground() {
+            if (!window.gsap) {
+                console.warn('GSAP not loaded, falling back to basic animations');
+                return;
+            }
+            
             const hero = document.querySelector('.hero');
             const heroWaves = document.querySelectorAll('.hero-wave');
             const heroGrid = document.querySelector('.hero-grid');
@@ -1498,134 +1545,205 @@
             let lastMouseX = 0.5;
             let lastMouseY = 0.5;
             
-            // Track mouse movement with velocity for wave effects
+            // GSAP Timeline for smooth transitions
+            const waveTimeline = gsap.timeline({ paused: true });
+            const resetTimeline = gsap.timeline({ paused: true });
+            
+            // Initialize GSAP properties
+            gsap.set(':root', {
+                '--wave-intensity': 1,
+                '--wave-speed': 1,
+                '--ripple-scale': 1,
+                '--ripple-opacity': 0.6,
+                '--liquid-distortion': 0,
+                '--blur-amount': '0px',
+                '--brightness': 1
+            });
+            
+            // Track mouse movement with GSAP smooth interpolation
             hero.addEventListener('mousemove', (e) => {
                 const rect = hero.getBoundingClientRect();
                 const newMouseX = (e.clientX - rect.left) / rect.width;
                 const newMouseY = (e.clientY - rect.top) / rect.height;
                 
-                // Calculate mouse velocity for wave intensity
+                // Calculate velocity
                 mouseVelocityX = newMouseX - lastMouseX;
                 mouseVelocityY = newMouseY - lastMouseY;
+                const velocity = Math.sqrt(mouseVelocityX ** 2 + mouseVelocityY ** 2);
                 
                 mouseX = newMouseX;
                 mouseY = newMouseY;
                 lastMouseX = newMouseX;
                 lastMouseY = newMouseY;
                 
-                // Update CSS variables for wave gradients
-                document.documentElement.style.setProperty('--mouse-x', (mouseX * 100) + '%');
-                document.documentElement.style.setProperty('--mouse-y', (mouseY * 100) + '%');
-                
-                // Calculate angle for ripple rotation
+                // Calculate dynamic values
                 const angle = Math.atan2(mouseY - 0.5, mouseX - 0.5) * (180 / Math.PI);
-                document.documentElement.style.setProperty('--mouse-angle', angle + 'deg');
+                const waveIntensity = Math.min(1 + velocity * 15, 3);
+                const waveSpeed = Math.min(1 + velocity * 10, 4);
+                const rippleScale = 1 + velocity * 8;
+                const liquidDistortion = Math.min(velocity * 20, 5);
+                const blurAmount = Math.min(velocity * 40, 8);
+                const brightness = 1 + velocity * 3;
                 
-                // Apply velocity-based wave transforms
+                // Smooth GSAP animations to CSS variables
+                gsap.to(':root', {
+                    duration: 0.3,
+                    ease: "power2.out",
+                    '--mouse-x': (mouseX * 100) + '%',
+                    '--mouse-y': (mouseY * 100) + '%',
+                    '--mouse-angle': angle + 'deg',
+                    '--wave-intensity': waveIntensity,
+                    '--wave-speed': waveSpeed,
+                    '--ripple-scale': rippleScale,
+                    '--ripple-opacity': Math.min(0.3 + velocity * 10, 1),
+                    '--liquid-distortion': liquidDistortion,
+                    '--blur-amount': blurAmount + 'px',
+                    '--brightness': brightness
+                });
+                
+                // Individual wave transformations with GSAP
                 heroWaves.forEach((wave, index) => {
-                    const velocityFactor = Math.sqrt(mouseVelocityX * mouseVelocityX + mouseVelocityY * mouseVelocityY) * 10;
-                    const waveScale = 1 + velocityFactor * (index + 1) * 0.1;
-                    const waveRotate = velocityFactor * (index + 1) * 15;
+                    const factor = (index + 1) * 0.5;
+                    const scale = 1 + velocity * factor * 2;
+                    const rotation = velocity * factor * 30;
                     
-                    wave.style.transform = `scale(${waveScale}) rotate(${waveRotate}deg)`;
-                    wave.style.filter = `blur(${velocityFactor * 2}px) brightness(${1 + velocityFactor * 0.2})`;
+                    gsap.to(wave, {
+                        duration: 0.4,
+                        ease: "power3.out",
+                        scale: scale,
+                        rotation: rotation,
+                        transformOrigin: `${mouseX * 100}% ${mouseY * 100}%`
+                    });
                 });
                 
-                // Liquid distortion based on mouse movement
+                // Liquid distortion with elastic easing
                 if (heroLiquid) {
-                    const distortionX = (mouseX - 0.5) * 50;
-                    const distortionY = (mouseY - 0.5) * 30;
-                    const velocityScale = 1 + Math.abs(mouseVelocityX + mouseVelocityY) * 5;
+                    const distortionX = (mouseX - 0.5) * 60;
+                    const distortionY = (mouseY - 0.5) * 40;
+                    const scaleValue = 1 + velocity * 6;
                     
-                    heroLiquid.style.transform = `translate(${distortionX}px, ${distortionY}px) scale(${velocityScale}) skew(${mouseVelocityX * 20}deg, ${mouseVelocityY * 15}deg)`;
-                }
-                
-                // Ripple intensity based on movement
-                if (heroRipple) {
-                    const rippleIntensity = Math.min(Math.abs(mouseVelocityX + mouseVelocityY) * 20, 2);
-                    heroRipple.style.opacity = 0.3 + rippleIntensity * 0.7;
-                    heroRipple.style.transform = `scale(${1 + rippleIntensity * 0.5}) rotate(${angle}deg)`;
-                }
-                
-                // Apply 3D transform to grid based on mouse position
-                const tiltX = (mouseY - 0.5) * 15;
-                const tiltY = (mouseX - 0.5) * -15;
-                heroGrid.style.transform = `perspective(1000px) rotateX(${20 + tiltX}deg) rotateY(${tiltY}deg)`;
-                
-                // Move orbs with wave-like motion
-                heroOrbs.forEach((orb, index) => {
-                    const factor = (index + 1) * 0.4;
-                    const waveOffsetX = Math.sin((Date.now() * 0.001) + (index * 2)) * 10;
-                    const waveOffsetY = Math.cos((Date.now() * 0.0015) + (index * 1.5)) * 8;
-                    const offsetX = (mouseX - 0.5) * 40 * factor + waveOffsetX;
-                    const offsetY = (mouseY - 0.5) * 30 * factor + waveOffsetY;
-                    const scale = 1 + factor * 0.15 + Math.abs(mouseVelocityX + mouseVelocityY) * 2;
-                    
-                    orb.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
-                });
-            });
-            
-            // Reset to gentle wave state when mouse leaves
-            hero.addEventListener('mouseleave', () => {
-                document.documentElement.style.setProperty('--mouse-x', '50%');
-                document.documentElement.style.setProperty('--mouse-y', '50%');
-                document.documentElement.style.setProperty('--mouse-angle', '0deg');
-                
-                heroWaves.forEach((wave) => {
-                    wave.style.transform = 'scale(1) rotate(0deg)';
-                    wave.style.filter = 'blur(0px) brightness(1)';
-                });
-                
-                if (heroLiquid) {
-                    heroLiquid.style.transform = 'translate(0px, 0px) scale(1) skew(0deg, 0deg)';
-                }
-                
-                if (heroRipple) {
-                    heroRipple.style.opacity = '0.6';
-                    heroRipple.style.transform = 'scale(1) rotate(0deg)';
-                }
-                
-                heroGrid.style.transform = 'perspective(1000px) rotateX(20deg) rotateY(0deg)';
-                
-                heroOrbs.forEach((orb) => {
-                    orb.style.transform = 'translate(0px, 0px) scale(1)';
-                });
-            });
-            
-            // Continuous wave animation
-            function animateWaves() {
-                const time = Date.now() * 0.001;
-                
-                heroWaves.forEach((wave, index) => {
-                    const waveOffset = time + (index * 2);
-                    const x = Math.sin(waveOffset * 0.5) * 15;
-                    const y = Math.cos(waveOffset * 0.3) * 10;
-                    const rotate = Math.sin(waveOffset * 0.2) * 5;
-                    const scale = 1 + Math.sin(waveOffset * 0.4) * 0.1;
-                    
-                    if (!hero.matches(':hover')) {
-                        wave.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg) scale(${scale})`;
-                    }
-                });
-                
-                requestAnimationFrame(animateWaves);
-            }
-            
-            animateWaves();
-            
-            // Add breathing effect to orbs with wave motion
-            setInterval(() => {
-                if (!hero.matches(':hover')) {
-                    heroOrbs.forEach((orb, index) => {
-                        const delay = index * 1000;
-                        const time = Date.now() + delay;
-                        const scale = 1 + Math.sin(time * 0.002) * 0.15;
-                        const waveX = Math.sin(time * 0.001) * 5;
-                        const waveY = Math.cos(time * 0.0015) * 3;
-                        orb.style.transform = `translate(${waveX}px, ${waveY}px) scale(${scale})`;
+                    gsap.to(heroLiquid, {
+                        duration: 0.6,
+                        ease: "elastic.out(1, 0.5)",
+                        x: distortionX,
+                        y: distortionY,
+                        scale: scaleValue,
+                        skewX: mouseVelocityX * 25,
+                        skewY: mouseVelocityY * 20
                     });
                 }
-            }, 50);
+                
+                // 3D Grid transformation
+                const tiltX = (mouseY - 0.5) * 20;
+                const tiltY = (mouseX - 0.5) * -20;
+                
+                gsap.to(heroGrid, {
+                    duration: 0.5,
+                    ease: "power2.out",
+                    rotationX: 20 + tiltX,
+                    rotationY: tiltY,
+                    transformPerspective: 1000
+                });
+                
+                // Orbs with wave-like motion
+                heroOrbs.forEach((orb, index) => {
+                    const factor = (index + 1) * 0.5;
+                    const offsetX = (mouseX - 0.5) * 50 * factor;
+                    const offsetY = (mouseY - 0.5) * 35 * factor;
+                    const scaleValue = 1 + factor * 0.2 + velocity * 4;
+                    
+                    gsap.to(orb, {
+                        duration: 0.8,
+                        ease: "power2.out",
+                        x: offsetX,
+                        y: offsetY,
+                        scale: scaleValue
+                    });
+                });
+            });
+            
+            // Smooth reset when mouse leaves
+            hero.addEventListener('mouseleave', () => {
+                gsap.to(':root', {
+                    duration: 1.2,
+                    ease: "power2.out",
+                    '--mouse-x': '50%',
+                    '--mouse-y': '50%',
+                    '--mouse-angle': '0deg',
+                    '--wave-intensity': 1,
+                    '--wave-speed': 1,
+                    '--ripple-scale': 1,
+                    '--ripple-opacity': 0.6,
+                    '--liquid-distortion': 0,
+                    '--blur-amount': '0px',
+                    '--brightness': 1
+                });
+                
+                gsap.to(heroWaves, {
+                    duration: 1,
+                    ease: "power2.out",
+                    scale: 1,
+                    rotation: 0,
+                    stagger: 0.1
+                });
+                
+                if (heroLiquid) {
+                    gsap.to(heroLiquid, {
+                        duration: 1.5,
+                        ease: "elastic.out(1, 0.3)",
+                        x: 0,
+                        y: 0,
+                        scale: 1,
+                        skewX: 0,
+                        skewY: 0
+                    });
+                }
+                
+                gsap.to(heroGrid, {
+                    duration: 1,
+                    ease: "power2.out",
+                    rotationX: 20,
+                    rotationY: 0
+                });
+                
+                gsap.to(heroOrbs, {
+                    duration: 1.2,
+                    ease: "elastic.out(1, 0.4)",
+                    x: 0,
+                    y: 0,
+                    scale: 1,
+                    stagger: 0.1
+                });
+            });
+            
+            // Continuous ambient wave animation with GSAP
+            const ambientTimeline = gsap.timeline({ repeat: -1 });
+            
+            heroWaves.forEach((wave, index) => {
+                ambientTimeline.to(wave, {
+                    duration: 6 + index * 2,
+                    ease: "sine.inOut",
+                    x: "+=20",
+                    y: "+=15",
+                    rotation: "+=10",
+                    scale: 1.1,
+                    yoyo: true,
+                    repeat: -1
+                }, index * 0.5);
+            });
+            
+            // Breathing orbs with GSAP
+            heroOrbs.forEach((orb, index) => {
+                gsap.to(orb, {
+                    duration: 3 + index,
+                    ease: "sine.inOut",
+                    scale: 1.2,
+                    rotation: 360,
+                    yoyo: true,
+                    repeat: -1,
+                    delay: index * 0.8
+                });
+            });
         }
 
         // Enhanced parallax for hero section
