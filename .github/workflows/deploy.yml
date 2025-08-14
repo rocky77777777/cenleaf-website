@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
           local-dir: ./
-          server-dir: /home/cenleaf/public_html/
+          server-dir: /cenleaf.com/public_html/
           exclude: |
             **/.git*
             **/.git*/**
