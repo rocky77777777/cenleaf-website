@@ -2,17 +2,56 @@
 <html lang="ja">
 <head>
     <script>
-// 🚨 緊急PC判定・リダイレクト機能（即座実行）
+// 🚨 改良版PC判定・リダイレクト機能（より確実な判定）
 (function() {
-    // ページ読み込み前の即座チェック
-    const ua = navigator.userAgent;
-    const isPC = !/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone|Mobile/i.test(ua) && 
-                 window.screen.width > 1024 && 
-                 !'ontouchstart' in window;
+    // デバッグ情報を表示
+    console.log('🔍 Device Detection Started');
+    console.log('UserAgent:', navigator.userAgent);
+    console.log('Screen Width:', window.screen.width);
+    console.log('Inner Width:', window.innerWidth);
+    console.log('Touch Support:', 'ontouchstart' in window);
+    console.log('Max Touch Points:', navigator.maxTouchPoints);
     
-    if (isPC && location.pathname.includes('mobile-advanced.html')) {
-        console.log('🖥️ PC detected - Redirecting immediately');
-        location.replace('https://cenleaf.com/');
+    // PC判定の改良版
+    const ua = navigator.userAgent.toLowerCase();
+    
+    // モバイルデバイスの除外判定
+    const isMobile = /android|iphone|ipad|ipod|blackberry|windows phone|mobile/i.test(ua);
+    
+    // 画面サイズ判定（PCは通常1024px以上）
+    const hasLargeScreen = window.screen.width >= 1024 || window.innerWidth >= 1024;
+    
+    // タッチサポートの判定
+    const touchPoints = navigator.maxTouchPoints || navigator.msMaxTouchPoints || 0;
+    const hasTouchSupport = 'ontouchstart' in window || touchPoints > 0;
+    
+    // PC判定ロジック（改良版）
+    // モバイルUAではない AND 大画面 の場合はPC
+    const isDesktop = !isMobile && hasLargeScreen;
+    
+    // 追加の判定：プラットフォーム情報
+    const platform = navigator.platform || '';
+    const isDesktopPlatform = /Win|Mac|Linux/i.test(platform) && !/Android|iPhone|iPad/i.test(platform);
+    
+    // 最終的なPC判定
+    const isPC = (isDesktop || isDesktopPlatform) && !isMobile;
+    
+    console.log('📊 Detection Results:', {
+        isMobile: isMobile,
+        hasLargeScreen: hasLargeScreen,
+        isDesktopPlatform: isDesktopPlatform,
+        isPC: isPC
+    });
+    
+    // PCと判定された場合、リダイレクト
+    if (isPC && window.location.pathname.includes('mobile-advanced.html')) {
+        console.log('🖥️ PC detected! Redirecting to desktop site...');
+        // 即座にリダイレクト
+        window.location.replace('https://cenleaf.com/');
+        // バックアップ（replaceが失敗した場合）
+        window.location.href = 'https://cenleaf.com/';
+    } else {
+        console.log('📱 Mobile/Tablet detected or already on correct page');
     }
 })();
 </script>
@@ -829,17 +868,56 @@
     <!-- ãããã¼ -->
     <header>
     <script>
-// 🚨 緊急PC判定・リダイレクト機能（即座実行）
+// 🚨 改良版PC判定・リダイレクト機能（より確実な判定）
 (function() {
-    // ページ読み込み前の即座チェック
-    const ua = navigator.userAgent;
-    const isPC = !/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone|Mobile/i.test(ua) && 
-                 window.screen.width > 1024 && 
-                 !'ontouchstart' in window;
+    // デバッグ情報を表示
+    console.log('🔍 Device Detection Started');
+    console.log('UserAgent:', navigator.userAgent);
+    console.log('Screen Width:', window.screen.width);
+    console.log('Inner Width:', window.innerWidth);
+    console.log('Touch Support:', 'ontouchstart' in window);
+    console.log('Max Touch Points:', navigator.maxTouchPoints);
     
-    if (isPC && location.pathname.includes('mobile-advanced.html')) {
-        console.log('🖥️ PC detected - Redirecting immediately');
-        location.replace('https://cenleaf.com/');
+    // PC判定の改良版
+    const ua = navigator.userAgent.toLowerCase();
+    
+    // モバイルデバイスの除外判定
+    const isMobile = /android|iphone|ipad|ipod|blackberry|windows phone|mobile/i.test(ua);
+    
+    // 画面サイズ判定（PCは通常1024px以上）
+    const hasLargeScreen = window.screen.width >= 1024 || window.innerWidth >= 1024;
+    
+    // タッチサポートの判定
+    const touchPoints = navigator.maxTouchPoints || navigator.msMaxTouchPoints || 0;
+    const hasTouchSupport = 'ontouchstart' in window || touchPoints > 0;
+    
+    // PC判定ロジック（改良版）
+    // モバイルUAではない AND 大画面 の場合はPC
+    const isDesktop = !isMobile && hasLargeScreen;
+    
+    // 追加の判定：プラットフォーム情報
+    const platform = navigator.platform || '';
+    const isDesktopPlatform = /Win|Mac|Linux/i.test(platform) && !/Android|iPhone|iPad/i.test(platform);
+    
+    // 最終的なPC判定
+    const isPC = (isDesktop || isDesktopPlatform) && !isMobile;
+    
+    console.log('📊 Detection Results:', {
+        isMobile: isMobile,
+        hasLargeScreen: hasLargeScreen,
+        isDesktopPlatform: isDesktopPlatform,
+        isPC: isPC
+    });
+    
+    // PCと判定された場合、リダイレクト
+    if (isPC && window.location.pathname.includes('mobile-advanced.html')) {
+        console.log('🖥️ PC detected! Redirecting to desktop site...');
+        // 即座にリダイレクト
+        window.location.replace('https://cenleaf.com/');
+        // バックアップ（replaceが失敗した場合）
+        window.location.href = 'https://cenleaf.com/';
+    } else {
+        console.log('📱 Mobile/Tablet detected or already on correct page');
     }
 })();
 </script>
