@@ -1,0 +1,24 @@
+{
+  "name": "sanity-cms",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@sanity/vision": "^4.4.1",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "sanity": "^4.4.1",
+    "styled-components": "^6.1.19"
+  }
+}
