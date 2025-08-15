@@ -20,9 +20,9 @@
             
             // いずれかの条件を満たす場合はモバイルページへリダイレクト
             if ((isMobile || isSmallScreen) && isTouchDevice) {
-                // 現在のパスがmobile.htmlでない場合のみリダイレクト
-                if (!window.location.pathname.includes('mobile.html')) {
-                    window.location.href = './mobile.html';
+                // 現在のパスがmobile-advanced.htmlでない場合のみリダイレクト
+                if (!window.location.pathname.includes('mobile-advanced.html')) {
+                    window.location.href = './mobile-advanced.html';
                 }
             }
         })();
@@ -273,18 +273,22 @@
         
         .cta-button {
             display: inline-block;
-            padding: 15px 40px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-            color: white !important;
+            padding: 20px 50px;
+            background: #FF006E;
+            background: linear-gradient(135deg, #FF006E 0%, #00D4FF 100%);
+            color: #FFFFFF !important;
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 900;
+            font-size: 1.2rem;
             border-radius: 50px;
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
-            box-shadow: 0 0 30px var(--neon-cyan);
-            z-index: 10;
-            font-size: 1.1rem;
+            box-shadow: 0 10px 40px rgba(255, 0, 110, 0.5);
+            z-index: 1000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 2px solid #FFFFFF;
         }
         
         .cta-button::before {
@@ -765,7 +769,7 @@
             <p style="font-size: 1.2rem; margin-bottom: 50px; color: var(--neon-cyan);">
                 最新情報をお届けするメールマガジンに登録
             </p>
-            <a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx?ftid=nU1AfsRTq9C4" class="cta-button" target="_blank" style="margin-bottom: 60px; display: inline-block;">メルマガに登録する</a>
+            <a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx?ftid=nU1AfsRTq9C4" target="_blank" style="display: inline-block; padding: 20px 50px; background: linear-gradient(135deg, #FF006E 0%, #00D4FF 100%); color: #FFFFFF; text-decoration: none; font-weight: 900; font-size: 1.2rem; border-radius: 50px; box-shadow: 0 10px 40px rgba(255, 0, 110, 0.5); text-transform: uppercase; letter-spacing: 2px; border: 2px solid #FFFFFF; margin-bottom: 60px;">メルマガに登録する</a>
             
             <div style="margin-top: 60px;">
                 <h3 style="font-size: 1.5rem; margin-bottom: 30px; color: var(--electric-green);">SOCIAL MEDIA</h3>
