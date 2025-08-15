@@ -234,7 +234,8 @@
         
         .hero-content {
             max-width: 800px;
-            z-index: 10;
+            z-index: 100;
+            position: relative;
         }
         
         .hero h1 {
@@ -274,7 +275,7 @@
             display: inline-block;
             padding: 15px 40px;
             background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-            color: black;
+            color: white !important;
             text-decoration: none;
             font-weight: 700;
             border-radius: 50px;
@@ -282,6 +283,8 @@
             overflow: hidden;
             transition: all 0.3s ease;
             box-shadow: 0 0 30px var(--neon-cyan);
+            z-index: 10;
+            font-size: 1.1rem;
         }
         
         .cta-button::before {
