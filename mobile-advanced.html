@@ -2,15 +2,13 @@
 <html lang="ja">
 <head>
     <script>
-// 🚨 改良版PC判定・リダイレクト機能（より確実な判定）
+// 🚨 PC判定・リダイレクト機能（即座実行）
 (function() {
     // デバッグ情報を表示
     console.log('🔍 Device Detection Started');
     console.log('UserAgent:', navigator.userAgent);
     console.log('Screen Width:', window.screen.width);
-    console.log('Inner Width:', window.innerWidth);
-    console.log('Touch Support:', 'ontouchstart' in window);
-    console.log('Max Touch Points:', navigator.maxTouchPoints);
+    console.log('Platform:', navigator.platform);
     
     // PC判定の改良版
     const ua = navigator.userAgent.toLowerCase();
@@ -21,20 +19,12 @@
     // 画面サイズ判定（PCは通常1024px以上）
     const hasLargeScreen = window.screen.width >= 1024 || window.innerWidth >= 1024;
     
-    // タッチサポートの判定
-    const touchPoints = navigator.maxTouchPoints || navigator.msMaxTouchPoints || 0;
-    const hasTouchSupport = 'ontouchstart' in window || touchPoints > 0;
-    
-    // PC判定ロジック（改良版）
-    // モバイルUAではない AND 大画面 の場合はPC
-    const isDesktop = !isMobile && hasLargeScreen;
-    
-    // 追加の判定：プラットフォーム情報
+    // プラットフォーム情報
     const platform = navigator.platform || '';
     const isDesktopPlatform = /Win|Mac|Linux/i.test(platform) && !/Android|iPhone|iPad/i.test(platform);
     
     // 最終的なPC判定
-    const isPC = (isDesktop || isDesktopPlatform) && !isMobile;
+    const isPC = (hasLargeScreen && !isMobile) || isDesktopPlatform;
     
     console.log('📊 Detection Results:', {
         isMobile: isMobile,
@@ -48,29 +38,27 @@
         console.log('🖥️ PC detected! Redirecting to desktop site...');
         // 即座にリダイレクト
         window.location.replace('https://cenleaf.com/');
-        // バックアップ（replaceが失敗した場合）
-        window.location.href = 'https://cenleaf.com/';
     } else {
         console.log('📱 Mobile/Tablet detected or already on correct page');
     }
 })();
-</script>
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>CENLEAF - æªæ¥åAIÃãªã¼ãã¡ã¼ã·ã§ã³</title>
-    <meta name="description" content="ãªã¼ãã¦ã§ããã¼ã¨AIã§ãåäººã»å°è¦æ¨¡ãã¸ãã¹ã®éå®¢ãè²©å£²ãèªåéè»¢åãæéã¨å ´æã«ç¸ãããªããæ¬¡ä¸ä»£ã®ãã¸ãã¹ã¢ãã«ãæ§ç¯ãã¾ãã">
+    <title>CENLEAF - 未来型AI×オートメーション</title>
+    <meta name="description" content="オートウェビナーとAIで、個人・小規模ビジネスの集客〜販売を自動運転化。時間と場所に縛られない、次世代のビジネスモデルを構築します。">
     
-    <!-- ãã¡ãã³ã³ -->
+    <!-- ファビコン -->
     <link rel="icon" type="image/png" href="/favicon.png">
     
-    <!-- OGPè¨­å® -->
-    <meta property="og:title" content="CENLEAF - ãªã¼ãã¦ã§ããã¼ã¨AIã§å£²ä¸ãèªåå">
-    <meta property="og:description" content="åäººã»å°è¦æ¨¡ãã¸ãã¹ã®éå®¢ãè²©å£²ãèªåéè»¢åãã¾ã">
+    <!-- OGP設定 -->
+    <meta property="og:title" content="CENLEAF - オートウェビナーとAIで売上を自動化">
+    <meta property="og:description" content="個人・小規模ビジネスの集客〜販売を自動運転化します">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://cenleaf.com">
     
-    <!-- ãã©ã³ã -->
+    <!-- フォント -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
@@ -101,7 +89,7 @@
             position: relative;
         }
 
-        /* ãã­ã°ã©ãã£ãã¯èæ¯ */
+        /* ホログラフィック背景 */
         body::before {
             content: '';
             position: fixed;
@@ -117,7 +105,7 @@
             z-index: 0;
         }
 
-        /* ãã¼ãã£ã¯ã«èæ¯ */
+        /* パーティクル背景 */
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -128,7 +116,7 @@
             z-index: 1;
         }
 
-        /* ãããã¼ */
+        /* ヘッダー */
         header {
             position: fixed;
             top: 0;
@@ -193,7 +181,7 @@
             transform: rotate(-45deg) translateY(-11px);
         }
 
-        /* ã¢ãã¤ã«ã¡ãã¥ã¼ */
+        /* モバイルメニュー */
         .mobile-menu {
             position: fixed;
             top: 60px;
@@ -239,7 +227,7 @@
             left: 100%;
         }
 
-        /* ãã¼ã­ã¼ã»ã¯ã·ã§ã³ */
+        /* ヒーローセクション */
         .hero {
             margin-top: 60px;
             padding: 80px 20px;
@@ -271,7 +259,7 @@
             letter-spacing: 5px;
         }
 
-        /* ã°ãªããã¨ãã§ã¯ã */
+        /* グリッチエフェクト */
         .glitch-text {
             position: relative;
             display: inline-block;
@@ -449,7 +437,7 @@
             100% { transform: rotate(45deg) translateX(100%); }
         }
 
-        /* ã»ã¯ã·ã§ã³å±é */
+        /* セクション共通 */
         section {
             padding: 80px 20px;
             position: relative;
@@ -469,7 +457,7 @@
             letter-spacing: 3px;
         }
 
-        /* ãµã¼ãã¹ã»ã¯ã·ã§ã³ */
+        /* サービスセクション */
         .services {
             background: linear-gradient(135deg, rgba(0, 255, 255, 0.05) 0%, transparent 50%, rgba(255, 0, 128, 0.05) 100%);
         }
@@ -532,7 +520,7 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        /* å®ç¸¾ã»ã¯ã·ã§ã³ */
+        /* 実績セクション */
         .stats {
             text-align: center;
             background: 
@@ -592,7 +580,7 @@
             margin-top: 8px;
         }
 
-        /* ãã­ãã£ã¼ã«ã»ã¯ã·ã§ã³ */
+        /* プロフィールセクション */
         .profile {
             background: linear-gradient(135deg, rgba(255, 0, 128, 0.05) 0%, transparent 50%, rgba(0, 255, 255, 0.05) 100%);
         }
@@ -687,7 +675,7 @@
             box-shadow: 0 0 20px var(--neon-cyan);
         }
 
-        /* CTA ã»ã¯ã·ã§ã³ */
+        /* CTA セクション */
         .cta-section {
             padding: 100px 20px;
             text-align: center;
@@ -707,7 +695,7 @@
             margin-bottom: 30px;
         }
 
-        /* SNSã»ã¯ã·ã§ã³ */
+        /* SNSセクション */
         .social-media-section {
             padding: 60px 20px;
             text-align: center;
@@ -742,7 +730,7 @@
             font-family: 'Orbitron', monospace;
         }
 
-        /* ããã¿ã¼ */
+        /* フッター */
         footer {
             padding: 30px 20px;
             text-align: center;
@@ -757,7 +745,7 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        /* ãã­ã¼ãã£ã³ã°ãã¿ã³ */
+        /* フローティングボタン */
         .floating-btn {
             position: fixed;
             bottom: 20px;
@@ -788,7 +776,7 @@
             }
         }
 
-        /* ã¹ã¯ã­ã¼ã«ã¢ãã¡ã¼ã·ã§ã³ */
+        /* スクロールアニメーション */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
@@ -800,7 +788,7 @@
             transform: translateY(0);
         }
 
-        /* ã¿ããã¨ãã§ã¯ã */
+        /* タッチエフェクト */
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -817,7 +805,7 @@
             }
         }
 
-        /* 3Dã¨ãã§ã¯ãç¨ */
+        /* 3Dエフェクト用 */
         .hero-3d-container {
             position: absolute;
             top: 0;
@@ -827,7 +815,7 @@
             overflow: hidden;
         }
 
-        /* ãã­ã°ã©ã å¹æ */
+        /* ホログラム効果 */
         @keyframes hologram {
             0%, 100% {
                 opacity: 1;
@@ -844,7 +832,7 @@
             transform-style: preserve-3d;
         }
 
-        /* ããã©ã¼ãã³ã¹æé©å */
+        /* パフォーマンス最適化 */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
@@ -853,7 +841,7 @@
             }
         }
 
-        /* PWAå¯¾å¿ */
+        /* PWA対応 */
         @media (display-mode: standalone) {
             header {
                 padding-top: env(safe-area-inset-top);
@@ -862,65 +850,11 @@
     </style>
 </head>
 <body>
-    <!-- ãã¼ãã£ã¯ã«èæ¯ -->
+    <!-- パーティクル背景 -->
     <canvas id="particles-canvas"></canvas>
 
-    <!-- ãããã¼ -->
+    <!-- ヘッダー -->
     <header>
-    <script>
-// 🚨 改良版PC判定・リダイレクト機能（より確実な判定）
-(function() {
-    // デバッグ情報を表示
-    console.log('🔍 Device Detection Started');
-    console.log('UserAgent:', navigator.userAgent);
-    console.log('Screen Width:', window.screen.width);
-    console.log('Inner Width:', window.innerWidth);
-    console.log('Touch Support:', 'ontouchstart' in window);
-    console.log('Max Touch Points:', navigator.maxTouchPoints);
-    
-    // PC判定の改良版
-    const ua = navigator.userAgent.toLowerCase();
-    
-    // モバイルデバイスの除外判定
-    const isMobile = /android|iphone|ipad|ipod|blackberry|windows phone|mobile/i.test(ua);
-    
-    // 画面サイズ判定（PCは通常1024px以上）
-    const hasLargeScreen = window.screen.width >= 1024 || window.innerWidth >= 1024;
-    
-    // タッチサポートの判定
-    const touchPoints = navigator.maxTouchPoints || navigator.msMaxTouchPoints || 0;
-    const hasTouchSupport = 'ontouchstart' in window || touchPoints > 0;
-    
-    // PC判定ロジック（改良版）
-    // モバイルUAではない AND 大画面 の場合はPC
-    const isDesktop = !isMobile && hasLargeScreen;
-    
-    // 追加の判定：プラットフォーム情報
-    const platform = navigator.platform || '';
-    const isDesktopPlatform = /Win|Mac|Linux/i.test(platform) && !/Android|iPhone|iPad/i.test(platform);
-    
-    // 最終的なPC判定
-    const isPC = (isDesktop || isDesktopPlatform) && !isMobile;
-    
-    console.log('📊 Detection Results:', {
-        isMobile: isMobile,
-        hasLargeScreen: hasLargeScreen,
-        isDesktopPlatform: isDesktopPlatform,
-        isPC: isPC
-    });
-    
-    // PCと判定された場合、リダイレクト
-    if (isPC && window.location.pathname.includes('mobile-advanced.html')) {
-        console.log('🖥️ PC detected! Redirecting to desktop site...');
-        // 即座にリダイレクト
-        window.location.replace('https://cenleaf.com/');
-        // バックアップ（replaceが失敗した場合）
-        window.location.href = 'https://cenleaf.com/';
-    } else {
-        console.log('📱 Mobile/Tablet detected or already on correct page');
-    }
-})();
-</script>
         <div class="header-content">
             <div class="logo">CENLEAF</div>
             <div class="menu-btn" id="menuBtn">
@@ -931,16 +865,16 @@
         </div>
     </header>
 
-    <!-- ã¢ãã¤ã«ã¡ãã¥ã¼ -->
+    <!-- モバイルメニュー -->
     <nav class="mobile-menu" id="mobileMenu">
-        <a href="#home" onclick="closeMenu()">ãã¼ã </a>
-        <a href="#services" onclick="closeMenu()">ãµã¼ãã¹</a>
-        <a href="#stats" onclick="closeMenu()">å®ç¸¾</a>
-        <a href="#profile" onclick="closeMenu()">ãã­ãã£ã¼ã«</a>
-        <a href="#contact" onclick="closeMenu()">ã³ã³ã¿ã¯ã</a>
+        <a href="#home" onclick="closeMenu()">ホーム</a>
+        <a href="#services" onclick="closeMenu()">サービス</a>
+        <a href="#stats" onclick="closeMenu()">実績</a>
+        <a href="#profile" onclick="closeMenu()">プロフィール</a>
+        <a href="#contact" onclick="closeMenu()">コンタクト</a>
     </nav>
 
-    <!-- ãã¼ã­ã¼ã»ã¯ã·ã§ã³ -->
+    <!-- ヒーローセクション -->
     <section class="hero" id="home">
         <div class="hero-3d-container">
             <canvas id="hero-3d" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
@@ -948,15 +882,15 @@
         <div class="hero-content" style="position: relative; z-index: 10;">
             <h1 class="fade-in glitch-text" data-text="CENLEAF">CENLEAF</h1>
             <p class="fade-in neon-text" style="font-size: 1.1rem; line-height: 1.8; margin: 20px auto 15px; color: var(--neon-cyan); text-shadow: 0 0 20px var(--neon-cyan);">
-                æéã»å ´æã»äººéé¢ä¿ã»ãéã®å¶éãç¡ãã
+                時間・場所・人間関係・お金の制限を無くし
             </p>
             <p class="subtitle fade-in" style="font-size: 1.3rem; color: var(--electric-green); text-shadow: 0 0 30px var(--electric-green);">
-                "èªç±ãªçãæ¹ã»åãæ¹"ãå½ããåã«ï¼
+                "自由な生き方・働き方"を当たり前に！
             </p>
             <div class="typing-text fade-in" id="typedText"></div>
             <div class="fade-in">
                 <a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx?ftid=nU1AfsRTq9C4" class="cta-button pulse-button" target="_blank">
-                    <span class="button-text">ã¡ã«ãã¬ã«ç»é²ãã</span>
+                    <span class="button-text">メルマガに登録する</span>
                     <span class="button-glow"></span>
                 </a>
             </div>
@@ -966,172 +900,178 @@
         </div>
     </section>
 
-    <!-- ãµã¼ãã¹ã»ã¯ã·ã§ã³ -->
+    <!-- サービスセクション -->
     <section class="services" id="services">
         <h2 class="fade-in">FUTURE SERVICES</h2>
         
         <div class="service-card fade-in">
-            <span class="service-icon">ð¥</span>
-            <h3>ãªã¼ãã¦ã§ããã¼å®å¨èªåå</h3>
-            <p>ä¼ç»ã»å°æ¬ã»ã¹ã©ã¤ãã»åé²ã»éä¿¡ã¾ã§ä¸æ°éè²«ã§è¨­è¨ãUTAGEÃAIæ´»ç¨ã§365æ¥èªåéå¬ã·ã¹ãã ã</p>
+            <span class="service-icon">🎥</span>
+            <h3>オートウェビナー完全自動化</h3>
+            <p>企画・台本・スライド・収録・配信まで一気通貫で設計。UTAGE×AI活用で365日自動開催システム。</p>
             <p style="font-size: 12px; color: var(--neon-cyan); margin-top: 10px;">
-                â è¦è´å®äºç90%è¶ã®ã·ããªãªè¨­è¨<br>
-                â CVRæ¸¬å®ã¨æ¹åãµã¤ã¯ã«åè£½å<br>
-                â æå1.4ä¸â100ä¸åã®å®ç¸¾æ§ç¯
+                ✓ 視聴完了率90%超のシナリオ設計<br>
+                ✓ CVR測定と改善サイクル内製化<br>
+                ✓ 月収1.4万→100万円の実績構築
             </p>
         </div>
 
         <div class="service-card fade-in">
-            <span class="service-icon">ð¤</span>
-            <h3>çæAIæ¥­åèªåå</h3>
-            <p>ChatGPTã»Claudeã»Geminiãä½¿ã£ãã³ã³ãã³ãå¶ä½ãéç¨ã¯ã¼ã¯ãã­ã¼ã®æ§ç¯æ¯æ´ã</p>
+            <span class="service-icon">🤖</span>
+            <h3>生成AI業務自動化</h3>
+            <p>ChatGPT・Claude・Geminiを使ったコンテンツ制作〜運用ワークフローの構築支援。</p>
             <p style="font-size: 12px; color: var(--neon-pink); margin-top: 10px;">
-                â å®è£éè¦ã®æé æ¸ã»ãã­ã³ããè¨­è¨<br>
-                â ãã¼ã å°å¥æ¯æ´ã¨KPIè¨­å®<br>
-                â ä½æ¥­æé70%åæ¸ã®å¹çå
+                ✓ 実装重視の手順書・プロンプト設計<br>
+                ✓ チーム導入支援とKPI設定<br>
+                ✓ 作業時間70%削減の効率化
             </p>
         </div>
 
         <div class="service-card fade-in">
-            <span class="service-icon">ð</span>
-            <h3>ã»ã¼ã«ã¹ãã¡ãã«è¨­è¨</h3>
-            <p>LPã»ã¡ã«ãã¬ã»æ±ºæ¸ã»CRMè¨­è¨ã¨èªååãèªç¶ã«å£²ããå°ç·ã"ä»æ¥ããåããä»çµã¿"ã§ã</p>
+            <span class="service-icon">📈</span>
+            <h3>セールスファネル設計</h3>
+            <p>LP・メルマガ・決済・CRM設計と自動化。自然に売れる導線を"今日から回せる仕組み"で。</p>
             <p style="font-size: 12px; color: var(--electric-green); margin-top: 10px;">
-                â æè²åã³ã³ãã³ãÃèªååãã¡ãã«<br>
-                â KPIè¨­è¨ï¼CTAã»CVRï¼ã¨æ¹å<br>
-                â è¬å¸«ã»å£«æ¥­ã»ã³ã³ãµã«å°éç¹å
+                ✓ 教育型コンテンツ×自動化ファネル<br>
+                ✓ KPI設計（CTA・CVR）と改善<br>
+                ✓ 講師・士業・コンサル専門特化
             </p>
         </div>
 
         <div class="service-card fade-in">
-            <span class="service-icon">ð¨</span>
-            <h3>AIã¯ã­ã¼ã³æ§ç¯ãµãã¼ã</h3>
-            <p>ããªãã®åèº«ã¨ãªãAIã¢ã·ã¹ã¿ã³ããæ§ç¯ãé¡§å®¢å¯¾å¿ããã³ã³ãã³ãçæã¾ã§èªååã</p>
+            <span class="service-icon">🎨</span>
+            <h3>AIクローン構築サポート</h3>
+            <p>あなたの分身となるAIアシスタントを構築。顧客対応からコンテンツ生成まで自動化。</p>
             <p style="font-size: 12px; color: var(--cyber-blue); margin-top: 10px;">
-                â åäººã®è©±ãæ¹ã»æèãå­¦ç¿ããAIæ§ç¯<br>
-                â 24æéé¡§å®¢å¯¾å¿ã·ã¹ãã <br>
-                â ã³ã³ãã³ãèªåçæã¢ã·ã¹ã¿ã³ã
+                ✓ 個人の話し方・思考を学習したAI構築<br>
+                ✓ 24時間顧客対応システム<br>
+                ✓ コンテンツ自動生成アシスタント
             </p>
         </div>
 
         <div class="service-card fade-in">
-            <span class="service-icon">ð</span>
-            <h3>ä¼æ¥­åãAIç ä¿®</h3>
-            <p>ãã¼ã å¨ä½ã®AIãªãã©ã·ã¼åä¸ãå®åã§ä½¿ãããã­ã³ããã»ã¯ã¼ã¯ãã­ã¼ç ä¿®ã</p>
+            <span class="service-icon">🎓</span>
+            <h3>企業向けAI研修</h3>
+            <p>チーム全体のAIリテラシー向上。実務で使えるプロンプト・ワークフロー研修。</p>
             <p style="font-size: 12px; color: var(--neon-purple); margin-top: 10px;">
-                â æ¥­çå¥ã«ã¹ã¿ãã¤ãºç ä¿®ãã­ã°ã©ã <br>
-                â å®ç¿ä¸­å¿ã®ãã³ãºãªã³ç ä¿®<br>
-                â ç¶ç¶çãªãã©ã­ã¼ã¢ããä½å¶
+                ✓ 業界別カスタマイズ研修プログラム<br>
+                ✓ 実習中心のハンズオン研修<br>
+                ✓ 継続的なフォローアップ体制
             </p>
         </div>
 
         <div class="service-card fade-in">
-            <span class="service-icon">ð¼</span>
-            <h3>ãã¸ãã¹ã³ã³ãµã«ãã£ã³ã°</h3>
-            <p>ãã¸ãã¹æ¦ç¥ããå®è£ã¾ã§ä¼´èµ°ããä»æ¥ããåããä»çµã¿ããä¸ç·ã«ä½ãã¾ãã</p>
+            <span class="service-icon">💼</span>
+            <h3>ビジネスコンサルティング</h3>
+            <p>ビジネス戦略から実装まで伴走。「今日から回せる仕組み」を一緒に作ります。</p>
             <p style="font-size: 12px; color: var(--electric-green); margin-top: 10px;">
-                â ãã¼ã±ãã£ã³ã°èªååè¨­è¨<br>
-                â KPIæ¹åãµã¤ã¯ã«æ§ç¯<br>
-                â ã³ã³ãã³ãå¶ä½æ¯æ´
+                ✓ マーケティング自動化設計<br>
+                ✓ KPI改善サイクル構築<br>
+                ✓ コンテンツ制作支援
             </p>
         </div>
     </section>
 
-    <!-- å®ç¸¾ã»ã¯ã·ã§ã³ -->
+    <!-- 実績セクション -->
     <section class="stats" id="stats">
         <h2 class="fade-in">ACHIEVEMENTS</h2>
         <div class="stat-grid">
             <div class="stat-card fade-in">
                 <div class="stat-number" data-target="63">0</div>
-                <div class="stat-label">Noteé£ç¶æ´æ°æ¥æ°</div>
+                <div class="stat-label">Note連続更新日数</div>
             </div>
             <div class="stat-card fade-in">
                 <div class="stat-number" data-target="47">0</div>
-                <div class="stat-label">å¶è¦é½éåºç</div>
+                <div class="stat-label">制覇都道府県</div>
             </div>
             <div class="stat-card fade-in">
                 <div class="stat-number" data-target="90">0</div>
-                <div class="stat-label">ã¦ã§ããã¼è¦è´å®äºç(%)</div>
+                <div class="stat-label">ウェビナー視聴完了率(%)</div>
             </div>
             <div class="stat-card fade-in">
                 <div class="stat-number" data-target="4">0</div>
-                <div class="stat-label">ããã«æ®ããå¹´æ°</div>
+                <div class="stat-label">ホテル暮らし年数</div>
             </div>
         </div>
     </section>
 
-    <!-- ãã­ãã£ã¼ã«ã»ã¯ã·ã§ã³ -->
+    <!-- プロフィールセクション -->
     <section class="profile" id="profile">
         <h2 class="fade-in">REPRESENTATIVE</h2>
         <div class="profile-content">
             <div class="profile-image fade-in">
-                <img src="images/profile/suzaki.jpg" alt="é å´ç´ä¸">
+                <img src="images/profile/suzaki.jpg" alt="須崎純一">
             </div>
-            <h3 class="profile-name fade-in">é å´ç´ä¸ / SUZAKI JUNICHI</h3>
-            <p class="profile-title fade-in">ãªã¼ãã¦ã§ããã¼ã¨AIã§ãåäººã»å°è¦æ¨¡ãã¸ãã¹ã®ãéå®¢ãè²©å£²ããèªåéè»¢åããäºº</p>
+            <h3 class="profile-name fade-in">須崎純一 / SUZAKI JUNICHI</h3>
+            <p class="profile-title fade-in">オートウェビナーとAIで、個人・小規模ビジネスの「集客〜販売」を自動運転化する人</p>
             <p class="profile-description fade-in">
-                ãã©ãã¯ä¼æ¥­ã§ã®ãã¤çãFXã§200ä¸åã®æå¤±ããªã¼ãã³ã·ã§ãã¯ã§ã®ç¡è·...æ°ãã®æ«æãçµã¦è¦ã¤ãããå¥½ãã¯æå¼·ãã®ççã<br>
-                ç¾å¨ã¯ã»ããã¼èªååÃAIæ´»ç¨ã§ãä»æ¥ããåããä»çµã¿ããä¸ç·ã«ä½ãã³ã³ãµã«ã¿ã³ãã<br><br>
-                ð¨ 2020-2024å¹´ï¼å¨å½ããã«æ®ãã4å¹´ã47é½éåºçå¶è¦<br>
-                ð æå1.4ä¸åã®ã³ã¼ãã3ã¶æã§æå100ä¸åè¶ã¸å°ã<br>
-                ð Noteç¶ç¶æç¨¿63æ¥è¶éæï¼AIÃãã¸ãã¹æ´»ç¨ãã¦ãã¦ï¼<br>
-                ð¯ ã¿ã¼ã²ããï¼è¬å¸«ã»å£«æ¥­ã»é«åä¾¡ã³ã³ãµã«ã»ä¿éºä»£çåº<br>
-                ð¡ ã¢ããã¼ï¼ããã¤ããããããä»ãããã
+                ブラック企業でのうつ病、FXで200万円の損失、リーマンショックでの無職...数々の挫折を経て見つけた「好きは最強」の真理。<br>
+                現在はセミナー自動化×AI活用で「今日から回せる仕組み」を一緒に作るコンサルタント。<br><br>
+                🏨 2020-2024年：全国ホテル暮らし4年、47都道府県制覇<br>
+                📈 月収1.4万円のコーチを3ヶ月で月収100万円超へ導く<br>
+                📝 Note継続投稿63日超達成（AI×ビジネス活用ノウハウ）<br>
+                🎯 ターゲット：講師・士業・高単価コンサル・保険代理店<br>
+                💡 モットー：「いつかやりたいを今やろう」
             </p>
             <div class="social-links fade-in">
-                <a href="https://www.youtube.com/@suzakijunichi" target="_blank" class="social-link">ðº</a>
-                <a href="https://note.com/suzakijunichi/" target="_blank" class="social-link">ð</a>
-                <a href="https://x.com/suzakij" target="_blank" class="social-link">ð¦</a>
-                <a href="https://www.facebook.com/junichi.suzaki" target="_blank" class="social-link">ð</a>
-                <a href="https://www.instagram.com/suzakijunichi" target="_blank" class="social-link">ð·</a>
+                <a href="https://www.youtube.com/@suzakijunichi" target="_blank" class="social-link">📺</a>
+                <a href="https://note.com/suzakijunichi/" target="_blank" class="social-link">📝</a>
+                <a href="https://x.com/suzakij" target="_blank" class="social-link">🐦</a>
+                <a href="https://www.facebook.com/junichi.suzaki" target="_blank" class="social-link">📘</a>
+                <a href="https://www.instagram.com/suzakijunichi" target="_blank" class="social-link">📷</a>
             </div>
         </div>
     </section>
 
-    <!-- CTAã»ã¯ã·ã§ã³ -->
+    <!-- CTAセクション -->
     <section class="cta-section" id="contact">
         <h2 class="fade-in">CONNECT WITH ME</h2>
-        <p class="fade-in">ææ°æå ±ããå±ãããã¡ã¼ã«ãã¬ã¸ã³ã«ç»é²</p>
+        <p class="fade-in">最新情報をお届けするメールマガジンに登録</p>
         <div class="fade-in">
-            <a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx?ftid=nU1AfsRTq9C4" class="cta-button" target="_blank">ã¡ã«ãã¬ã«ç»é²ãã</a>
+            <a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx?ftid=nU1AfsRTq9C4" class="cta-button" target="_blank">メルマガに登録する</a>
         </div>
     </section>
 
-    <!-- SNSã»ã¯ã·ã§ã³ -->
+    <!-- SNSセクション -->
     <section class="social-media-section">
         <h3 style="font-size: 24px; margin-bottom: 30px; color: var(--electric-green); font-family: 'Orbitron', monospace;">SOCIAL MEDIA</h3>
         <div class="social-media-grid">
             <a href="https://www.youtube.com/@suzakijunichi" target="_blank" class="social-media-link" style="color: #FF0000;">
-                <span>ðº</span>
+                <span>📺</span>
                 <span>YouTube</span>
             </a>
             <a href="https://note.com/suzakijunichi/" target="_blank" class="social-media-link" style="color: #41C9B4;">
-                <span>ð</span>
+                <span>📝</span>
                 <span>note</span>
             </a>
             <a href="https://x.com/suzakij" target="_blank" class="social-media-link" style="color: #1DA1F2;">
-                <span>ð¦</span>
+                <span>🐦</span>
                 <span>X</span>
             </a>
             <a href="https://www.facebook.com/junichi.suzaki" target="_blank" class="social-media-link" style="color: #1877F2;">
-                <span>ð</span>
+                <span>📘</span>
                 <span>Facebook</span>
             </a>
             <a href="https://www.instagram.com/suzakijunichi" target="_blank" class="social-media-link" style="color: #E4405F;">
-                <span>ð·</span>
+                <span>📷</span>
                 <span>Instagram</span>
+            </a>
+            <a href="https://line.me/R/ti/p/%40cenleaf" target="_blank" class="social-media-link" style="color: #00B900;">
+                <span>💬</span>
+                <span>LINE</span>
             </a>
         </div>
     </section>
 
-    <!-- ããã¿ã¼ -->
+    <!-- フッター -->
     <footer>
         <p>&copy; 2024 CENLEAF. All rights reserved.</p>
     </footer>
 
+    <!-- フローティングボタン -->
+    <a href="https://line.me/R/ti/p/%40cenleaf" class="floating-btn">💬</a>
 
     <script>
-        // ã¡ãã¥ã¼éé
+        // メニュー開閉
         const menuBtn = document.getElementById('menuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         
@@ -1145,11 +1085,11 @@
             mobileMenu.classList.remove('active');
         }
 
-        // ã¿ã¤ãã³ã°ã¢ãã¡ã¼ã·ã§ã³
+        // タイピングアニメーション
         const texts = [
-            'ãªã¼ãã¦ã§ããã¼ÃAIã§',
-            'éå®¢ãè²©å£²ãèªåéè»¢å',
-            'ããã¤ããããããä»ãããã'
+            'オートウェビナー×AIで',
+            '集客〜販売を自動運転化',
+            '「いつかやりたいを今やろう」'
         ];
         let textIndex = 0;
         let charIndex = 0;
@@ -1185,7 +1125,7 @@
 
         typeText();
 
-        // ã¹ã¯ã­ã¼ã«ã¢ãã¡ã¼ã·ã§ã³
+        // スクロールアニメーション
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1206,7 +1146,7 @@
             observer.observe(el);
         });
 
-        // æ°å­ã¢ãã¡ã¼ã·ã§ã³
+        // 数字アニメーション
         function animateNumbers(card) {
             const number = card.querySelector('.stat-number');
             if (number.classList.contains('animated')) return;
@@ -1227,7 +1167,7 @@
             }, 16);
         }
 
-        // ã¹ã ã¼ã¹ã¹ã¯ã­ã¼ã«
+        // スムーススクロール
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -1241,7 +1181,7 @@
             });
         });
 
-        // ãã¼ãã£ã¯ã«ã¢ãã¡ã¼ã·ã§ã³
+        // パーティクルアニメーション
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
         
@@ -1305,7 +1245,7 @@
                 particle.draw();
             });
             
-            // æ¥ç¶ç·ãæç»
+            // 接続線を描画
             particles.forEach((p1, i) => {
                 particles.slice(i + 1).forEach(p2 => {
                     const distance = Math.sqrt(
@@ -1330,7 +1270,7 @@
         
         animateParticles();
 
-        // ã¿ãããªããã«ã¨ãã§ã¯ã
+        // タッチリップルエフェクト
         document.addEventListener('touchstart', (e) => {
             const touch = e.touches[0];
             createRipple(touch.pageX, touch.pageY);
@@ -1349,7 +1289,7 @@
             }, 600);
         }
 
-        // ã¹ã¯ã¤ãã¸ã§ã¹ãã£ã¼
+        // スワイプジェスチャー
         let touchStartY = 0;
         let touchEndY = 0;
 
@@ -1364,12 +1304,12 @@
 
         function handleSwipe() {
             if (touchEndY < touchStartY - 50) {
-                // ä¸ã¹ã¯ã¤ã
+                // 上スワイプ
                 closeMenu();
             }
         }
 
-        // 3Dãã¼ã­ã¼ã¢ãã¡ã¼ã·ã§ã³
+        // 3Dヒーローアニメーション
         const hero3d = document.getElementById('hero-3d');
         if (hero3d) {
             const ctx3d = hero3d.getContext('2d');
@@ -1410,13 +1350,13 @@
             draw3D();
         }
 
-        // ã¸ã£ã¤ã­ã»ã³ãµã¼å¯¾å¿
+        // ジャイロセンサー対応
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', (event) => {
-                const beta = event.beta;  // Xè»¸
-                const gamma = event.gamma; // Yè»¸
+                const beta = event.beta;  // X軸
+                const gamma = event.gamma; // Y軸
                 
-                // ãã©ã©ãã¯ã¹å¹æ
+                // パララックス効果
                 const elements = document.querySelectorAll('.fade-in');
                 elements.forEach((el, i) => {
                     const depth = (i + 1) * 0.5;
@@ -1427,7 +1367,7 @@
             });
         }
 
-        // ãããã£ãã¯ãã£ã¼ãããã¯
+        // ハプティックフィードバック
         function triggerHaptic() {
             if (navigator.vibrate) {
                 navigator.vibrate(10);
@@ -1438,7 +1378,7 @@
             el.addEventListener('touchstart', triggerHaptic);
         });
 
-        // ãã«ãã¥ãªãã¬ãã·ã¥
+        // プルトゥリフレッシュ
         let pullStartY = 0;
         let pulling = false;
         
@@ -1465,7 +1405,7 @@
             }
         });
 
-        // ããã¤ã¹ã®åãæ¤ç¥
+        // デバイスの向き検知
         window.addEventListener('orientationchange', () => {
             setTimeout(() => {
                 resizeCanvas();
@@ -1476,7 +1416,7 @@
             }, 100);
         });
 
-        // ããã©ã¼ãã³ã¹æé©å
+        // パフォーマンス最適化
         let ticking = false;
         function requestTick() {
             if (!ticking) {
@@ -1487,7 +1427,7 @@
 
         function updateScroll() {
             ticking = false;
-            // ã¹ã¯ã­ã¼ã«ãã¼ã¹ã®ã¢ãã¡ã¼ã·ã§ã³
+            // スクロールベースのアニメーション
             const scrolled = window.scrollY;
             const heroEl = document.querySelector('.hero');
             if (heroEl) {
@@ -1497,18 +1437,18 @@
 
         window.addEventListener('scroll', requestTick, { passive: true });
 
-        // PWAæ©è½
+        // PWA機能
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js').catch(() => {});
         }
 
-        // ãªãã©ã¤ã³æ¤ç¥
+        // オフライン検知
         window.addEventListener('online', () => {
-            console.log('ãªã³ã©ã¤ã³ã«å¾©å¸°');
+            console.log('オンラインに復帰');
         });
         
         window.addEventListener('offline', () => {
-            console.log('ãªãã©ã¤ã³ç¶æ');
+            console.log('オフライン状態');
         });
     </script>
 </body>
