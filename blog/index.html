@@ -324,14 +324,11 @@
     <script src="https://unpkg.com/@sanity/client/umd/sanityClient.min.js"></script>
     
     <script>
-        // Sanity設定
-        const client = window.SanityClient({
-            projectId: 'wr3iko59',
-            dataset: 'production',
-            useCdn: true,
-            apiVersion: '2024-01-01'
-        });
-
+        // Sanity APIを直接使用
+        const projectId = 'wr3iko59';
+        const dataset = 'production';
+        const apiVersion = '2024-01-01';
+        
         // 記事取得と表示
         async function loadPosts(category = 'all') {
             const blogGrid = document.getElementById('blog-grid');
@@ -353,7 +350,13 @@
                     "author": author->{ name }
                 }`;
 
-                const posts = await client.fetch(query);
+                // Sanity APIを直接呼び出し
+                const encodedQuery = encodeURIComponent(query);
+                const url = `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodedQuery}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                const posts = data.result;
 
                 if (posts.length === 0) {
                     blogGrid.innerHTML = '<p style="text-align: center; color: #888;">記事がまだありません。</p>';
@@ -361,7 +364,7 @@
                 }
 
                 blogGrid.innerHTML = posts.map(post => {
-                    const imageUrl = post.mainImage ? 
+                    const imageUrl = post.mainImage && post.mainImage.asset ? 
                         `https://cdn.sanity.io/images/wr3iko59/production/${post.mainImage.asset._ref.replace('image-', '').replace('-jpg', '.jpg').replace('-png', '.png')}?w=400&h=200&fit=crop` : 
                         '';
                     
