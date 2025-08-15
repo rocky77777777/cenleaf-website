@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BillReceiPro - 請求書・領収書のAI自動化で経理業務を月5時間→5分に</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* ヘッダー */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .hero .subtitle {
+            font-size: 24px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 20px 60px;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            transition: transform 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #ffd93d;
+            color: #333;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        /* 問題提起セクション */
+        .problem {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        
+        .problem h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #333;
+        }
+        
+        .problem-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .problem-item {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .problem-item .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        /* ソリューションセクション */
+        .solution {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .solution h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #667eea;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            color: white;
+        }
+        
+        .feature h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        /* Before/After */
+        .comparison {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        
+        .comparison h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .before, .after {
+            padding: 40px;
+            border-radius: 10px;
+        }
+        
+        .before {
+            background: #fff;
+            border: 3px solid #e0e0e0;
+        }
+        
+        .after {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+        }
+        
+        .after::before {
+            content: "導入後";
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: #ff6b6b;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        /* 料金プラン */
+        .pricing {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .pricing h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .pricing-card.recommended {
+            border-color: #667eea;
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
+        }
+        
+        .pricing-card.recommended::before {
+            content: "人気No.1";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .plan-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .plan-price {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .plan-price small {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+        
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .plan-features li::before {
+            content: "✓ ";
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        /* 導入事例 */
+        .testimonials {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        
+        .testimonials h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        
+        .testimonial-info h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .testimonial-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .testimonial-content {
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        /* FAQ */
+        .faq {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .faq h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            background: #f8f9fa;
+            padding: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 20px;
+            display: none;
+            background: white;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        /* CTA */
+        .final-cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            color: white;
+        }
+        
+        .final-cta h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+        
+        .final-cta p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        .countdown {
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero .subtitle {
+                font-size: 18px;
+            }
+            
+            .before-after {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.recommended {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <div class="container">
+            <div class="badge">🎉 期間限定！初月無料キャンペーン中</div>
+            <h1>請求書・領収書の処理時間を<br>
+                <span style="color: #ffd93d;">月5時間→たった5分</span>に短縮</h1>
+            <p class="subtitle">AI×自動化で経理業務を完全自動運転化する<br>
+                個人事業主・小規模ビジネス専用サービス</p>
+            <a href="#pricing" class="cta-button">今すぐ無料で始める →</a>
+            <p style="margin-top: 20px; font-size: 14px;">
+                ※クレジットカード不要・3分で登録完了
+            </p>
+        </div>
+    </section>
+
+    <!-- 問題提起 -->
+    <section class="problem">
+        <div class="container">
+            <h2>😫 こんな経理の悩み、ありませんか？</h2>
+            <div class="problem-list">
+                <div class="problem-item">
+                    <div class="icon">📱</div>
+                    <h3>領収書の山に埋もれる</h3>
+                    <p>レシートや領収書の整理に毎月何時間も費やしていませんか？スマホの写真フォルダが領収書だらけ...</p>
+                </div>
+                <div class="problem-item">
+                    <div class="icon">📊</div>
+                    <h3>請求書の支払い漏れ</h3>
+                    <p>支払期限を忘れて信用を失いかけた経験は？請求書の管理がExcelでは限界...</p>
+                </div>
+                <div class="problem-item">
+                    <div class="icon">💸</div>
+                    <h3>税理士への丸投げは高額</h3>
+                    <p>月3〜5万円の顧問料、本当に必要ですか？簡単な経理作業まで外注するのはもったいない！</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                <h3 style="font-size: 28px; color: #ff6b6b; margin-bottom: 20px;">
+                    実は、経理業務の87%は自動化できます
+                </h3>
+                <p style="font-size: 18px;">
+                    最新のAI技術を使えば、今まで手作業だった業務の大半を<br>
+                    <span class="highlight">完全自動化</span>できる時代になりました
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ソリューション -->
+    <section class="solution">
+        <div class="container">
+            <h2>✨ BillReceiProが実現する3つの革命</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon">📸</div>
+                    <h3>スマホで撮って送るだけ</h3>
+                    <p>LINEで領収書の写真を送るだけで、AIが自動で読み取り・分類・保存。もう入力作業は不要です。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AIが99.8%の精度で処理</h3>
+                    <p>最新のGPT-4 Visionが文字認識。店名、金額、日付、用途まで完璧に読み取ります。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📈</div>
+                    <h3>会計ソフトと完全連携</h3>
+                    <p>freee、弥生会計、マネーフォワードと自動連携。仕訳も自動生成されます。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⏰</div>
+                    <h3>支払い漏れゼロ</h3>
+                    <p>請求書の支払期限を3日前、前日、当日に自動通知。延滞金とはもうサヨナラ。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💰</div>
+                    <h3>キャッシュフロー予測</h3>
+                    <p>今月の収支、来月の資金繰りが一目瞭然。資金ショートを事前に防げます。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <h3>税務調査も安心</h3>
+                    <p>電子帳簿保存法に完全対応。7年間の保管義務もクラウドで自動管理。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Before/After -->
+    <section class="comparison">
+        <div class="container">
+            <h2>導入前後の変化</h2>
+            <div class="before-after">
+                <div class="before">
+                    <h3 style="color: #666; margin-bottom: 20px;">😰 導入前</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>✗ 月末の経理作業に5時間</li>
+                        <li>✗ 領収書の入力ミス多発</li>
+                        <li>✗ 支払い漏れで信用失墜</li>
+                        <li>✗ 税理士への丸投げで月5万円</li>
+                        <li>✗ 経費の使いすぎに気づけない</li>
+                    </ul>
+                </div>
+                <div class="after">
+                    <h3 style="margin-bottom: 20px;">😊 導入後</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>✓ 経理作業は月5分で完了</li>
+                        <li>✓ AIが99.8%の精度で自動処理</li>
+                        <li>✓ 支払い漏れゼロを実現</li>
+                        <li>✓ 月額4,980円〜で全自動化</li>
+                        <li>✓ リアルタイムで経費を可視化</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 料金プラン -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>料金プラン</h2>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <div class="plan-name">ライトプラン</div>
+                    <div class="plan-price">
+                        ¥4,980<small>/月</small>
+                    </div>
+                    <ul class="plan-features">
+                        <li>領収書 月100枚まで</li>
+                        <li>請求書 月20件まで</li>
+                        <li>基本的な自動仕訳</li>
+                        <li>CSVエクスポート</li>
+                        <li>メールサポート</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="padding: 15px 40px;">申し込む</a>
+                </div>
+                
+                <div class="pricing-card recommended">
+                    <div class="plan-name">スタンダードプラン</div>
+                    <div class="plan-price">
+                        ¥14,800<small>/月</small>
+                    </div>
+                    <ul class="plan-features">
+                        <li>領収書 月500枚まで</li>
+                        <li>請求書 月100件まで</li>
+                        <li>会計ソフト自動連携</li>
+                        <li>支払予定表作成</li>
+                        <li>キャッシュフロー予測</li>
+                        <li>優先サポート</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="padding: 15px 40px;">申し込む</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="plan-name">プレミアムプラン</div>
+                    <div class="plan-price">
+                        ¥39,800<small>/月</small>
+                    </div>
+                    <ul class="plan-features">
+                        <li>処理枚数無制限</li>
+                        <li>複数会社管理</li>
+                        <li>部門別予算管理</li>
+                        <li>API連携無制限</li>
+                        <li>専任サポート</li>
+                        <li>カスタマイズ対応</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="padding: 15px 40px;">申し込む</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 導入事例 -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>導入企業様の声</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">山</div>
+                        <div class="testimonial-info">
+                            <h4>山田太郎 様</h4>
+                            <p>経営コンサルタント</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        「毎月の経理作業が<span class="highlight">5時間→10分</span>に短縮されました。空いた時間で新規案件を2件獲得でき、売上が1.5倍に。導入して本当に良かったです。」
+                    </div>
+                </div>
+                
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">佐</div>
+                        <div class="testimonial-info">
+                            <h4>佐藤花子 様</h4>
+                            <p>社労士事務所代表</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        「顧問先からの請求書管理が劇的に楽になりました。<span class="highlight">支払い漏れがゼロ</span>になり、信頼度もアップ。スタッフの残業も月20時間削減できました。」
+                    </div>
+                </div>
+                
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">鈴</div>
+                        <div class="testimonial-info">
+                            <h4>鈴木一郎 様</h4>
+                            <p>セミナー講師</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        「全国を飛び回っているので、<span class="highlight">移動中にLINEで処理</span>できるのが最高です。交通費や宿泊費の管理も自動化され、確定申告が1日で終わりました。」
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="container">
+            <h2>よくある質問</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Q. 本当にLINEで送るだけで処理できますか？
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        はい、専用のLINE公式アカウントに領収書の写真を送るだけで、AIが自動で読み取り、データ化します。面倒な設定は一切不要です。
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Q. 既存の会計ソフトと連携できますか？
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        freee、弥生会計、マネーフォワードクラウドなど、主要な会計ソフトとAPI連携しています。仕訳データが自動で転送されるので、二重入力は不要です。
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Q. セキュリティは大丈夫ですか？
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        SSL暗号化通信、AWS上での運用、定期的なセキュリティ監査を実施しています。また、ISO27001認証も取得予定です。大切なデータは安全に管理されます。
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Q. 導入サポートはありますか？
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        初期設定から運用まで、専門スタッフが完全サポートします。また、毎月無料のオンラインセミナーも開催しているので、安心してご利用いただけます。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 最終CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <div class="countdown">⏰ キャンペーン終了まで残り3日</div>
+            <h2>今なら初月無料＋設定サポート付き</h2>
+            <p>通常19,800円の初期設定費用が今だけ0円<br>
+                さらに3ヶ月継続で永年10%OFF</p>
+            <a href="#" class="cta-button" style="background: white; color: #667eea;">
+                無料で始める（3分で完了）→
+            </a>
+            <p style="margin-top: 20px; font-size: 14px;">
+                ※クレジットカード登録不要<br>
+                ※自動更新なし・いつでも解約可能
+            </p>
+        </div>
+    </section>
+
+    <script>
+        // FAQ開閉
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                const parent = item.parentElement;
+                parent.classList.toggle('active');
+            });
+        });
+
+        // スムーススクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
