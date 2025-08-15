@@ -1,56 +1,37 @@
-name: Deploy to Xserver
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: 
-      - main
-    paths:
-      - 'wp-content/themes/**'
-      - 'wp-content/plugins/**'
-      - 'wp-content/mu-plugins/**'
-      - 'assets/**'
-      - 'midori/**'
-      - '*.html'
-      - '*.css'
-      - '*.js'
-      - '**/*.html'
-      - '**/*.css'
-      - '**/*.js'
-  workflow_dispatch:  # 手動実行も可能
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    
     steps:
-      - name: 🚀 Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
+      - name: Checkout
+        uses: actions/checkout@v4
       
-      - name: 📁 Deploy to Xserver via FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          server: sv7749.xserver.jp
-          username: cenleaf
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
-          local-dir: ./
-          server-dir: /cenleaf.com/public_html/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/README.md
-            **/.github/**
-            **/wp-config.php
-            **/wp-content/uploads/**
-            **/.DS_Store
-            **/*.log
-            **/.env
-            **/.gitignore
-          
-      - name: ✅ Deployment Complete
-        run: |
-          echo "🎉 Deployment to cenleaf.com completed successfully!"
-          echo "📅 Deployed at: $(date)"
+          path: "."
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
