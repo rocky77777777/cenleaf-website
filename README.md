@@ -76,4 +76,4 @@ cenleaf.com/
 CENLEAF - https://cenleaf.com
 
 ## ライセンス
-© 2024 CENLEAF. All rights reserved.
+© 2024 CENLEAF. All rights reserved.trigger pages
