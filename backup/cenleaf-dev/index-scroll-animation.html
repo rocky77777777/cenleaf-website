@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cenleaf - AI活用×オンライン自動化コンサルティング</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #f5f5f7;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Fade-in animation classes */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .fade-in-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .fade-in-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+        }
+        
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Stagger animation delays */
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
+        .delay-500 { transition-delay: 0.5s; }
+        .delay-600 { transition-delay: 0.6s; }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #000000 0%, #1d1d1f 50%, #2c2c2e 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(29, 29, 31, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #000000 0%, #1d1d1f 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 122, 255, 0.1) 0%, transparent 70%);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: #a1a1a6;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .service-card {
+            background: rgba(29, 29, 31, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .service-card:hover::before {
+            opacity: 1;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 122, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #007AFF 0%, #5AC8FA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+        
+        .service-description {
+            color: #a1a1a6;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        .stats-section {
+            padding: 8rem 0;
+            background: linear-gradient(180deg, #000000 0%, #1d1d1f 100%);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #007AFF 0%, #5AC8FA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #a1a1a6;
+            font-size: 1rem;
+        }
+        
+        .section {
+            padding: 8rem 0;
+        }
+        
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .cta-section {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, #1d1d1f 0%, #000000 100%);
+            text-align: center;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #007AFF 0%, #5AC8FA 100%);
+            color: #ffffff;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+        }
+        
+        .navigation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #a1a1a6;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+        
+        @media (max-width: 768px) {
+            .service-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 0 1rem;
+            }
+            
+            .service-card {
+                padding: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+        
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .floating-elements::before,
+        .floating-elements::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out;
+        }
+        
+        .floating-elements::before {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .floating-elements::after {
+            bottom: 20%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="nav-container">
+            <div class="logo">Cenleaf</div>
+            <ul class="nav-links">
+                <li><a href="#services">サービス</a></li>
+                <li><a href="#stats">実績</a></li>
+                <li><a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx" target="_blank">メルマガで自動化ノウハウお届け</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="floating-elements"></div>
+        <div class="hero-content">
+            <h1 class="hero-title fade-in-up">AI活用×自動化で<br>ビジネスを進化させる</h1>
+            <p class="hero-subtitle fade-in-up delay-200">365日稼働する自動化システムで売上2倍、作業時間半減を実現</p>
+            <a href="#services" class="cta-button fade-in-up delay-400">サービスを見る</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section" id="stats">
+        <div class="stats-grid">
+            <div class="stat-item fade-in-up">
+                <span class="stat-number">2.8倍</span>
+                <span class="stat-label">コンバージョン率向上</span>
+            </div>
+            <div class="stat-item fade-in-up delay-100">
+                <span class="stat-number">70%</span>
+                <span class="stat-label">作業時間削減</span>
+            </div>
+            <div class="stat-item fade-in-up delay-200">
+                <span class="stat-number">1/3</span>
+                <span class="stat-label">リード獲得単価</span>
+            </div>
+            <div class="stat-item fade-in-up delay-300">
+                <span class="stat-number">68%</span>
+                <span class="stat-label">リピート率改善</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section" id="services">
+        <h2 class="section-title fade-in-up">提供サービス</h2>
+        <div class="service-grid">
+            <div class="service-card scale-in">
+                <div class="service-icon fade-in delay-100">🎥</div>
+                <h3 class="service-title fade-in-up delay-200">オートウェビナー構築</h3>
+                <p class="service-description fade-in-up delay-300">UTAGEとAIシナリオで365日自動開催。手動開催の拘束から解放され、月120回の自動配信でCVR2.8倍を実現。顧客の都合に合わせていつでも視聴可能な環境を構築します。</p>
+            </div>
+            
+            <div class="service-card scale-in delay-100">
+                <div class="service-icon fade-in delay-200">🤖</div>
+                <h3 class="service-title fade-in-up delay-300">AI活用コンサルティング</h3>
+                <p class="service-description fade-in-up delay-400">ChatGPT・Claude・Geminiを活用した業務効率化。資料作成時間70%削減、リード獲得単価1/3を実現。AIの力で日常業務を劇的に効率化し、創造的な業務に集中できる環境を作ります。</p>
+            </div>
+            
+            <div class="service-card scale-in delay-200">
+                <div class="service-icon fade-in delay-300">📈</div>
+                <h3 class="service-title fade-in-up delay-400">セールスファネル最適化</h3>
+                <p class="service-description fade-in-up delay-500">LTV設計＋ステップメール自動化＋多チャネル連携で、平均購入単価1.5倍、リピート率40%→68%を達成。顧客の購買行動を分析し、最適なタイミングで最適な提案を自動化します。</p>
+            </div>
+            
+            <div class="service-card scale-in delay-300">
+                <div class="service-icon fade-in delay-400">📝</div>
+                <h3 class="service-title fade-in-up delay-500">コンテンツマーケティング</h3>
+                <p class="service-description fade-in-up delay-600">AIを活用した記事作成・ブログ運営の効率化。SEO対策と組み合わせて集客を自動化します。質の高いコンテンツを継続的に生成し、検索エンジンからの流入を安定化させます。</p>
+            </div>
+            
+            <div class="service-card scale-in delay-400">
+                <div class="service-icon fade-in delay-500">🔄</div>
+                <h3 class="service-title fade-in-up delay-600">業務自動化支援</h3>
+                <p class="service-description fade-in-up delay-700">Zapier・Make等のツールを活用し、定型業務を自動化。人的ミスを削減し、生産性を向上させます。複数のツールを連携させ、シームレスな業務フローを構築します。</p>
+            </div>
+            
+            <div class="service-card scale-in delay-500">
+                <div class="service-icon fade-in delay-600">📊</div>
+                <h3 class="service-title fade-in-up delay-700">データ分析・改善提案</h3>
+                <p class="service-description fade-in-up delay-800">Google Analytics等のデータを基に、具体的な改善施策をご提案。PDCAサイクルを高速で回します。データドリブンな意思決定をサポートし、継続的な成長を実現します。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <h2 class="section-title fade-in-up">無料メルマガで<br>自動化ノウハウをお届け</h2>
+        <p class="fade-in-up delay-200" style="font-size: 1.2rem; color: #a1a1a6; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            AIと自動化の最新情報・実践的なノウハウを週1回配信。<br>
+            売上2倍、作業時間半減を実現した具体的な方法をお伝えします。
+        </p>
+        <a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx" target="_blank" class="cta-button fade-in-up delay-400">
+            <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i>
+            メルマガに登録する
+        </a>
+    </section>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // For stat numbers, also trigger counter animation
+                    if (entry.target.classList.contains('stat-item')) {
+                        const statNumber = entry.target.querySelector('.stat-number');
+                        if (statNumber && !statNumber.dataset.animated) {
+                            statNumber.dataset.animated = 'true';
+                            const finalValue = statNumber.textContent;
+                            statNumber.textContent = '0';
+                            animateCounter(statNumber, finalValue);
+                        }
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with animation classes
+        document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .fade-in, .scale-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.navigation');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                nav.style.background = 'rgba(0, 0, 0, 0.8)';
+            }
+        });
+
+        function animateCounter(element, finalValue) {
+            const duration = 2000;
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                if (finalValue.includes('%')) {
+                    const numValue = parseInt(finalValue);
+                    const currentValue = Math.floor(progress * numValue);
+                    element.textContent = currentValue + '%';
+                } else if (finalValue.includes('倍')) {
+                    const numValue = parseFloat(finalValue);
+                    const currentValue = (progress * numValue).toFixed(1);
+                    element.textContent = currentValue + '倍';
+                } else if (finalValue.includes('/')) {
+                    if (progress > 0.5) {
+                        element.textContent = finalValue;
+                    }
+                } else {
+                    element.textContent = finalValue;
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Add parallax effect to hero section
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - (scrolled / window.innerHeight);
+            }
+        });
+
+        // Add hover effects to service cards with animation
+        document.querySelectorAll('.service-card').forEach((card, index) => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+                this.style.transitionDelay = '0s';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.transitionDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

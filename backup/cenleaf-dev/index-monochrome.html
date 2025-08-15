@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENLEAF - AI×オートメーションで自由な働き方を</title>
+    <meta name="description" content="時間・場所・人間関係の制限を無くし、自由な働き方を当たり前に。AI活用とオートメーションで24時間稼働するビジネスを実現。">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #000000;
+            --text-primary: #191919;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F7F7F7;
+            --bg-tertiary: #EFEFEF;
+            --border-color: #E5E5E5;
+            --hover-bg: #F0F0F0;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        
+        p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: -0.03em;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        
+        .cta-button {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .cta-button:hover {
+            background: #333;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 32px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .hero-text h1 {
+            font-size: 48px;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+        
+        .hero-text p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .primary-button {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-block;
+            font-size: 15px;
+        }
+        
+        .primary-button:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .secondary-button {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-block;
+            font-size: 15px;
+        }
+        
+        .secondary-button:hover {
+            background: var(--hover-bg);
+            border-color: var(--text-tertiary);
+        }
+        
+        /* Visual Card */
+        .hero-visual {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 48px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .visual-content {
+            text-align: center;
+        }
+        
+        .visual-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 36px;
+        }
+        
+        .visual-content h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 80px 32px;
+            background: var(--bg-secondary);
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 56px;
+        }
+        
+        .section-header h2 {
+            font-size: 36px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+        
+        .section-header p {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .service-card {
+            background: var(--bg-primary);
+            padding: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .service-card:hover {
+            border-color: var(--text-tertiary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .service-emoji {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        
+        .service-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .service-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Stats Section */
+        .achievements {
+            padding: 80px 32px;
+            background: var(--bg-primary);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .stat-card {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        
+        .stat-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 32px;
+            background: var(--bg-secondary);
+            text-align: center;
+        }
+        
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .cta-section p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            padding: 48px 32px 24px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+        
+        .footer-brand h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        .footer-brand p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        
+        .footer-column h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-column ul li a,
+        .footer-column ul li {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--text-primary);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 14px;
+        }
+        
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 4px;
+        }
+        
+        .mobile-menu-toggle span {
+            width: 20px;
+            height: 2px;
+            background: var(--text-primary);
+            margin: 2px 0;
+            transition: 0.3s;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .hero {
+                padding: 100px 20px 60px;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .hero-text h1 {
+                font-size: 36px;
+            }
+            
+            .hero-visual {
+                display: none;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                text-align: center;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-text,
+        .service-card,
+        .stat-card {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .service-card:nth-child(2) { animation-delay: 0.1s; }
+        .service-card:nth-child(3) { animation-delay: 0.2s; }
+        .service-card:nth-child(4) { animation-delay: 0.3s; }
+        .service-card:nth-child(5) { animation-delay: 0.4s; }
+        .service-card:nth-child(6) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">CENLEAF</a>
+            <ul class="nav-links">
+                <li><a href="#services">サービス</a></li>
+                <li><a href="#about">代表について</a></li>
+                <li><a href="#works">実績</a></li>
+                <li><a href="#news">ニュース</a></li>
+                <li><a href="#contact" class="cta-button">お問い合わせ</a></li>
+            </ul>
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>
+                    AI × オートメーションで<br>
+                    "自由な働き方"を<br>
+                    当たり前に
+                </h1>
+                <p>
+                    時間・場所・人間関係──<br>
+                    あらゆる制限を取り払い、<br>
+                    ビジネスを24時間フル稼働させる仕組み化を
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="primary-button">無料相談を予約する</a>
+                    <a href="#download" class="secondary-button">サービス資料をダウンロード</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-content">
+                    <div class="visual-icon">
+                        🚀
+                    </div>
+                    <h3>24時間365日稼働する<br>ビジネスの仕組み</h3>
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-value">230+</div>
+                            <div class="stat-label">導入実績</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3.2倍</div>
+                            <div class="stat-label">売上向上</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">65%</div>
+                            <div class="stat-label">時間削減</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <h2>私たちのサービス</h2>
+            <p>お客様のニーズに合わせた最適なソリューションをご提供します</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-emoji">🎥</div>
+                <h3>オートウェビナー構築</h3>
+                <p>UTAGEとAIシナリオで365日自動開催。手動開催の拘束から解放され、月120回の自動配信でCVR2.8倍を実現。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-emoji">🤖</div>
+                <h3>AI活用コンサルティング</h3>
+                <p>ChatGPT・Claude・Geminiを活用した業務効率化。資料作成時間70%削減、リード獲得単価1/3を実現。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-emoji">📈</div>
+                <h3>セールスファネル最適化</h3>
+                <p>LTV設計＋ステップメール自動化＋多チャネル連携で、平均購入単価1.5倍、リピート率40%→68%を達成。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-emoji">📝</div>
+                <h3>コンテンツマーケティング</h3>
+                <p>AIを活用した記事作成・ブログ運営の効率化。SEO対策と組み合わせて集客を自動化します。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-emoji">🔄</div>
+                <h3>業務自動化支援</h3>
+                <p>Zapier・Make等のツールを活用し、定型業務を自動化。人的ミスを削減し、生産性を向上させます。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-emoji">📊</div>
+                <h3>データ分析・改善提案</h3>
+                <p>Google Analytics等のデータを基に、具体的な改善施策をご提案。PDCAサイクルを高速で回します。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="achievements">
+        <div class="section-header">
+            <h2>数字で見る実績</h2>
+            <p>お客様と共に歩んできた、私たちの成果をご紹介します</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">230+</div>
+                <div class="stat-description">導入企業・個人事業主</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3.2倍</div>
+                <div class="stat-description">平均CVR向上率</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">65%</div>
+                <div class="stat-description">平均作業時間削減</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">98%</div>
+                <div class="stat-description">顧客満足度</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>"自由" を当たり前にする<br>次の一歩を、今。</h2>
+            <p>売上＝時間×労力の方程式から解放されませんか？<br>AIと自動化を味方につけて、場所も時間も縛られない収益の仕組みを作りましょう。</p>
+            <a href="#contact" class="primary-button">無料相談を申し込む</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>CENLEAF</h3>
+                <p>時間・場所・人間関係の制限を無くし、<br>"自由な働き方" を当たり前に。<br>ITが苦手でも "仕組み" で稼げる人を増やします。</p>
+            </div>
+            <div class="footer-column">
+                <h4>サービス</h4>
+                <ul>
+                    <li><a href="#">オートウェビナー構築</a></li>
+                    <li><a href="#">AI活用コンサルティング</a></li>
+                    <li><a href="#">セールスファネル最適化</a></li>
+                    <li><a href="#">コンテンツマーケティング</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>代表情報</h4>
+                <ul>
+                    <li><a href="#">代表プロフィール</a></li>
+                    <li><a href="#">実績・事例</a></li>
+                    <li><a href="#">メディア掲載</a></li>
+                    <li><a href="#">ブログ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>お問い合わせ</h4>
+                <ul>
+                    <li>Email: info@cenleaf.com</li>
+                    <li>LINE: @suzaki-ai</li>
+                    <li>営業時間: 平日 10:00-18:00</li>
+                    <li>※完全予約制</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 CENLEAF. All rights reserved. | 代表：須崎純一</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Number animation
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumber = entry.target;
+                    const finalNumber = statNumber.textContent;
+                    let currentNumber = 0;
+                    
+                    const isPercentage = finalNumber.includes('%');
+                    const isPlus = finalNumber.includes('+');
+                    const isTimes = finalNumber.includes('倍');
+                    const targetNumber = parseFloat(finalNumber.replace(/[^0-9.]/g, ''));
+                    
+                    const increment = targetNumber / 50;
+                    
+                    const counter = setInterval(() => {
+                        currentNumber += increment;
+                        if (currentNumber >= targetNumber) {
+                            currentNumber = targetNumber;
+                            clearInterval(counter);
+                            
+                            let displayText = currentNumber;
+                            if (isTimes) {
+                                displayText = currentNumber.toFixed(1) + '倍';
+                            } else if (isPercentage) {
+                                displayText = Math.floor(currentNumber) + '%';
+                            } else if (isPlus) {
+                                displayText = Math.floor(currentNumber) + '+';
+                            } else {
+                                displayText = Math.floor(currentNumber);
+                            }
+                            
+                            statNumber.textContent = displayText;
+                        } else {
+                            if (isTimes) {
+                                statNumber.textContent = currentNumber.toFixed(1) + '倍';
+                            } else if (isPercentage) {
+                                statNumber.textContent = Math.floor(currentNumber) + '%';
+                            } else if (isPlus) {
+                                statNumber.textContent = Math.floor(currentNumber) + '+';
+                            } else {
+                                statNumber.textContent = Math.floor(currentNumber);
+                            }
+                        }
+                    }, 30);
+                    
+                    observer.unobserve(statNumber);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-number, .stat-value').forEach(stat => {
+            observer.observe(stat);
+        });
+    </script>
+</body>
+</html>

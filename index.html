@@ -6,6 +6,28 @@
     <title>🚀 CENLEAF - 未来型AI×オートメーション</title>
     <meta name="description" content="最先端Web技術で創り上げた、未来からやってきたようなCENLEAFのウェブサイト">
     
+    <!-- モバイルデバイス判定とリダイレクト -->
+    <script>
+        (function() {
+            // ユーザーエージェントによる判定
+            var isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            // 画面幅による判定（768px以下をモバイルとする）
+            var isSmallScreen = window.innerWidth <= 768;
+            
+            // タッチデバイスの判定
+            var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+            
+            // いずれかの条件を満たす場合はモバイルページへリダイレクト
+            if ((isMobile || isSmallScreen) && isTouchDevice) {
+                // 現在のパスがmobile.htmlでない場合のみリダイレクト
+                if (!window.location.pathname.includes('mobile.html')) {
+                    window.location.href = './mobile.html';
+                }
+            }
+        })();
+    </script>
+    
     <!-- 最先端ライブラリ群 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
