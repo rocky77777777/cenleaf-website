@@ -203,7 +203,7 @@
 
         .hero h1 {
             font-family: 'Orbitron', monospace;
-            font-size: 48px;
+            font-size: clamp(3rem, 10vw, 5rem);
             font-weight: 900;
             line-height: 1.2;
             margin-bottom: 20px;
@@ -212,7 +212,55 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: textGradient 3s ease-in-out infinite;
-            text-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+
+        /* グリッチエフェクト */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--electric-green), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glitch-text::before {
+            animation: glitch-1 0.3s infinite;
+            color: var(--neon-cyan);
+            z-index: -1;
+        }
+
+        .glitch-text::after {
+            animation: glitch-2 0.3s infinite;
+            color: var(--neon-pink);
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { clip: rect(0, 900px, 0, 0); }
+            25% { clip: rect(20px, 900px, 40px, 0); }
+            50% { clip: rect(60px, 900px, 80px, 0); }
+            75% { clip: rect(40px, 900px, 60px, 0); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { clip: rect(0, 900px, 0, 0); }
+            25% { clip: rect(80px, 900px, 100px, 0); }
+            50% { clip: rect(20px, 900px, 40px, 0); }
+            75% { clip: rect(60px, 900px, 80px, 0); }
         }
 
         @keyframes textGradient {
@@ -245,20 +293,79 @@
 
         .cta-button {
             display: inline-block;
-            padding: 18px 45px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-            color: white;
+            padding: 20px 50px;
+            background: #FF006E;
+            background: linear-gradient(135deg, #FF006E 0%, #00D4FF 100%);
+            color: #FFFFFF;
             text-decoration: none;
             border-radius: 50px;
-            font-weight: bold;
-            font-size: 16px;
-            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.4);
+            font-weight: 900;
+            font-size: 1rem;
+            box-shadow: 0 10px 40px rgba(255, 0, 110, 0.5);
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
             font-family: 'Orbitron', monospace;
             text-transform: uppercase;
             letter-spacing: 2px;
+            border: 2px solid #FFFFFF;
+        }
+
+        .pulse-button {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 10px 40px rgba(255, 0, 110, 0.5);
+            }
+            50% {
+                box-shadow: 0 20px 60px rgba(255, 0, 110, 0.8),
+                            0 0 100px rgba(0, 212, 255, 0.4);
+            }
+        }
+
+        .button-glow {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+            animation: rotate-glow 3s linear infinite;
+        }
+
+        @keyframes rotate-glow {
+            100% { transform: rotate(360deg); }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 50px;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 25px;
+            opacity: 0.7;
+        }
+
+        .scroll-indicator span {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            margin-left: -3px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: scroll-down 2s infinite;
+        }
+
+        @keyframes scroll-down {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(20px); opacity: 0; }
         }
 
         .cta-button::before {
@@ -656,12 +763,46 @@
             }
         }
 
+        /* 3Dエフェクト用 */
+        .hero-3d-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* ホログラム効果 */
+        @keyframes hologram {
+            0%, 100% {
+                opacity: 1;
+                transform: translateZ(0) rotateX(0deg);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateZ(10px) rotateX(2deg);
+            }
+        }
+
+        .hologram-effect {
+            animation: hologram 4s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
         /* パフォーマンス最適化 */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* PWA対応 */
+        @media (display-mode: standalone) {
+            header {
+                padding-top: env(safe-area-inset-top);
             }
         }
     </style>
@@ -693,12 +834,27 @@
 
     <!-- ヒーローセクション -->
     <section class="hero" id="home">
-        <h1 class="fade-in">CENLEAF</h1>
-        <p class="fade-in">時間・場所・人間関係・お金の制限を無くし</p>
-        <p class="subtitle fade-in">"自由な生き方・働き方"を当たり前に！</p>
-        <div class="typing-text fade-in" id="typedText"></div>
-        <div class="fade-in">
-            <a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx?ftid=nU1AfsRTq9C4" class="cta-button" target="_blank">メルマガに登録する</a>
+        <div class="hero-3d-container">
+            <canvas id="hero-3d" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
+        </div>
+        <div class="hero-content" style="position: relative; z-index: 10;">
+            <h1 class="fade-in glitch-text" data-text="CENLEAF">CENLEAF</h1>
+            <p class="fade-in neon-text" style="font-size: 1.1rem; line-height: 1.8; margin: 20px auto 15px; color: var(--neon-cyan); text-shadow: 0 0 20px var(--neon-cyan);">
+                時間・場所・人間関係・お金の制限を無くし
+            </p>
+            <p class="subtitle fade-in" style="font-size: 1.3rem; color: var(--electric-green); text-shadow: 0 0 30px var(--electric-green);">
+                "自由な生き方・働き方"を当たり前に！
+            </p>
+            <div class="typing-text fade-in" id="typedText"></div>
+            <div class="fade-in">
+                <a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx?ftid=nU1AfsRTq9C4" class="cta-button pulse-button" target="_blank">
+                    <span class="button-text">メルマガに登録する</span>
+                    <span class="button-glow"></span>
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
         </div>
     </section>
 
@@ -1111,10 +1267,110 @@
             }
         }
 
+        // 3Dヒーローアニメーション
+        const hero3d = document.getElementById('hero-3d');
+        if (hero3d) {
+            const ctx3d = hero3d.getContext('2d');
+            hero3d.width = window.innerWidth;
+            hero3d.height = window.innerHeight;
+            
+            const lines = [];
+            for (let i = 0; i < 20; i++) {
+                lines.push({
+                    x: Math.random() * hero3d.width,
+                    y: Math.random() * hero3d.height,
+                    speedX: (Math.random() - 0.5) * 2,
+                    speedY: (Math.random() - 0.5) * 2,
+                    length: Math.random() * 100 + 50
+                });
+            }
+            
+            function draw3D() {
+                ctx3d.clearRect(0, 0, hero3d.width, hero3d.height);
+                ctx3d.strokeStyle = 'rgba(0, 255, 255, 0.1)';
+                ctx3d.lineWidth = 1;
+                
+                lines.forEach(line => {
+                    ctx3d.beginPath();
+                    ctx3d.moveTo(line.x, line.y);
+                    ctx3d.lineTo(line.x + line.length, line.y);
+                    ctx3d.stroke();
+                    
+                    line.x += line.speedX;
+                    line.y += line.speedY;
+                    
+                    if (line.x < 0 || line.x > hero3d.width) line.speedX *= -1;
+                    if (line.y < 0 || line.y > hero3d.height) line.speedY *= -1;
+                });
+                
+                requestAnimationFrame(draw3D);
+            }
+            draw3D();
+        }
+
+        // ジャイロセンサー対応
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (event) => {
+                const beta = event.beta;  // X軸
+                const gamma = event.gamma; // Y軸
+                
+                // パララックス効果
+                const elements = document.querySelectorAll('.fade-in');
+                elements.forEach((el, i) => {
+                    const depth = (i + 1) * 0.5;
+                    const moveX = gamma * depth;
+                    const moveY = beta * depth;
+                    el.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+                });
+            });
+        }
+
+        // ハプティックフィードバック
+        function triggerHaptic() {
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+        }
+
+        document.querySelectorAll('.cta-button, .service-card, .social-link').forEach(el => {
+            el.addEventListener('touchstart', triggerHaptic);
+        });
+
+        // プルトゥリフレッシュ
+        let pullStartY = 0;
+        let pulling = false;
+        
+        document.addEventListener('touchstart', (e) => {
+            if (window.scrollY === 0) {
+                pullStartY = e.touches[0].clientY;
+                pulling = true;
+            }
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (pulling) {
+                const pullDistance = e.touches[0].clientY - pullStartY;
+                if (pullDistance > 100) {
+                    document.body.style.transform = `translateY(${Math.min(pullDistance - 100, 50)}px)`;
+                }
+            }
+        });
+        
+        document.addEventListener('touchend', () => {
+            if (pulling) {
+                document.body.style.transform = '';
+                pulling = false;
+            }
+        });
+
         // デバイスの向き検知
         window.addEventListener('orientationchange', () => {
             setTimeout(() => {
                 resizeCanvas();
+                if (hero3d) {
+                    hero3d.width = window.innerWidth;
+                    hero3d.height = window.innerHeight;
+                }
             }, 100);
         });
 
@@ -1130,9 +1386,28 @@
         function updateScroll() {
             ticking = false;
             // スクロールベースのアニメーション
+            const scrolled = window.scrollY;
+            const heroEl = document.querySelector('.hero');
+            if (heroEl) {
+                heroEl.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
         }
 
         window.addEventListener('scroll', requestTick, { passive: true });
+
+        // PWA機能
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+        }
+
+        // オフライン検知
+        window.addEventListener('online', () => {
+            console.log('オンラインに復帰');
+        });
+        
+        window.addEventListener('offline', () => {
+            console.log('オフライン状態');
+        });
     </script>
 </body>
 </html>
