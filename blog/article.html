@@ -521,7 +521,86 @@
         }
 
         // 軽量関連記事表示（API不使用）
-        function showRelatedArticles(currentArticle) {
+        // microCMSから関連記事を取得して表示
+        async function showRelatedArticles(currentArticle) {
+            const relatedContainer = document.getElementById('related-articles');
+            
+            try {
+                // microCMSから記事を取得
+                const response = await fetch(`https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?limit=10`, {
+                    headers: {
+                        'X-MICROCMS-API-KEY': API_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (!data.contents || data.contents.length === 0) {
+                    // APIから記事が取得できない場合はデモデータを使用
+                    showDemoRelatedArticles(currentArticle);
+                    return;
+                }
+
+                // 現在の記事のカテゴリーを取得
+                const currentCategoryName = currentArticle.category ? 
+                    (typeof currentArticle.category === 'object' ? currentArticle.category.name : currentArticle.category) : 
+                    '';
+
+                // 記事をスコアリング（同じカテゴリーは高スコア）
+                const scoredArticles = data.contents
+                    .filter(article => article.id !== currentArticle.id && article.title !== currentArticle.title)
+                    .map(article => {
+                        const categoryName = article.category ? 
+                            (typeof article.category === 'object' ? article.category.name : article.category) : 
+                            '';
+                        
+                        // スコア計算：同じカテゴリーなら100点、違うカテゴリーなら0点
+                        const score = (categoryName === currentCategoryName) ? 100 : 0;
+                        
+                        return { ...article, score, categoryName };
+                    })
+                    .sort((a, b) => b.score - a.score || new Date(b.publishedAt) - new Date(a.publishedAt))
+                    .slice(0, 3); // 最大3件の関連記事
+
+                if (scoredArticles.length === 0) {
+                    relatedContainer.innerHTML = '<p>関連記事はありません</p>';
+                    return;
+                }
+
+                // 関連記事を表示
+                let html = '';
+                scoredArticles.forEach(article => {
+                    // 記事の抜粋を作成（contentからHTMLタグを除去して最初の100文字）
+                    const excerpt = article.content ? 
+                        article.content.replace(/<[^>]*>/g, '').substring(0, 100) + '...' : 
+                        '';
+                    
+                    const href = `/blog/article.html?id=${article.id}`;
+                    
+                    html += `
+                        <a href="${href}" class="related-article">
+                            <span class="category">${article.categoryName || '未分類'}</span>
+                            <h3>${article.title}</h3>
+                            <p>${excerpt}</p>
+                        </a>
+                    `;
+                });
+                
+                relatedContainer.innerHTML = html;
+                
+            } catch (error) {
+                console.error('関連記事の取得に失敗:', error);
+                // エラー時はデモデータを表示
+                showDemoRelatedArticles(currentArticle);
+            }
+        }
+
+        // デモ関連記事を表示（フォールバック）
+        function showDemoRelatedArticles(currentArticle) {
             const relatedContainer = document.getElementById('related-articles');
             
             // デモ記事データ
