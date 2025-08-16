@@ -512,8 +512,9 @@
                 
                 let url;
                 if (articleInfo.type === 'slug') {
-                    // slugで検索する場合
-                    url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?filters=slug[equals]${articleInfo.value}`;
+                    // slugで検索する場合 - 全記事を取得してクライアント側でフィルタ
+                    // microCMSのfiltersが期待通り動作しないため
+                    url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?limit=100`;
                 } else {
                     // IDで直接取得する場合
                     url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}/${articleInfo.value}`;
@@ -536,8 +537,18 @@
                 let article;
                 if (articleInfo.type === 'slug') {
                     const data = await response.json();
+                    console.log('slug検索結果:', data);
+                    
                     if (data.contents && data.contents.length > 0) {
-                        article = data.contents[0];
+                        // slugでフィルタリング
+                        const filtered = data.contents.filter(item => item.slug === articleInfo.value);
+                        console.log(`slug="${articleInfo.value}"でフィルタ:`, filtered);
+                        
+                        if (filtered.length > 0) {
+                            article = filtered[0];
+                        } else {
+                            throw new Error(`slug "${articleInfo.value}" の記事が見つかりません`);
+                        }
                     } else {
                         throw new Error('記事が見つかりません');
                     }
