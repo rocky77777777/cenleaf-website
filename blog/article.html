@@ -24,11 +24,14 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
             line-height: 1.8;
             padding: 20px;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            overflow-x: hidden;
+            word-wrap: break-word;
         }
 
         /* ヘッダー */
@@ -145,6 +148,15 @@
         .article-content {
             font-size: 16px;
             color: #333333;
+            overflow-x: hidden;
+            word-wrap: break-word;
+        }
+        
+        /* すべてのテキスト要素で横スクロール防止 */
+        .article-content * {
+            max-width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .article-content h2 {
@@ -278,7 +290,9 @@
             border: 1px solid #e0e0e0;
             border-radius: 5px;
             padding: 15px;
-            overflow-x: auto;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            white-space: pre-wrap;
             margin: 20px 0;
             color: #333333;
         }
