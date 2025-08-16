@@ -516,18 +516,165 @@
             });
         }
 
+        // SEOメタタグを動的に更新
+        function updateSEOMetaTags(article) {
+            // タイトル更新
+            document.title = `${article.title} | CENLEAF BLOG`;
+            
+            // 記事の抜粋を生成（本文から最初の160文字）
+            const excerpt = article.excerpt || 
+                (article.content || article.body || '').replace(/<[^>]*>/g, '').substring(0, 160) + '...';
+            
+            // メタディスクリプション
+            let metaDescription = document.querySelector('meta[name="description"]');
+            if (!metaDescription) {
+                metaDescription = document.createElement('meta');
+                metaDescription.name = 'description';
+                document.head.appendChild(metaDescription);
+            }
+            metaDescription.content = excerpt;
+            
+            // カテゴリー名を取得
+            const categoryName = article.category ? 
+                (typeof article.category === 'object' ? article.category.name : article.category) : 
+                '';
+            
+            // キーワード
+            let metaKeywords = document.querySelector('meta[name="keywords"]');
+            if (!metaKeywords) {
+                metaKeywords = document.createElement('meta');
+                metaKeywords.name = 'keywords';
+                document.head.appendChild(metaKeywords);
+            }
+            metaKeywords.content = `${article.title},${categoryName},須崎純一,AIマーケティング,オートウェビナー`;
+            
+            // Canonical URL
+            const articleUrl = `https://cenleaf.com/blog/article.html?${article.slug ? 'slug=' + article.slug : 'id=' + article.id}`;
+            let canonical = document.querySelector('link[rel="canonical"]');
+            if (!canonical) {
+                canonical = document.createElement('link');
+                canonical.rel = 'canonical';
+                document.head.appendChild(canonical);
+            }
+            canonical.href = articleUrl;
+            
+            // OGP メタタグ
+            updateOGPTags(article, excerpt, articleUrl);
+        }
+
+        // OGPメタタグを更新
+        function updateOGPTags(article, excerpt, url) {
+            const ogTags = [
+                { property: 'og:type', content: 'article' },
+                { property: 'og:title', content: article.title },
+                { property: 'og:description', content: excerpt },
+                { property: 'og:url', content: url },
+                { property: 'og:site_name', content: 'CENLEAF' },
+                { property: 'og:image', content: 'https://cenleaf.com/images/ogp-banner.png' },
+                { name: 'twitter:card', content: 'summary_large_image' },
+                { name: 'twitter:title', content: article.title },
+                { name: 'twitter:description', content: excerpt },
+                { name: 'twitter:image', content: 'https://cenleaf.com/images/ogp-banner.png' }
+            ];
+            
+            ogTags.forEach(tag => {
+                const selector = tag.property ? `meta[property="${tag.property}"]` : `meta[name="${tag.name}"]`;
+                let metaTag = document.querySelector(selector);
+                if (!metaTag) {
+                    metaTag = document.createElement('meta');
+                    if (tag.property) metaTag.setAttribute('property', tag.property);
+                    if (tag.name) metaTag.setAttribute('name', tag.name);
+                    document.head.appendChild(metaTag);
+                }
+                metaTag.content = tag.content;
+            });
+        }
+
+        // 構造化データ（JSON-LD）を追加
+        function addStructuredData(article) {
+            // 既存の構造化データスクリプトを削除
+            const existingScript = document.querySelector('script[type="application/ld+json"]');
+            if (existingScript) {
+                existingScript.remove();
+            }
+            
+            const categoryName = article.category ? 
+                (typeof article.category === 'object' ? article.category.name : article.category) : 
+                '未分類';
+            
+            const structuredData = {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "BlogPosting",
+                        "@id": `https://cenleaf.com/blog/article.html?${article.slug ? 'slug=' + article.slug : 'id=' + article.id}`,
+                        "headline": article.title,
+                        "description": article.excerpt || (article.content || '').replace(/<[^>]*>/g, '').substring(0, 160),
+                        "datePublished": article.publishedAt || article.createdAt,
+                        "dateModified": article.updatedAt || article.publishedAt || article.createdAt,
+                        "author": {
+                            "@type": "Person",
+                            "name": "須崎純一",
+                            "url": "https://cenleaf.com/"
+                        },
+                        "publisher": {
+                            "@type": "Person",
+                            "name": "須崎純一",
+                            "url": "https://cenleaf.com/"
+                        },
+                        "articleSection": categoryName,
+                        "inLanguage": "ja",
+                        "mainEntityOfPage": {
+                            "@type": "WebPage",
+                            "@id": `https://cenleaf.com/blog/article.html?${article.slug ? 'slug=' + article.slug : 'id=' + article.id}`
+                        }
+                    },
+                    {
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "ホーム",
+                                "item": "https://cenleaf.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "ブログ",
+                                "item": "https://cenleaf.com/blog/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 3,
+                                "name": categoryName,
+                                "item": `https://cenleaf.com/blog/?category=${encodeURIComponent(categoryName)}`
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 4,
+                                "name": article.title
+                            }
+                        ]
+                    }
+                ]
+            };
+            
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify(structuredData);
+            document.head.appendChild(script);
+        }
+
         // 記事を表示
         function displayArticle(article) {
             const content = document.getElementById('content');
             
-            // タイトルを更新
-            document.title = `${article.title} | CENLEAF BLOG`;
+            // SEOメタタグを動的に更新
+            updateSEOMetaTags(article);
             
-            // メタタグを更新
-            const metaDescription = document.querySelector('meta[name="description"]');
-            if (metaDescription && article.excerpt) {
-                metaDescription.content = article.excerpt;
-            }
+            // 構造化データを追加
+            addStructuredData(article);
             
             // カテゴリー名を取得
             const categoryName = article.category ? 
