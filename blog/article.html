@@ -422,11 +422,7 @@
                     <header class="article-header">
                         ${article.category ? `<span class="category-tag">${article.category}</span>` : ''}
                         <h1>${article.title}</h1>
-                        <div class="article-meta">
-                            <span>✍️ ${article.author || '須崎純一'}</span>
-                            <span>📅 ${formatDate(article.publishedAt || article.createdAt)}</span>
-                            ${article.readTime ? `<span>⏱️ ${article.readTime}分で読めます</span>` : ''}
-                        </div>
+                        ${article.readTime ? `<div class="article-meta"><span>⏱️ ${article.readTime}分で読めます</span></div>` : ''}
                     </header>
 
                     <div class="article-content">
@@ -560,7 +556,6 @@
                         <span class="category">${article.category}</span>
                         <h4>${article.title}</h4>
                         <p class="excerpt">${article.excerpt}</p>
-                        <span class="date">${formatDate(article.publishedAt)}</span>
                     </a>
                 `;
             });

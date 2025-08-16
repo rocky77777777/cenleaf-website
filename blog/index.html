@@ -224,10 +224,6 @@
                         <span class="category">${post.category || '一般'}</span>
                         <h2 class="blog-title">${post.title}</h2>
                         <p class="blog-excerpt">${post.excerpt || ''}</p>
-                        <div class="blog-footer">
-                            <span>✍️ 須崎純一</span>
-                            <span>${formatDate(post.publishedAt || post.createdAt || new Date())}</span>
-                        </div>
                     </a>
                 `;
             }).join('');
