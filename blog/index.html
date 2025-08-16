@@ -62,6 +62,22 @@
             font-size: 36px;
         }
 
+        /* ローディング */
+        .loading {
+            text-align: center;
+            color: #00ffff;
+            font-size: 18px;
+            padding: 40px;
+        }
+
+        /* エラーメッセージ */
+        .error {
+            text-align: center;
+            color: #ff0080;
+            font-size: 16px;
+            padding: 40px;
+        }
+
         /* ブログカード */
         .blog-grid {
             display: grid;
@@ -76,6 +92,10 @@
             border-radius: 8px;
             padding: 20px;
             transition: transform 0.3s ease;
+            cursor: pointer;
+            display: block;
+            text-decoration: none;
+            color: inherit;
         }
 
         .blog-card:hover {
@@ -143,97 +163,146 @@
         <!-- タイトル -->
         <h1>CENLEAF BLOG</h1>
 
-        <!-- ブログ記事 -->
-        <div class="blog-grid">
-            <!-- 記事1 -->
-            <div class="blog-card">
-                <span class="category">自己紹介</span>
-                <h2 class="blog-title">AIとマーケティングの自動化で、時間と場所の自由を手に入れた話</h2>
-                <p class="blog-excerpt">
-                    はじめまして、須崎純一です。今ではAIとウェビナー自動化の専門家として活動していますが、
-                    ここまでの道のりは決して平坦ではありませんでした。ブラック企業でうつ病になり、
-                    トイレットペーパーが1年で1本も減らないほど引きこもった時期もありました。
-                </p>
-                <div class="blog-footer">
-                    <span>✍️ 須崎純一</span>
-                    <span>2025/08/15</span>
-                </div>
-            </div>
-
-            <!-- 記事2 -->
-            <div class="blog-card">
-                <span class="category">マーケティング</span>
-                <h2 class="blog-title">ウェビナー自動化で月商300万円を達成した3つのステップ</h2>
-                <p class="blog-excerpt">
-                    「セミナーを自動化して、寝ている間も売上が上がる仕組みを作りたい」
-                    そんな夢のような話を現実にする方法をお伝えします。
-                    UTAGEを使った完全自動化システムの構築手順を公開。
-                </p>
-                <div class="blog-footer">
-                    <span>✍️ 須崎純一</span>
-                    <span>2025/08/10</span>
-                </div>
-            </div>
-
-            <!-- 記事3 -->
-            <div class="blog-card">
-                <span class="category">AIツール</span>
-                <h2 class="blog-title">ChatGPT×n8nで作る最強の業務自動化システム</h2>
-                <p class="blog-excerpt">
-                    AIと自動化ツールを組み合わせることで、今まで3時間かかっていた作業を5分に短縮できました。
-                    ChatGPTとn8nを連携させた実践的な自動化フローの作り方を解説します。
-                </p>
-                <div class="blog-footer">
-                    <span>✍️ 須崎純一</span>
-                    <span>2025/08/05</span>
-                </div>
-            </div>
-
-            <!-- 記事4 -->
-            <div class="blog-card">
-                <span class="category">ビジネス</span>
-                <h2 class="blog-title">個人事業主が法人化するベストタイミング</h2>
-                <p class="blog-excerpt">
-                    売上が伸びてきたら考える法人化。でも、いつがベストタイミング？
-                    税金面だけでなく、信用・採用・資金調達の観点から、
-                    法人化の最適なタイミングを解説します。
-                </p>
-                <div class="blog-footer">
-                    <span>✍️ 須崎純一</span>
-                    <span>2025/07/28</span>
-                </div>
-            </div>
-
-            <!-- 記事5 -->
-            <div class="blog-card">
-                <span class="category">自動化</span>
-                <h2 class="blog-title">メルマガ配信を完全自動化！ConvertKitの使い方</h2>
-                <p class="blog-excerpt">
-                    メールマーケティングの自動化は売上アップの鍵。
-                    ConvertKitを使った自動配信シーケンスの設計方法と、
-                    成約率を上げるメール文章のテンプレートを公開。
-                </p>
-                <div class="blog-footer">
-                    <span>✍️ 須崎純一</span>
-                    <span>2025/07/20</span>
-                </div>
-            </div>
-
-            <!-- 記事6 -->
-            <div class="blog-card">
-                <span class="category">AIツール</span>
-                <h2 class="blog-title">Claude 3.5 Sonnetで作る完璧なプロンプト集</h2>
-                <p class="blog-excerpt">
-                    Claude 3.5 Sonnetの能力を最大限引き出すプロンプトの書き方とは？
-                    実際に使って効果があった具体的なプロンプト例を、
-                    用途別に50個以上まとめました。
-                </p>
-                <div class="blog-footer">
-                    <span>✍️ 須崎純一</span>
-                    <span>2025/07/15</span>
-                </div>
-            </div>
+        <!-- ブログ記事コンテナ -->
+        <div id="blog-grid" class="blog-grid">
+            <div class="loading">記事を読み込み中...</div>
         </div>
     </div>
+
+    <!-- Sanity Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@sanity/client@6/dist/index.browser.min.js"></script>
+    
+    <script>
+        // Sanity設定
+        const projectId = 'wr3iko59';
+        const dataset = 'production';
+        const apiVersion = '2024-01-01';
+        
+        // Sanityクライアントの初期化
+        const client = window.sanityClient({
+            projectId: projectId,
+            dataset: dataset,
+            apiVersion: apiVersion,
+            useCdn: true
+        });
+
+        // 日付フォーマット
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ja-JP', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).replace(/\//g, '/');
+        }
+
+        // カテゴリマッピング
+        const categoryMap = {
+            'marketing': 'マーケティング',
+            'ai': 'AIツール',
+            'automation': '自動化',
+            'business': 'ビジネス',
+            'intro': '自己紹介'
+        };
+
+        // デモデータ
+        const demoData = [
+            {
+                title: 'AIとマーケティングの自動化で、時間と場所の自由を手に入れた話',
+                category: '自己紹介',
+                excerpt: 'はじめまして、須崎純一です。今ではAIとウェビナー自動化の専門家として活動していますが、ここまでの道のりは決して平坦ではありませんでした。',
+                author: '須崎純一',
+                publishedAt: '2025-08-15',
+                slug: { current: 'introduction' }
+            },
+            {
+                title: 'ウェビナー自動化で月商300万円を達成した3つのステップ',
+                category: 'マーケティング',
+                excerpt: 'セミナーを自動化して、寝ている間も売上が上がる仕組みを作りたい」そんな夢のような話を現実にする方法をお伝えします。',
+                author: '須崎純一',
+                publishedAt: '2025-08-10',
+                slug: { current: 'webinar-automation' }
+            },
+            {
+                title: 'ChatGPT×n8nで作る最強の業務自動化システム',
+                category: 'AIツール',
+                excerpt: 'AIと自動化ツールを組み合わせることで、今まで3時間かかっていた作業を5分に短縮できました。',
+                author: '須崎純一',
+                publishedAt: '2025-08-05',
+                slug: { current: 'chatgpt-n8n' }
+            }
+        ];
+
+        // ブログ記事を表示
+        function displayPosts(posts) {
+            const blogGrid = document.getElementById('blog-grid');
+            
+            if (posts.length === 0) {
+                blogGrid.innerHTML = '<div class="error">記事が見つかりませんでした</div>';
+                return;
+            }
+
+            blogGrid.innerHTML = posts.map(post => `
+                <a href="https://suzakijunichi.com/${post.slug?.current || post.slug || '#'}" target="_blank" class="blog-card">
+                    <span class="category">${post.category || '一般'}</span>
+                    <h2 class="blog-title">${post.title}</h2>
+                    <p class="blog-excerpt">${post.excerpt || ''}</p>
+                    <div class="blog-footer">
+                        <span>✍️ ${post.author || '須崎純一'}</span>
+                        <span>${formatDate(post.publishedAt || post._createdAt || new Date())}</span>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // Sanityから記事を取得
+        async function fetchPosts() {
+            const blogGrid = document.getElementById('blog-grid');
+            
+            try {
+                console.log('Fetching posts from Sanity...');
+                
+                // Sanityクエリ
+                const query = `*[_type == "post"] | order(publishedAt desc) {
+                    _id,
+                    title,
+                    slug,
+                    publishedAt,
+                    _createdAt,
+                    excerpt,
+                    "category": category->title,
+                    "categorySlug": category->slug.current,
+                    "author": author->name
+                }[0...10]`;
+
+                const posts = await client.fetch(query);
+                console.log('Fetched posts:', posts);
+
+                if (posts && posts.length > 0) {
+                    // カテゴリ名を日本語に変換
+                    const processedPosts = posts.map(post => ({
+                        ...post,
+                        category: categoryMap[post.categorySlug] || post.category || '一般'
+                    }));
+                    displayPosts(processedPosts);
+                } else {
+                    // Sanityにデータがない場合はデモデータを表示
+                    console.log('No posts found, showing demo data');
+                    displayPosts(demoData);
+                }
+
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                // エラー時はデモデータを表示
+                blogGrid.innerHTML = '<div class="error">Sanityから記事を取得できませんでした。デモデータを表示します。</div>';
+                setTimeout(() => {
+                    displayPosts(demoData);
+                }, 2000);
+            }
+        }
+
+        // ページ読み込み時に記事を取得
+        fetchPosts();
+    </script>
 </body>
 </html>
