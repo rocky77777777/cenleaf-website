@@ -619,7 +619,7 @@
                         return { ...article, score, categoryName };
                     })
                     .sort((a, b) => b.score - a.score || new Date(b.publishedAt) - new Date(a.publishedAt))
-                    .slice(0, 3); // 最大3件の関連記事
+                    .slice(0, 5); // 最大5件の関連記事
 
                 if (scoredArticles.length === 0) {
                     relatedContainer.innerHTML = '<p>関連記事はありません</p>';
@@ -630,7 +630,7 @@
                 let html = '';
                 scoredArticles.forEach(article => {
                     // slugがある場合はslugベースのURL、ない場合はIDベースのURL
-                    const href = article.slug ? `/blog/${article.slug}` : `/blog/article.html?id=${article.id}`;
+                    const href = article.slug ? `/blog/article.html?slug=${article.slug}` : `/blog/article.html?id=${article.id}`;
                     
                     html += `
                         <a href="${href}" class="related-article">
