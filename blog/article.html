@@ -242,6 +242,74 @@
             background: #005a99;
         }
 
+        /* 関連記事 */
+        .related-articles {
+            margin: 50px 0;
+            padding: 40px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .related-articles h3 {
+            font-size: 24px;
+            color: #007acc;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .related-card {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .related-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 122, 204, 0.2);
+            border-color: #007acc;
+        }
+
+        .related-card .category {
+            display: inline-block;
+            background: #007acc;
+            color: #ffffff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .related-card h4 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #333333;
+            line-height: 1.4;
+        }
+
+        .related-card .excerpt {
+            font-size: 13px;
+            color: #666666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .related-card .date {
+            font-size: 12px;
+            color: #999999;
+        }
+
         /* フッター */
         .article-footer {
             margin-top: 60px;
@@ -365,6 +433,14 @@
                         ${article.content || article.body || '<p>記事の本文がありません。</p>'}
                     </div>
 
+                    <!-- 関連記事 -->
+                    <div class="related-articles">
+                        <h3>📚 関連記事</h3>
+                        <div class="related-grid" id="related-articles">
+                            <!-- 関連記事がここに表示されます -->
+                        </div>
+                    </div>
+
                     <!-- CTA -->
                     <div class="cta-section">
                         <h3>無料ウェビナーのご案内</h3>
@@ -431,6 +507,9 @@
                 
                 displayArticle(article);
                 
+                // 関連記事を軽量で表示
+                showRelatedArticles(article);
+                
             } catch (error) {
                 console.error('エラー:', error);
                 
@@ -445,9 +524,53 @@
             }
         }
 
+        // 軽量関連記事表示（API不使用）
+        function showRelatedArticles(currentArticle) {
+            const relatedContainer = document.getElementById('related-articles');
+            
+            // デモ記事データ
+            const allArticles = [
+                {
+                    title: 'AIとマーケティングの自動化で、時間と場所の自由を手に入れた話',
+                    category: '自己紹介',
+                    excerpt: 'はじめまして、須崎純一です。今ではAIとウェビナー自動化の専門家として活動していますが...',
+                    publishedAt: '2025-08-16',
+                    href: '/blog/ai-marketing-automation.html'
+                },
+                {
+                    title: 'ウェビナー自動化で月商300万円を達成した3つのステップ',
+                    category: 'マーケティング',
+                    excerpt: 'セミナーを自動化して、寝ている間も売上が上がる仕組みを作りたい」そんな夢のような話を...',
+                    publishedAt: '2025-08-16',
+                    href: '/blog/webinar-automation-guide.html'
+                }
+            ];
+            
+            // 現在の記事を除外して関連記事を選択
+            const relatedArticles = allArticles.filter(article => 
+                !currentArticle.title.includes(article.title.substring(0, 10))
+            );
+            
+            if (relatedArticles.length === 0) return;
+            
+            let html = '';
+            relatedArticles.forEach(article => {
+                html += `
+                    <a href="${article.href}" class="related-card">
+                        <span class="category">${article.category}</span>
+                        <h4>${article.title}</h4>
+                        <p class="excerpt">${article.excerpt}</p>
+                        <span class="date">${formatDate(article.publishedAt)}</span>
+                    </a>
+                `;
+            });
+            
+            relatedContainer.innerHTML = html;
+        }
+
         // デモ記事1
         function displayDemoArticle1() {
-            displayArticle({
+            const article = {
                 title: 'AIとマーケティングの自動化で、時間と場所の自由を手に入れた話',
                 category: '自己紹介',
                 excerpt: 'はじめまして、須崎純一です。今ではAIとウェビナー自動化の専門家として活動していますが、ここまでの道のりは決して平坦ではありませんでした。',
@@ -493,12 +616,15 @@
                     
                     <p>私のミッションは、「いつかやりたいを今やろう」という想いを持つ人たちが、時間とお金の制約から解放され、本当にやりたいことに集中できる環境を作ることです。</p>
                 `
-            });
+            };
+            
+            displayArticle(article);
+            showRelatedArticles(article);
         }
 
         // デモ記事2
         function displayDemoArticle2() {
-            displayArticle({
+            const article = {
                 title: 'ウェビナー自動化で月商300万円を達成した3つのステップ',
                 category: 'マーケティング',
                 excerpt: 'セミナーを自動化して、寝ている間も売上が上がる仕組みを作りたい」そんな夢のような話を現実にする方法をお伝えします。',
@@ -551,7 +677,10 @@
                     
                     <p>この仕組みを一度作れば、あなたも時間と場所に縛られない、自由な働き方が実現できます。</p>
                 `
-            });
+            };
+            
+            displayArticle(article);
+            showRelatedArticles(article);
         }
 
         // ページ読み込み時に記事を取得
