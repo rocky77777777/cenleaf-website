@@ -123,13 +123,6 @@
             line-height: 1.4;
         }
 
-        .blog-excerpt {
-            color: #666666;
-            font-size: 14px;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
         .blog-footer {
             display: flex;
             justify-content: space-between;
@@ -192,14 +185,12 @@
             {
                 title: 'AIとマーケティングの自動化で、時間と場所の自由を手に入れた話',
                 category: '自己紹介',
-                excerpt: 'はじめまして、須崎純一です。今ではAIとウェビナー自動化の専門家として活動していますが、ここまでの道のりは決して平坦ではありませんでした。',
                 publishedAt: '2025-08-16',
                 slug: 'ai-marketing-automation'
             },
             {
                 title: 'ウェビナー自動化で月商300万円を達成した3つのステップ',
                 category: 'マーケティング',
-                excerpt: 'セミナーを自動化して、寝ている間も売上が上がる仕組みを作りたい」そんな夢のような話を現実にする方法をお伝えします。',
                 publishedAt: '2025-08-16',
                 slug: 'webinar-automation-guide'
             }
@@ -219,11 +210,15 @@
                 const isDemo = post.slug === 'ai-marketing-automation' || post.slug === 'webinar-automation-guide';
                 const href = isDemo ? `/blog/${post.slug}.html` : `/blog/article.html?id=${post.id || post.slug}`;
                 
+                // カテゴリーの表示処理を修正
+                const categoryName = post.category ? 
+                    (typeof post.category === 'object' ? post.category.name : post.category) : 
+                    '未分類';
+                
                 return `
                     <a href="${href}" class="blog-card">
-                        <span class="category">${post.category || '一般'}</span>
+                        <span class="category">${categoryName}</span>
                         <h2 class="blog-title">${post.title}</h2>
-                        <p class="blog-excerpt">${post.excerpt || ''}</p>
                     </a>
                 `;
             }).join('');
