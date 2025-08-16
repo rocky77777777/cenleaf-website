@@ -2467,12 +2467,27 @@
             for (let element of elements) {
                 // フォント設定
                 let font = baseFont;
-                if (element.bold && element.italic) {
-                    font = font.replace('bold ', 'bold italic ');
-                } else if (element.bold) {
-                    if (!font.includes('bold')) font = 'bold ' + font;
-                } else if (element.italic) {
-                    font = font.replace('bold ', 'italic ');
+                
+                // ベースフォントから bold/italic を一旦削除して再構築
+                // フォーマット: [bold] [italic] <size>px <family>
+                const fontParts = font.match(/(?:(bold|italic)\s+)?(?:(bold|italic)\s+)?(\d+px)\s+(.+)/);
+                if (fontParts) {
+                    const fontSize = fontParts[3];
+                    const fontFamily = fontParts[4];
+                    const baseBold = fontParts[1] === 'bold' || fontParts[2] === 'bold';
+                    const baseItalic = fontParts[1] === 'italic' || fontParts[2] === 'italic';
+                    
+                    let fontStyle = '';
+                    // ベースがboldまたは要素がboldの場合
+                    if (baseBold || element.bold) {
+                        fontStyle += 'bold ';
+                    }
+                    // ベースがitalicまたは要素がitalicの場合
+                    if (baseItalic || element.italic) {
+                        fontStyle += 'italic ';
+                    }
+                    
+                    font = `${fontStyle}${fontSize} ${fontFamily}`;
                 }
                 
                 ctx.font = font;
