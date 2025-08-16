@@ -19,7 +19,7 @@ jobs:
         username: cenleaf
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: /public_html/
-        protocol: ftp
+        protocol: ftps
         port: 21
         exclude: |
           **/.git*
