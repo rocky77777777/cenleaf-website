@@ -278,8 +278,14 @@
                 すべて<span class="article-count">(${posts.length})</span>
             </button>`;
 
-            // 各カテゴリーのボタンを追加
-            Object.entries(categories).sort((a, b) => b[1] - a[1]).forEach(([category, count]) => {
+            // 各カテゴリーのボタンを追加（コラムを最後に配置）
+            Object.entries(categories).sort((a, b) => {
+                // コラムは最後に配置
+                if (a[0] === 'コラム') return 1;
+                if (b[0] === 'コラム') return -1;
+                // その他は記事数順（多い順）
+                return b[1] - a[1];
+            }).forEach(([category, count]) => {
                 filterHTML += `<button class="category-btn" data-category="${category}" onclick="filterByCategory('${category}')">
                     ${category}<span class="article-count">(${count})</span>
                 </button>`;
