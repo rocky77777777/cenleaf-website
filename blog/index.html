@@ -3,91 +3,461 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog | Cenleaf</title>
+    <title>Blog | CENLEAF - AIとマーケティングの最前線</title>
+    <meta name="description" content="須崎純一が発信するAI活用、マーケティング自動化、ビジネス成長戦略の最新情報">
+    
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-pink: #ff0080;
+            --neon-purple: #8000ff;
+            --dark-bg: #0a0a0a;
+            --cyber-blue: #0066ff;
+            --electric-green: #00ff41;
+        }
+
         body {
-            background: #0a0a0a;
+            background: var(--dark-bg);
             color: #fff;
-            font-family: -apple-system, sans-serif;
-            padding: 20px;
+            font-family: 'Noto Sans JP', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        .container {
-            max-width: 1200px;
+
+        /* ネオンエフェクト背景 */
+        .bg-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+        }
+
+        /* ヘッダー */
+        .header {
+            position: relative;
+            z-index: 100;
+            padding: 2rem 5%;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.8);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
             margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        h1 {
-            color: #00ffff;
+
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 5%;
             text-align: center;
-            margin: 40px 0;
+            background: linear-gradient(180deg, transparent, rgba(0, 255, 255, 0.05));
         }
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--electric-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px var(--neon-cyan);
         }
-        .blog-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #00ffff;
-            border-radius: 10px;
-            padding: 20px;
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        /* フィルターとソート */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: transparent;
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s;
         }
-        .blog-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,255,255,0.3);
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-cyan);
         }
-        .category {
+
+        /* ブロググリッド */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .blog-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-category {
             display: inline-block;
             padding: 5px 15px;
-            background: rgba(0,255,255,0.2);
-            border-radius: 15px;
-            font-size: 12px;
-            margin-bottom: 10px;
+            background: rgba(0, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            color: var(--neon-cyan);
         }
-        h2 {
-            font-size: 18px;
-            margin: 10px 0;
+
+        .blog-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
         }
-        p {
+
+        .blog-excerpt {
             color: #aaa;
-            font-size: 14px;
+            font-size: 0.9rem;
             line-height: 1.6;
+            margin-bottom: 1rem;
         }
-        .date {
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             color: #666;
-            font-size: 12px;
-            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ローディング */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* エラーメッセージ */
+        .error {
+            text-align: center;
+            padding: 3rem;
+            color: var(--neon-pink);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>CENLEAF BLOG</h1>
-        <p style="text-align: center; margin-bottom: 40px;">完全に静的なHTMLバージョン（テスト用）</p>
-        
-        <div class="blog-grid">
-            <div class="blog-card">
-                <span class="category">自己紹介</span>
-                <h2>自己紹介：AIとマーケティングの自動化で、時間と場所の自由を手に入れた話</h2>
-                <p>はじめまして、須崎純一です。今ではAIとウェビナー自動化の専門家として活動していますが、ここまでの道のりは決して平坦ではありませんでした。</p>
-                <div class="date">2025/08/15</div>
-            </div>
-            
-            <div class="blog-card">
-                <span class="category">マーケティング</span>
-                <h2>ウェビナー自動化で月商300万円を達成した3つのステップ</h2>
-                <p>「セミナーを自動化して、寝ている間も売上が上がる仕組みを作りたい」そんな夢のような話を現実にする方法をお伝えします。</p>
-                <div class="date">2025/08/10</div>
-            </div>
-            
-            <div class="blog-card">
-                <span class="category">AIツール</span>
-                <h2>ChatGPT×n8nで作る最強の業務自動化システム</h2>
-                <p>AIと自動化ツールを組み合わせることで、今まで3時間かかっていた作業を5分に短縮できました。その具体的な方法を公開します。</p>
-                <div class="date">2025/08/05</div>
-            </div>
+    <div class="bg-effect"></div>
+    
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">CENLEAF</a>
+            <a href="/" class="back-btn">トップページへ戻る</a>
         </div>
-    </div>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <h1>CENLEAF BLOG</h1>
+        <p>AIとマーケティング自動化の最新情報をお届け</p>
+    </section>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- フィルター -->
+        <div class="filters">
+            <button class="filter-btn active" data-category="all">すべて</button>
+            <button class="filter-btn" data-category="ai">AIツール</button>
+            <button class="filter-btn" data-category="marketing">マーケティング</button>
+            <button class="filter-btn" data-category="automation">自動化</button>
+            <button class="filter-btn" data-category="business">ビジネス</button>
+        </div>
+
+        <!-- ブログ記事グリッド -->
+        <div id="blog-grid" class="blog-grid">
+            <div class="loading">記事を読み込み中</div>
+        </div>
+    </main>
+
+    <!-- Sanity Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@sanity/client@6/dist/index.browser.min.js"></script>
+    
+    <script>
+        // Sanity設定
+        const projectId = 'wr3iko59';
+        const dataset = 'production';
+        const apiVersion = '2024-01-01';
+        
+        // Sanityクライアントの初期化
+        const client = window.sanityClient({
+            projectId: projectId,
+            dataset: dataset,
+            apiVersion: apiVersion,
+            useCdn: true
+        });
+
+        // カテゴリのアイコンマッピング
+        const categoryIcons = {
+            'ai': '🤖',
+            'marketing': '📈',
+            'automation': '⚡',
+            'business': '💼',
+            'default': '📝'
+        };
+
+        // 日付フォーマット
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ja-JP', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // ブログ記事を取得して表示
+        async function fetchAndDisplayPosts(category = 'all') {
+            const blogGrid = document.getElementById('blog-grid');
+            blogGrid.innerHTML = '<div class="loading">記事を読み込み中</div>';
+
+            try {
+                // Sanityクエリ
+                let query = `*[_type == "post"`;
+                if (category !== 'all') {
+                    query += ` && category->slug.current == "${category}"`;
+                }
+                query += `] | order(publishedAt desc) {
+                    _id,
+                    title,
+                    slug,
+                    publishedAt,
+                    excerpt,
+                    "category": category->title,
+                    "categorySlug": category->slug.current,
+                    "author": author->name
+                }`;
+
+                const posts = await client.fetch(query);
+
+                if (posts.length === 0) {
+                    blogGrid.innerHTML = '<div class="error">記事が見つかりませんでした</div>';
+                    // デモデータを表示
+                    displayDemoData();
+                    return;
+                }
+
+                // 記事をHTMLに変換
+                blogGrid.innerHTML = posts.map(post => `
+                    <article class="blog-card" onclick="location.href='/blog/${post.slug.current}'">
+                        <div class="blog-image">
+                            ${categoryIcons[post.categorySlug] || categoryIcons.default}
+                        </div>
+                        <div class="blog-content">
+                            <span class="blog-category">${post.category || '一般'}</span>
+                            <h2 class="blog-title">${post.title}</h2>
+                            <p class="blog-excerpt">${post.excerpt || '記事の概要がありません'}</p>
+                            <div class="blog-meta">
+                                <span class="author">✍️ ${post.author || '須崎純一'}</span>
+                                <span class="date">${formatDate(post.publishedAt)}</span>
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                blogGrid.innerHTML = '<div class="error">記事の読み込みに失敗しました。デモデータを表示します。</div>';
+                // エラー時はデモデータを表示
+                displayDemoData();
+            }
+        }
+
+        // デモデータの表示
+        function displayDemoData() {
+            const demoData = [
+                {
+                    title: '自己紹介：AIとマーケティングの自動化で、時間と場所の自由を手に入れた話',
+                    category: '自己紹介',
+                    categorySlug: 'intro',
+                    excerpt: 'はじめまして、須崎純一です。今ではAIとウェビナー自動化の専門家として活動していますが、ここまでの道のりは決して平坦ではありませんでした。',
+                    author: '須崎純一',
+                    publishedAt: '2025-08-15',
+                    slug: { current: 'introduction' }
+                },
+                {
+                    title: 'ウェビナー自動化で月商300万円を達成した3つのステップ',
+                    category: 'マーケティング',
+                    categorySlug: 'marketing',
+                    excerpt: 'セミナーを自動化して、寝ている間も売上が上がる仕組みを作りたい」そんな夢のような話を現実にする方法をお伝えします。',
+                    author: '須崎純一',
+                    publishedAt: '2025-08-10',
+                    slug: { current: 'webinar-automation' }
+                },
+                {
+                    title: 'ChatGPT×n8nで作る最強の業務自動化システム',
+                    category: 'AIツール',
+                    categorySlug: 'ai',
+                    excerpt: 'AIと自動化ツールを組み合わせることで、今まで3時間かかっていた作業を5分に短縮できました。その具体的な方法を公開します。',
+                    author: '須崎純一',
+                    publishedAt: '2025-08-05',
+                    slug: { current: 'chatgpt-n8n' }
+                }
+            ];
+
+            const blogGrid = document.getElementById('blog-grid');
+            blogGrid.innerHTML = demoData.map(post => `
+                <article class="blog-card">
+                    <div class="blog-image">
+                        ${categoryIcons[post.categorySlug] || categoryIcons.default}
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">${post.category}</span>
+                        <h2 class="blog-title">${post.title}</h2>
+                        <p class="blog-excerpt">${post.excerpt}</p>
+                        <div class="blog-meta">
+                            <span class="author">✍️ ${post.author}</span>
+                            <span class="date">${formatDate(post.publishedAt)}</span>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // フィルターボタンのイベント設定
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // アクティブクラスの切り替え
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // カテゴリで記事をフィルター
+                const category = this.dataset.category;
+                fetchAndDisplayPosts(category);
+            });
+        });
+
+        // 初期読み込み
+        fetchAndDisplayPosts();
+    </script>
 </body>
 </html>
