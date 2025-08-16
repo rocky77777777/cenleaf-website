@@ -326,17 +326,12 @@
             }
 
             blogGrid.innerHTML = posts.map(post => {
-                // slugがある場合はslugベースのURL、ない場合はIDベースのURL
-                let href;
-                if (post.slug) {
-                    // slugベースのURL（推奨）
-                    href = `/blog/${post.slug}`;
-                } else {
-                    // IDベースのURL（フォールバック）
-                    href = `/blog/article.html?id=${post.id}`;
-                }
+                // 常にarticle.htmlを使用（ヘッドレスCMSの正しい使い方）
+                // slugがある場合はslug、ない場合はIDを使用
+                const param = post.slug ? `slug=${post.slug}` : `id=${post.id}`;
+                const href = `/blog/article.html?${param}`;
                 
-                // カテゴリーの表示処理を修正
+                // カテゴリーの表示処理
                 const categoryName = post.category ? 
                     (typeof post.category === 'object' ? post.category.name : post.category) : 
                     '未分類';
