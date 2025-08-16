@@ -212,17 +212,23 @@
                 return;
             }
 
-            blogGrid.innerHTML = posts.map(post => `
-                <a href="/blog/${post.slug || post.id}.html" class="blog-card">
-                    <span class="category">${post.category || '一般'}</span>
-                    <h2 class="blog-title">${post.title}</h2>
-                    <p class="blog-excerpt">${post.excerpt || ''}</p>
-                    <div class="blog-footer">
-                        <span>✍️ 須崎純一</span>
-                        <span>${formatDate(post.publishedAt || post.createdAt || new Date())}</span>
-                    </div>
-                </a>
-            `).join('');
+            blogGrid.innerHTML = posts.map(post => {
+                // microCMSの記事の場合はarticle.htmlを使用、デモデータの場合は個別HTMLを使用
+                const isDemo = post.slug === 'ai-marketing-automation' || post.slug === 'webinar-automation-guide';
+                const href = isDemo ? `/blog/${post.slug}.html` : `/blog/article.html?id=${post.id || post.slug}`;
+                
+                return `
+                    <a href="${href}" class="blog-card">
+                        <span class="category">${post.category || '一般'}</span>
+                        <h2 class="blog-title">${post.title}</h2>
+                        <p class="blog-excerpt">${post.excerpt || ''}</p>
+                        <div class="blog-footer">
+                            <span>✍️ 須崎純一</span>
+                            <span>${formatDate(post.publishedAt || post.createdAt || new Date())}</span>
+                        </div>
+                    </a>
+                `;
+            }).join('');
         }
 
         // microCMSから記事を取得
