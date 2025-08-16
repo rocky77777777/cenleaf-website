@@ -324,17 +324,20 @@
     <script src="https://unpkg.com/@sanity/client/umd/sanityClient.min.js"></script>
     
     <script>
-        // Sanity APIを直接使用
-        const projectId = 'wr3iko59';
-        const dataset = 'production';
-        const apiVersion = '2024-01-01';
+        // Sanity Client設定
+        const client = window.SanityClient({
+            projectId: 'wr3iko59',
+            dataset: 'production',
+            useCdn: true,
+            apiVersion: '2024-01-01'
+        });
         
         // 記事取得と表示
         async function loadPosts(category = 'all') {
             const blogGrid = document.getElementById('blog-grid');
             blogGrid.innerHTML = '<div class="loading">記事を読み込み中...</div>';
             
-            console.log('記事を読み込み中...', { category });
+            console.log('Loading posts...', { category });
 
             try {
                 let query = `*[_type == "post"`;
@@ -352,25 +355,10 @@
                     "author": author->{ name }
                 }`;
 
-                // Sanity APIを直接呼び出し（CORSヘッダー付き）
-                const encodedQuery = encodeURIComponent(query);
-                const url = `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodedQuery}`;
+                // Sanity Clientを使用してクエリ実行
+                const posts = await client.fetch(query);
                 
-                const response = await fetch(url, {
-                    mode: 'cors',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                const posts = data.result;
-                
-                console.log('取得した記事:', posts);
+                console.log('Fetched posts:', posts);
 
                 if (!posts || posts.length === 0) {
                     blogGrid.innerHTML = '<p style="text-align: center; color: #888;">記事がまだありません。</p>';
@@ -378,9 +366,16 @@
                 }
 
                 blogGrid.innerHTML = posts.map(post => {
-                    const imageUrl = post.mainImage && post.mainImage.asset ? 
-                        `https://cdn.sanity.io/images/wr3iko59/production/${post.mainImage.asset._ref.replace('image-', '').replace('-jpg', '.jpg').replace('-png', '.png')}?w=400&h=200&fit=crop` : 
-                        '';
+                    // 画像URLの生成
+                    let imageUrl = '';
+                    if (post.mainImage && post.mainImage.asset && post.mainImage.asset._ref) {
+                        const ref = post.mainImage.asset._ref;
+                        // image-{id}-{format} 形式から ID と形式を抽出
+                        const [, id, format] = ref.match(/^image-(.+)-(.+)$/) || [];
+                        if (id && format) {
+                            imageUrl = `https://cdn.sanity.io/images/wr3iko59/production/${id}.${format}?w=400&h=200&fit=crop`;
+                        }
+                    }
                     
                     const date = new Date(post.publishedAt).toLocaleDateString('ja-JP');
                     const category = post.categories && post.categories[0] ? post.categories[0] : null;
