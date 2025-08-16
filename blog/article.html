@@ -880,33 +880,8 @@
 
         // 記事内容を読みやすく構造化する関数
         function enhanceArticleContent(content) {
-            // ステップリストの検出と変換
-            const stepPattern = /(\d+通目：[^<\n]+(?:<br\s*\/?>.*?)?(?=\d+通目：|$))/gs;
-            const steps = content.match(stepPattern);
+            // ステップリストの自動変換は無効化（元のテキストをそのまま保持）
             
-            if (steps && steps.length > 1) {
-                // ステップリストを構造化された形式に変換
-                let stepListHTML = '<div class="step-list"><h4>📧 メール配信ステップ</h4>';
-                steps.forEach((step, index) => {
-                    const stepNumber = index + 1;
-                    const stepContent = step.replace(/\d+通目：/, '').replace(/<br\s*\/?>/g, ' ').trim();
-                    stepListHTML += `
-                        <div class="step-item">
-                            <div class="step-number">${stepNumber}</div>
-                            <div class="step-content">
-                                <div class="step-title">第${stepNumber}通目</div>
-                                <div class="step-description">${stepContent}</div>
-                            </div>
-                        </div>
-                    `;
-                });
-                stepListHTML += '</div>';
-                
-                // 元のステップリストを新しい形式に置換
-                content = content.replace(stepPattern, '').replace(/\s+/, ' ');
-                content = content.replace(/メール.*?配信.*?の.*?流れ/i, stepListHTML);
-            }
-
             // メリットを含むセクションをハイライトボックスに変換
             content = content.replace(/(メリット[^<]*?)(<br\s*\/?>|\n)([^<]+)/g, 
                 '<div class="highlight-box"><h4>✨ $1</h4><p>$3</p></div>');
