@@ -100,194 +100,100 @@
         .step-title {
             font-size: 14px;
             font-weight: bold;
-        }
-
-        select {
-            width: 100%;
-            padding: 8px 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 13px;
-            background: white;
-            margin-bottom: 15px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 350px;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 13px;
-            resize: vertical;
-            font-family: 'Noto Sans JP', monospace;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        button {
-            padding: 10px 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 13px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-        }
-
-        button.secondary {
-            background: #e0e0e0;
             color: #333;
         }
 
-        button.secondary:hover {
-            background: #d0d0d0;
-        }
-
-        .slide-counter {
-            margin-top: 8px;
-            text-align: center;
-            color: #666;
-            font-size: 12px;
-        }
-
-        .preview-frame {
-            width: 270px;
-            height: 338px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-            margin: 15px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .preview-content {
-            padding: 20px;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: center;
-            font-size: 12px;
-            line-height: 1.6;
-        }
-
-        .navigation-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .nav-button {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: white;
-            border: 2px solid #667eea;
-            color: #667eea;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .nav-button:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .nav-button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .slide-indicator {
-            font-size: 14px;
-            font-weight: bold;
-            color: #333;
-            min-width: 60px;
-            text-align: center;
-        }
-
-        .generate-button {
-            width: 100%;
-            padding: 14px;
-            margin-top: 20px;
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            font-size: 15px;
-        }
-
-        .edit-panel {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
+        .form-group {
             margin-bottom: 20px;
         }
 
-        .edit-panel h3 {
-            font-size: 14px;
-            margin-bottom: 12px;
-            color: #333;
-        }
-
-        .edit-control {
-            margin-bottom: 15px;
-        }
-
-        .edit-control label {
+        label {
             display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #555;
             font-size: 12px;
-            color: #666;
-            margin-bottom: 5px;
         }
 
-        .edit-control input,
-        .edit-control textarea {
+        input[type="text"],
+        textarea {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #e0e0e0;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
             border-radius: 6px;
             font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .edit-control textarea {
-            height: 100px;
-            resize: vertical;
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
 
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f0ff;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 11px;
+        }
+
+        /* カラーパレット */
         .color-palette {
             display: flex;
+            gap: 6px;
+            margin-top: 8px;
             flex-wrap: wrap;
-            gap: 8px;
             align-items: center;
         }
 
+        .color-label {
+            font-size: 10px;
+            color: #666;
+            margin-right: 6px;
+        }
+
         .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
             cursor: pointer;
             border: 2px solid transparent;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            position: relative;
         }
 
         .color-option:hover {
@@ -295,146 +201,518 @@
         }
 
         .color-option.selected {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            border-color: #333;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #333;
         }
 
         .color-option.gradient {
-            background: linear-gradient(135deg, var(--color1) 0%, var(--color2) 100%);
+            background: linear-gradient(135deg, var(--color1), var(--color2));
         }
 
-        .color-label {
-            font-size: 11px;
-            color: #666;
-            margin-right: 5px;
-        }
-
-        .layout-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .layout-group {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .layout-group label {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .layout-options {
-            display: flex;
-            gap: 5px;
-        }
-
-        .layout-option {
-            width: 32px;
-            height: 32px;
-            border: 2px solid #e0e0e0;
+        /* カラーピッカー */
+        .color-picker-section {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f8f9fa;
             border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .color-picker-row {
             display: flex;
+            gap: 8px;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
+            margin-bottom: 8px;
         }
 
-        .layout-option:hover {
-            border-color: #667eea;
+        .color-picker-row:last-child {
+            margin-bottom: 0;
         }
 
-        .layout-option.selected {
-            background: #667eea;
-            border-color: #667eea;
-            color: white;
-        }
-
-        .font-size-control {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .size-slider {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .size-slider label {
-            font-size: 11px;
-            color: #666;
+        .color-picker-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #495057;
             min-width: 60px;
         }
 
-        .size-slider input[type="range"] {
+        .color-picker-input {
+            width: 40px;
+            height: 30px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            background: none;
+            padding: 0;
+        }
+
+        .color-picker-input:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .gradient-preview {
             flex: 1;
+            height: 30px;
+            border-radius: 6px;
+            border: 2px solid #dee2e6;
+            background: linear-gradient(135deg, var(--preview-color1), var(--preview-color2));
         }
 
-        .size-value {
-            font-size: 11px;
-            color: #667eea;
-            min-width: 40px;
-            text-align: right;
-        }
-
-        .action-buttons {
+        .color-type-toggle {
             display: flex;
-            gap: 8px;
-            margin-top: 15px;
+            gap: 4px;
+            margin-bottom: 8px;
         }
 
-        .action-button {
+        .color-type-btn {
             flex: 1;
-            padding: 8px;
-            font-size: 12px;
-        }
-
-        .success-badge {
-            background: #48bb78;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
+            padding: 6px 12px;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 4px;
             font-size: 10px;
-            margin-left: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .loading {
-            display: none;
-            position: fixed;
+        .color-type-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* マークダウン装飾ツールバー */
+        .markdown-toolbar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+
+        .markdown-btn {
+            padding: 4px 8px;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 3px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: monospace;
+        }
+
+        .markdown-btn:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .markdown-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* 装飾プレビュー */
+        .decorated-textarea {
+            position: relative;
+        }
+
+        .preview-overlay {
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
+            padding: 10px;
+            font-size: 13px;
+            line-height: 1.4;
+            pointer-events: none;
+            color: transparent;
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            font-family: inherit;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+
+        .preview-overlay .markdown-bold {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .preview-overlay .markdown-italic {
+            font-style: italic;
+            color: #333;
+        }
+
+        .preview-overlay .markdown-strike {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .preview-overlay .markdown-code {
+            background: #f1f3f4;
+            padding: 1px 3px;
+            border-radius: 2px;
+            color: #d73a49;
+            font-family: monospace;
+        }
+
+        .preview-overlay .markdown-underline {
+            text-decoration: underline;
+            color: #333;
+        }
+
+        /* コメント誘導型CTA専用スタイル */
+        .cta-comment-layout {
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-comment-top {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .cta-comment-keyword {
+            font-size: 48px !important;
+            font-weight: bold;
+            color: #ff6b6b;
+            border: 3px solid #ff6b6b;
+            padding: 20px 40px;
+            border-radius: 12px;
+            background: rgba(255, 107, 107, 0.1);
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cta-comment-bottom {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        .cta-comment-contact {
+            font-size: 12px;
+            margin-top: 20px;
+            color: #888;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* アスペクト比選択 */
+        .aspect-ratio-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .aspect-ratio-option {
+            text-align: center;
+            padding: 10px 6px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .aspect-ratio-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .aspect-ratio-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .aspect-preview {
+            width: 32px;
+            height: 24px;
+            margin: 0 auto 6px;
+            border-radius: 3px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .aspect-ratio-option span {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .aspect-ratio-option small {
+            display: block;
+            font-size: 8px;
+            opacity: 0.7;
+        }
+
+        /* レイアウトコントロール */
+        .layout-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .layout-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .layout-group label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0;
+        }
+
+        .layout-options {
+            display: flex;
+            gap: 3px;
+        }
+
+        .layout-option {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .layout-option:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .layout-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .layout-option.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* フォントサイズ調整 */
+        .font-size-controls {
+            margin-top: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .font-size-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .font-size-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .font-size-group label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0;
+        }
+
+        .font-size-slider {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .font-size-input {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #dee2e6;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .font-size-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .font-size-value {
+            min-width: 32px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: #667eea;
+            background: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid #dee2e6;
+        }
+
+        .preview-container {
+            width: 100%;
+            max-width: 320px;
+            position: relative;
+        }
+
+        .preview-frame {
+            width: 100%;
+            aspect-ratio: 1080 / 1350;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-content {
+            width: 100%;
+            height: 100%;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            font-size: 10px;
+        }
+
+        .slide-counter {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .slide-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .slide-nav {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .slide-nav:hover {
+            background: #5a6fd8;
+        }
+
+        .slide-nav:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .slide-count-info {
+            background: #e3f2fd;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 3px solid #2196f3;
+        }
+
+        .slide-count-info h3 {
+            color: #1976d2;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+
+        .slide-count-info p {
+            color: #666;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .edit-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .edit-panel h3 {
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .current-slide-badge {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
         }
 
         .loading.active {
-            display: flex;
-        }
-
-        .loading-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
+            display: block;
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
             border-radius: 50%;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+            margin: 0 auto;
         }
 
         @keyframes spin {
@@ -449,8 +727,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
             align-items: center;
             justify-content: center;
         }
@@ -459,31 +737,27 @@
             display: flex;
         }
 
-        .download-content {
+        .modal-content {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
+            padding: 40px;
+            border-radius: 20px;
             max-width: 600px;
             width: 90%;
+            text-align: center;
             max-height: 80vh;
             overflow-y: auto;
         }
 
-        .download-header {
-            text-align: center;
+        .modal-content h2 {
             margin-bottom: 20px;
-        }
-
-        .download-header h2 {
-            font-size: 20px;
-            margin-bottom: 8px;
+            color: #333;
         }
 
         .download-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
             gap: 10px;
-            margin-bottom: 20px;
+            margin: 20px 0;
         }
 
         .download-item {
@@ -493,10 +767,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 12px;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 18px;
-            font-weight: bold;
+            transition: all 0.3s;
         }
 
         .download-item:hover {
@@ -504,26 +777,311 @@
             color: white;
         }
 
-        .download-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .download-actions button {
-            flex: 1;
-        }
-
+        /* タブレット対応 (1200px未満) */
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
             }
             
-            .input-section,
-            .edit-section {
+            .input-section, .edit-section {
                 width: 100%;
-                max-width: 100%;
                 border: none;
+                border-bottom: 1px solid #e0e0e0;
             }
+            
+            .container {
+                max-width: 100%;
+                margin: 10px;
+                border-radius: 15px;
+            }
+        }
+        
+        /* タブレット（中）対応 (768px未満) */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+                margin-bottom: 8px;
+            }
+            
+            .header p {
+                font-size: 14px;
+            }
+            
+            
+            .input-section, .edit-section {
+                padding: 20px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+            
+            .preview-container {
+                max-width: 280px;
+            }
+        }
+        
+        /* スマートフォン対応 (480px未満) */
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            
+            .container {
+                border-radius: 10px;
+                margin: 5px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+                line-height: 1.3;
+            }
+            
+            
+            .input-section, .edit-section {
+                padding: 15px;
+            }
+            
+            .section-title {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            .preview-container {
+                max-width: 240px;
+            }
+            
+            .color-palette {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+            
+            .color-sample {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .controls-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .slide-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .slide-nav-btn {
+                width: 100%;
+                padding: 12px;
+            }
+        }
+        
+        /* 極小画面対応 (320px未満) */
+        @media (max-width: 320px) {
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            
+            .input-section, .edit-section {
+                padding: 10px;
+            }
+            
+            .preview-container {
+                max-width: 200px;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+        }
+        
+        /* アニメーションシステム */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.8s ease-out;
+        }
+        
+        .scale-in {
+            animation: scaleIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                transform: translateY(20px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0); 
+                opacity: 1; 
+            }
+        }
+        
+        @keyframes bounceIn {
+            0% { 
+                transform: scale(0.3); 
+                opacity: 0; 
+            }
+            50% { 
+                transform: scale(1.05); 
+            }
+            70% { 
+                transform: scale(0.9); 
+            }
+            100% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+        }
+        
+        @keyframes scaleIn {
+            from { 
+                transform: scale(0.8); 
+                opacity: 0; 
+            }
+            to { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+        }
+        
+        /* ホバーエフェクト統一 */
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .hover-glow {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-glow:hover {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        
+        /* スライドプレビューアニメーション */
+        .preview-transition {
+            animation: slideSwitch 0.5s ease-in-out;
+        }
+        
+        @keyframes slideSwitch {
+            0% { transform: translateX(0) scale(1); }
+            50% { transform: translateX(10px) scale(0.95); opacity: 0.7; }
+            100% { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        
+        /* ツールチップ */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* キーボードショートカット表示 */
+        .shortcut-hint {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            z-index: 1000;
+            max-width: 250px;
+            display: none;
+        }
+        
+        .shortcut-hint.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .shortcut-item {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .key {
+            background: #555;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
         }
     </style>
 </head>
@@ -531,138 +1089,310 @@
     <div class="container">
         <div class="header">
             <h1>📱 Instagram画像作成ツール</h1>
-            <p>文章を入力するだけで、プロ仕様のInstagram投稿画像を自動作成<br>マークダウンで文章を入れるだけでカルーセル投稿がサクッとできる</p>
+            <p>マークダウンで文章を入れるだけでカルーセル投稿がサクッとできる</p>
         </div>
 
         <div class="main-content">
+            <!-- 入力セクション -->
             <div class="input-section">
+                <!-- STEP 1: アスペクト比選択 -->
                 <div class="step-header">
                     <div class="step-number">1</div>
-                    <div class="step-title">アスペクト比を選択</div>
+                    <div class="step-title">アスペクト比選択</div>
                 </div>
-                <select id="aspectRatio" onchange="updateAspectRatio()">
-                    <option value="4:5">4:5 (縦型・推奨)</option>
-                    <option value="9:16">9:16 (ストーリーズ)</option>
-                    <option value="1:1">1:1 (正方形)</option>
-                    <option value="16:9">16:9 (横型)</option>
-                </select>
+                
+                <div class="form-group">
+                    <label>投稿サイズ</label>
+                    <div class="aspect-ratio-selector">
+                        <div class="aspect-ratio-option selected" data-ratio="4:5" onclick="selectAspectRatio('4:5')">
+                            <div class="aspect-preview" style="background: #667eea; aspect-ratio: 4/5;"></div>
+                            <span>4:5 (縦長)</span>
+                            <small>1080×1350px</small>
+                        </div>
+                        <div class="aspect-ratio-option" data-ratio="9:16" onclick="selectAspectRatio('9:16')">
+                            <div class="aspect-preview" style="background: #43e97b; aspect-ratio: 9/16;"></div>
+                            <span>9:16 (ストーリー)</span>
+                            <small>1080×1920px</small>
+                        </div>
+                        <div class="aspect-ratio-option" data-ratio="1:1" onclick="selectAspectRatio('1:1')">
+                            <div class="aspect-preview" style="background: #f093fb; aspect-ratio: 1/1;"></div>
+                            <span>1:1 (正方形)</span>
+                            <small>1080×1080px</small>
+                        </div>
+                        <div class="aspect-ratio-option" data-ratio="16:9" onclick="selectAspectRatio('16:9')">
+                            <div class="aspect-preview" style="background: #4facfe; aspect-ratio: 16/9;"></div>
+                            <span>16:9 (横長)</span>
+                            <small>1080×607px</small>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- STEP 2: マークダウン一括入力 -->
                 <div class="step-header">
                     <div class="step-number">2</div>
-                    <div class="step-title">マークダウンで内容を入力</div>
+                    <div class="step-title">マークダウン一括入力</div>
                 </div>
-                <textarea id="markdownInput" placeholder="# タイトル
-
-## スライド1のタイトル
-本文テキスト
-
-## スライド2のタイトル
-本文テキスト" oninput="previewSlideCount()"></textarea>
                 
-                <div class="slide-counter">
-                    予想スライド数: <span id="slideCount">0</span>枚
+                <div class="slide-count-info">
+                    <h3>📊 生成されるスライド数: <span id="slideCount">0</span>枚</h3>
+                    <p>見出し（# ## ###）で自動分割されます。最大20枚まで対応。</p>
                 </div>
 
-                <div class="button-group">
-                    <button onclick="loadSample()">サンプル読込</button>
-                    <button onclick="clearInput()" class="secondary">クリア</button>
-                </div>
-
-                <button onclick="parseMarkdown()" class="generate-button">
-                    パースしてスライドを生成
-                </button>
-            </div>
-
-            <div class="preview-section">
-                <h3 style="font-size: 14px; margin-bottom: 10px;">プレビュー</h3>
-                
-                <div class="preview-frame" id="previewFrame">
-                    <div class="preview-content" id="previewContent">
-                        プレビューがここに表示されます
-                    </div>
-                </div>
-
-                <div class="navigation-controls" id="navigationControls" style="display: none;">
-                    <button class="nav-button" onclick="previousSlide()" id="prevButton">←</button>
-                    <div class="slide-indicator">
-                        <span id="currentSlide">1</span> / <span id="totalSlides">1</span>
-                    </div>
-                    <button class="nav-button" onclick="nextSlide()" id="nextButton">→</button>
-                </div>
-
-                <button onclick="generateImages()" class="generate-button" id="generateImagesButton" style="display: none;">
-                    📸 画像を生成する
-                </button>
-            </div>
-
-            <div class="edit-section" id="editSection" style="display: none;">
-                <div class="edit-panel" id="editPanels">
-                    <h3>スライド編集 <span id="currentSlideBadge" class="success-badge">1</span></h3>
+                <div class="form-group">
+                    <textarea id="markdownInput" 
+                              placeholder="ここにマークダウンテキストを貼り付けてください"
+                              style="height: 200px; font-family: monospace; font-size: 12px; line-height: 1.4;"
+                              oninput="previewSlideCount()"></textarea>
                     
-                    <div class="edit-control">
-                        <label>タイトル</label>
-                        <input type="text" id="editTitle" onchange="updateSlideContent('title')">
+                    <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-primary btn-small" onclick="parseMarkdown()">
+                            🚀 自動分割
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-small" onclick="clearInput()">
+                            クリア
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-small" onclick="loadSample()">
+                            📝 サンプル
+                        </button>
                     </div>
+                </div>
 
-                    <div class="edit-control">
-                        <label>本文</label>
-                        <textarea id="editBody" onchange="updateSlideContent('body')"></textarea>
+                <!-- STEP 3: スライド管理 -->
+                <div class="step-header" style="margin-top: 20px;">
+                    <div class="step-number">3</div>
+                    <div class="step-title">スライド管理</div>
+                </div>
+                
+                <!-- 手動作成ボタン -->
+                <div id="manualCreation" style="margin-bottom: 15px;">
+                    <button class="btn btn-primary" onclick="createFirstSlide()" style="width: 100%; padding: 12px;">
+                        ✏️ 手動でスライドを作成開始
+                    </button>
+                </div>
+                
+                <!-- 生成結果 -->
+                <div id="generationResult" style="display: none;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                        <h3 style="color: #28a745; margin-bottom: 8px; font-size: 12px;">📊 現在のスライド数: <span id="generatedCount">0</span>枚</h3>
+                        <div id="slidesList" style="font-size: 10px; color: #666; max-height: 100px; overflow-y: auto;"></div>
                     </div>
-
-                    <div class="edit-control">
-                        <label>背景色</label>
-                        <div class="color-palette" id="colorPalette"></div>
+                    
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                        <button class="btn btn-secondary btn-small" onclick="addSlide()" style="flex: 1;">
+                            ➕ スライド追加
+                        </button>
+                        <button class="btn btn-secondary btn-small" onclick="deleteCurrentSlide()" style="flex: 1;">
+                            🗑️ 削除
+                        </button>
                     </div>
+                    
+                    <button class="btn btn-primary" onclick="generateImages()" style="width: 100%; padding: 12px;">
+                        🎨 PNG画像を生成する
+                    </button>
+                </div>
+            </div>
 
-                    <div class="edit-control">
-                        <label>レイアウト</label>
-                        <div class="layout-controls" id="layoutControls"></div>
-                    </div>
-
-                    <div class="edit-control">
-                        <label>文字サイズ</label>
-                        <div class="font-size-control">
-                            <div class="size-slider">
-                                <label>タイトル</label>
-                                <input type="range" id="titleSize" min="40" max="120" value="68" 
-                                       onchange="updateFontSize('titleSize', this.value)">
-                                <span class="size-value" id="titleSizeValue">68px</span>
+            <!-- プレビューセクション -->
+            <div class="preview-section">
+                <h3 style="margin-bottom: 15px; color: #333; font-size: 14px;">プレビュー</h3>
+                
+                <div class="preview-container">
+                    <div class="preview-frame" id="previewFrame">
+                        <div class="preview-content" id="previewContent">
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: #667eea;">
+                                    マークダウンを入力してください
+                                </div>
+                                <div style="font-size: 10px; opacity: 0.7; line-height: 1.5;">
+                                    見出し（# ## ###）で自動的にスライドが分割されます
+                                </div>
                             </div>
-                            <div class="size-slider">
-                                <label>本文</label>
-                                <input type="range" id="bodySize" min="20" max="80" value="44" 
-                                       onchange="updateFontSize('bodySize', this.value)">
-                                <span class="size-value" id="bodySizeValue">44px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-counter" id="slideCounter">
+                    スライド - / -
+                </div>
+
+                <div class="slide-controls">
+                    <button class="slide-nav" id="prevBtn" onclick="previousSlide()" disabled>⬅️ 前</button>
+                    <button class="slide-nav" id="nextBtn" onclick="nextSlide()" disabled>次 ➡️</button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 15px; color: #666; font-size: 12px;">画像を生成中...</p>
+                </div>
+            </div>
+
+            <!-- 編集セクション -->
+            <div class="edit-section">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">個別調整</div>
+                </div>
+                
+                <div id="editPanels" style="display: none;">
+                    <!-- 現在のスライド編集 -->
+                    <div class="edit-panel">
+                        <h3>
+                            📝 スライド編集
+                            <span class="current-slide-badge" id="currentSlideBadge">1</span>
+                            <span id="ctaLabel" style="display: none; background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; margin-left: 8px;">CTA</span>
+                        </h3>
+                        
+                        <!-- コメント誘導型専用ボタン（最後のスライドのみ表示） -->
+                        <div id="commentCtaButton" style="display: none; margin-bottom: 15px;">
+                            <button class="btn btn-primary" onclick="applyCommentCTA()" style="width: 100%; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); border: none; padding: 12px; font-size: 12px; font-weight: bold;">
+                                🗨️ 「教えて」コメント誘導ページにする
+                            </button>
+                        </div>
+
+                        <!-- CTA設定（最後のスライドのみ表示） -->
+                        <div id="ctaSettings" style="display: none; margin-bottom: 15px; padding: 12px; background: #fff3cd; border-radius: 6px; border-left: 3px solid #ffc107;">
+                            <div style="margin-bottom: 8px;">
+                                <label style="display: flex; align-items: center; gap: 6px; font-size: 11px;">
+                                    <input type="checkbox" id="enableCTA" onchange="toggleCTA(this.checked)">
+                                    このスライドをCTA（Call to Action）ページにする
+                                </label>
+                            </div>
+                            <div id="ctaOptions" style="display: none;">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label style="font-size: 10px;">CTA種類</label>
+                                    <select id="ctaType" onchange="updateCTATemplate()" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 11px;">
+                                        <option value="contact">お問い合わせ・相談</option>
+                                        <option value="comment">コメント誘導型</option>
+                                        <option value="follow">フォロー・登録</option>
+                                        <option value="website">ウェブサイト・ブログ</option>
+                                        <option value="download">資料ダウンロード</option>
+                                        <option value="custom">カスタム</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label style="font-size: 10px;">アクション文言</label>
+                                    <input type="text" id="ctaActionText" placeholder="今すぐお問い合わせください" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 11px;" onchange="updateCTAContent()">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label style="font-size: 10px;">連絡先・URL（改行可）</label>
+                                    <textarea id="ctaContact" placeholder="@suzaki_junichi" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 11px; min-height: 40px; resize: vertical;" onchange="updateCTAContent()"></textarea>
+                                </div>
+                                <div id="commentSuggestions" style="display: none; margin-top: 8px; padding: 8px; background: #f8f9fa; border-radius: 4px; border: 1px solid #e9ecef;">
+                                    <div style="font-size: 9px; color: #666; margin-bottom: 4px;">💡 コメント誘導例：</div>
+                                    <div style="font-size: 9px; line-height: 1.3;">
+                                        <div onclick="setCommentSuggestion('インスタ')" style="cursor: pointer; color: #667eea; margin-bottom: 2px;">【 インスタ 】</div>
+                                        <div onclick="setCommentSuggestion('教えて')" style="cursor: pointer; color: #667eea; margin-bottom: 2px;">【 教えて 】</div>
+                                        <div onclick="setCommentSuggestion('詳細希望')" style="cursor: pointer; color: #667eea; margin-bottom: 2px;">【 詳細希望 】</div>
+                                        <div onclick="setCommentSuggestion('興味あり')" style="cursor: pointer; color: #667eea;">【 興味あり 】</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>タイトル</label>
+                            <!-- タイトル装飾ツールバー -->
+                            <div class="markdown-toolbar">
+                                <button class="markdown-btn" onclick="applyFormatting('title', 'bold')" title="太文字"><strong>太</strong></button>
+                                <button class="markdown-btn" onclick="applyFormatting('title', 'italic')" title="斜体"><em>斜</em></button>
+                                <button class="markdown-btn" onclick="applyFormatting('title', 'underline')" title="下線"><u>下</u></button>
+                                <button class="markdown-btn" onclick="applyFormatting('title', 'strike')" title="取り消し線"><del>消</del></button>
+                            </div>
+                            <div class="decorated-textarea">
+                                <input type="text" id="editTitle" onkeyup="updateCurrentSlide('title', this.value); updateFormattingPreview('title')" />
+                                <div class="preview-overlay" id="titlePreview"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>本文</label>
+                            <!-- 本文装飾ツールバー -->
+                            <div class="markdown-toolbar">
+                                <button class="markdown-btn" onclick="applyFormatting('body', 'bold')" title="太文字"><strong>太</strong></button>
+                                <button class="markdown-btn" onclick="applyFormatting('body', 'italic')" title="斜体"><em>斜</em></button>
+                                <button class="markdown-btn" onclick="applyFormatting('body', 'underline')" title="下線"><u>下</u></button>
+                                <button class="markdown-btn" onclick="applyFormatting('body', 'strike')" title="取り消し線"><del>消</del></button>
+                                <button class="markdown-btn" onclick="insertLineBreak('body')" title="改行">改行</button>
+                            </div>
+                            <div class="decorated-textarea">
+                                <textarea id="editBody" onkeyup="updateCurrentSlide('body', this.value); updateFormattingPreview('body')" style="height: 80px;"></textarea>
+                                <div class="preview-overlay" id="bodyPreview"></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="action-buttons">
-                        <button onclick="addSlide()" class="action-button">スライド追加</button>
-                        <button onclick="deleteCurrentSlide()" class="action-button secondary">削除</button>
+                    <!-- カラー調整 -->
+                    <div class="edit-panel">
+                        <h3>🎨 背景カラー</h3>
+                        
+                        <!-- プリセットカラー -->
+                        <div class="color-palette" id="colorPalette">
+                            <!-- 動的に生成 -->
+                        </div>
+                        
+                        <!-- カスタムカラーピッカー -->
+                        <div class="color-picker-section">
+                            <div class="color-type-toggle">
+                                <button class="color-type-btn active" id="solidTypeBtn" onclick="switchColorType('solid')">単色</button>
+                                <button class="color-type-btn" id="gradientTypeBtn" onclick="switchColorType('gradient')">グラデーション</button>
+                            </div>
+                            
+                            <div id="solidColorPicker">
+                                <div class="color-picker-row">
+                                    <span class="color-picker-label">カスタム:</span>
+                                    <input type="color" class="color-picker-input" id="customSolidColor" onchange="applyCustomColor('solid', this.value)">
+                                </div>
+                            </div>
+                            
+                            <div id="gradientColorPicker" style="display: none;">
+                                <div class="color-picker-row">
+                                    <span class="color-picker-label">開始色:</span>
+                                    <input type="color" class="color-picker-input" id="customGradientColor1" onchange="updateCustomGradient()">
+                                </div>
+                                <div class="color-picker-row">
+                                    <span class="color-picker-label">終了色:</span>
+                                    <input type="color" class="color-picker-input" id="customGradientColor2" onchange="updateCustomGradient()">
+                                    <div class="gradient-preview" id="gradientPreview"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- レイアウト調整 -->
+                    <div class="edit-panel">
+                        <h3>📐 文字配置</h3>
+                        <div class="layout-controls" id="layoutControls">
+                            <!-- 動的に生成 -->
+                        </div>
+                    </div>
+
+                    <!-- フォントサイズ調整 -->
+                    <div class="edit-panel">
+                        <h3>📏 文字サイズ</h3>
+                        <div class="font-size-controls" id="fontSizeControls">
+                            <!-- 動的に生成 -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="loading" id="loading">
-        <div class="loading-content">
-            <div class="spinner"></div>
-            <p>画像を生成中...</p>
-        </div>
-    </div>
-
+    <!-- ダウンロードモーダル -->
     <div class="download-modal" id="downloadModal">
-        <div class="download-content">
-            <div class="download-header">
-                <h2>🎉 画像生成完了！</h2>
-                <p>クリックして個別ダウンロード</p>
+        <div class="modal-content">
+            <h2>🎉 カルーセル生成完了！</h2>
+            <p>画像をクリックしてダウンロード</p>
+            <div class="download-grid" id="downloadGrid">
+                <!-- 動的に生成 -->
             </div>
-            <div class="download-grid" id="downloadGrid"></div>
-            <div class="download-actions">
-                <button onclick="downloadAll()">すべてダウンロード</button>
-                <button onclick="closeModal()" class="secondary">閉じる</button>
+            <div style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="downloadAll()" style="margin-right: 10px;">
+                    📦 すべてダウンロード
+                </button>
+                <button class="btn btn-secondary" onclick="closeModal()">
+                    閉じる
+                </button>
             </div>
         </div>
     </div>
@@ -672,59 +1402,90 @@
         let slidesData = [];
         let currentSlide = 1;
         let totalSlides = 0;
-        let aspectRatio = '4:5';
-
-        // サンプルマークダウン
-        const sampleMarkdown = `## 「AIの機能を覚える」なんて時間のムダだった話
-
-正直言います。
-**AI勉強会とか行かなくていい**です。
-
-僕も3年前は同じでした。
-- 分厚いマニュアル読んで
-- YouTube動画見まくって  
-- 有料セミナー受けて
-
-でも3ヶ月後...
-**ChatGPTが大型アップデートして覚えた機能の半分が消えてた**
-
-あの勉強時間、なんだったの？
-
-## 気づいた瞬間
-
-ある日、メルマガ書くのが面倒で
-ChatGPTに「**メルマガの返信文作って**」って投げました。
-
-機能なんて何も知らないまま。
-
-**5分で完成。しかも自分より読みやすい。**
-
-「え、これでよくない？」`;
+        let aspectRatio = '4:5'; // デフォルト
 
         // カラーパレット定義
         const colorPalettes = {
             gradients: [
-                { name: 'Instagram', colors: ['#833ab4', '#fd1d1d'] },
-                { name: 'サンセット', colors: ['#ff6b6b', '#feca57'] },
-                { name: 'オーシャン', colors: ['#667eea', '#764ba2'] },
-                { name: 'フォレスト', colors: ['#38ef7d', '#11998e'] }
+                { name: '紫', colors: ['#667eea', '#764ba2'] },
+                { name: 'ピンク', colors: ['#f093fb', '#f5576c'] },
+                { name: '青', colors: ['#4facfe', '#00f2fe'] },
+                { name: '緑', colors: ['#43e97b', '#38f9d7'] },
+                { name: 'オレンジ', colors: ['#fa709a', '#fee140'] },
+                { name: '赤', colors: ['#f43b47', '#453a94'] },
+                { name: 'ティール', colors: ['#30cfd0', '#330867'] },
+                { name: 'パープル', colors: ['#a8edea', '#fed6e3'] }
             ],
             solids: [
-                { name: 'ホワイト', color: '#ffffff' },
-                { name: 'ブラック', color: '#1a1a1a' },
+                { name: '白', color: '#ffffff' },
+                { name: '黒', color: '#1a1a1a' },
                 { name: 'グレー', color: '#f5f5f5' },
-                { name: 'ネイビー', color: '#2c3e50' }
+                { name: '紺', color: '#2c3e50' },
+                { name: 'ベージュ', color: '#f8f4e6' },
+                { name: 'ミント', color: '#e8f5e9' },
+                { name: 'ピンク', color: '#fce4ec' },
+                { name: 'イエロー', color: '#fff9c4' }
             ]
         };
 
+        // サンプルマークダウンデータ
+        const sampleMarkdown = '# **売上が3倍になった日**、私がやったのは「商圏を変える」ことだけだった\n\nこんにちは！須崎純一です\n\n月収30万円で頭打ち。\n\nそんな私が、たった3ヶ月で**月収100万円**を超えました。\n\n何をしたか？\n\n商品は変えてません。\n価格も変えてません。\nサービス内容も同じ。\n\n変えたのは*「商圏」*だけ。\n\n## 商圏って何？多くの人が**勘違い**してること\n\n商圏＝地域だと思ってませんか？\n\n~~違います。~~\n**間違いです。**\n\n商圏とは、\n*「あなたの商品が届く範囲」*のこと。\n\nそれは、\n- **誰に**届くか（対象）\n- **どこで**届くか（メディア）  \n- **どうやって**届くか（コミュニティ）\n\nこの3つで決まるんです。\n\n## 方法1：対象を変える｜**同じ商品で売上3倍**\n\n私のクライアントの話です。\n\n彼女はヨガインストラクター。\n主婦向けに1レッスン`2,000円`。\n月収15万円で限界でした。\n\nそこで**対象を変えました。**\n\n主婦 → **経営者**\n\n同じヨガレッスンです。\nでも*伝え方*を変えました。\n\n価格：`2,000円` → **15,000円**\n月収：15万円 → **50万円**\n\n商品は全く同じ。\n**対象を変えただけ**です。';
+
         // 初期化
         document.addEventListener('DOMContentLoaded', function() {
-            previewSlideCount();
+            updateUI();
+            updatePreviewFrameAspectRatio();
+            // updateProgress(1); // 初期状態はステップ1
+            
+            // コンテナーにアニメーションクラスを追加
+            document.querySelector('.container').classList.add('fade-in');
+            
+            // ボタンにホバーエフェクトを追加
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.classList.add('hover-lift');
+            });
+            
+            // プレビューコンテナーにアニメーションを追加
+            document.querySelector('.preview-container').classList.add('hover-glow');
+            
+            // ツールチップ初期化
+            setTimeout(initializeTooltips, 100);
         });
+        
+        // アニメーションヘルパー関数
+        function addPreviewAnimation() {
+            const previewContainer = document.querySelector('.preview-container');
+            previewContainer.classList.add('preview-transition');
+            setTimeout(() => {
+                previewContainer.classList.remove('preview-transition');
+            }, 500);
+        }
+        
+        function addElementAnimation(element, animationType) {
+            element.classList.add(animationType);
+            setTimeout(() => {
+                element.classList.remove(animationType);
+            }, 800);
+        }
+        
+        // プログレスバー関連関数は削除済み
 
-        // アスペクト比更新
-        function updateAspectRatio() {
-            aspectRatio = document.getElementById('aspectRatio').value;
+
+        // アスペクト比選択
+        function selectAspectRatio(ratio) {
+            aspectRatio = ratio;
+            
+            // UI更新
+            document.querySelectorAll('.aspect-ratio-option').forEach(option => {
+                option.classList.toggle('selected', option.dataset.ratio === ratio);
+            });
+            
+            updatePreviewFrameAspectRatio();
+            // updateProgress(2); // ステップ2に進行
+        }
+
+        // プレビューフレームのアスペクト比更新
+        function updatePreviewFrameAspectRatio() {
             const previewFrame = document.getElementById('previewFrame');
             
             switch (aspectRatio) {
@@ -739,7 +1500,7 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
                     break;
                 case '4:5':
                 default:
-                    previewFrame.style.aspectRatio = '4 / 5';
+                    previewFrame.style.aspectRatio = '1080 / 1350';
                     break;
             }
         }
@@ -758,6 +1519,9 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
             currentSlide = 1;
             updateUI();
             previewSlideCount();
+            document.getElementById('editPanels').style.display = 'none';
+            document.getElementById('generationResult').style.display = 'none';
+            document.getElementById('manualCreation').style.display = 'block';
         }
 
         // スライド数プレビュー
@@ -770,142 +1534,340 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
 
             const parsedSlides = parseMarkdownToSlides(markdownText);
             document.getElementById('slideCount').textContent = Math.min(parsedSlides.length, 20);
+            
+            // コンテンツが入力されたらステップ2に進行
+            if (markdownText.length > 10) {
+                // updateProgress(2);
+            }
         }
 
         // マークダウンをパースしてスライドに分割
         function parseMarkdownToSlides(markdownText) {
             const lines = markdownText.split('\n');
             const slides = [];
-            let currentSlideData = null;
+            let currentSlide = null;
+            let isFirstSlide = true;
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
                 
-                // ## で始まる行（新しいスライド）
-                if (line.startsWith('## ')) {
-                    if (currentSlideData) {
-                        slides.push(currentSlideData);
-                    }
-                    currentSlideData = {
-                        title: line.substring(3).trim(),
+                // # で始まる行（メインタイトル - 1枚目用）
+                if (line.startsWith('# ') && isFirstSlide) {
+                    if (currentSlide) slides.push(currentSlide);
+                    currentSlide = {
+                        title: parseMarkdownText(line.substring(2).trim()),
                         body: ''
                     };
+                    isFirstSlide = false;
                 }
-                // ### で始まる行（小見出し - 本文として追加）
+                // ## で始まる行（サブタイトル - 新しいスライドを作成）
+                else if (line.startsWith('## ')) {
+                    if (currentSlide) slides.push(currentSlide);
+                    currentSlide = {
+                        title: parseMarkdownText(line.substring(3).trim()),
+                        body: ''
+                    };
+                    isFirstSlide = false;
+                }
+                // ### で始まる行（小見出し - 本文の一部として扱う、改ページしない）
                 else if (line.startsWith('### ')) {
-                    if (currentSlideData) {
-                        const subheading = line.substring(4).trim();
-                        if (currentSlideData.body) {
-                            currentSlideData.body += '\n\n**' + subheading + '**';
+                    if (currentSlide) {
+                        const subheading = parseMarkdownText(line.substring(4).trim());
+                        if (currentSlide.body) {
+                            currentSlide.body += '\n\n**' + subheading + '**';
                         } else {
-                            currentSlideData.body = '**' + subheading + '**';
+                            currentSlide.body = '**' + subheading + '**';
                         }
                     }
                 }
-                // 本文に追加
-                else if (currentSlideData) {
+                // 本文に追加（空行も改行として保持）
+                else if (currentSlide) {
                     if (line === '') {
-                        if (currentSlideData.body) {
-                            currentSlideData.body += '\n';
+                        // 空行の場合は改行を追加
+                        if (currentSlide.body) {
+                            currentSlide.body += '\n';
                         }
                     } else {
-                        if (currentSlideData.body) {
-                            currentSlideData.body += '\n' + line;
+                        // テキストがある場合
+                        if (currentSlide.body) {
+                            currentSlide.body += '\n' + parseMarkdownText(line);
                         } else {
-                            currentSlideData.body = line;
+                            currentSlide.body = parseMarkdownText(line);
                         }
                     }
                 }
             }
 
             // 最後のスライドを追加
-            if (currentSlideData) {
-                slides.push(currentSlideData);
+            if (currentSlide) {
+                slides.push(currentSlide);
             }
 
+            // 20枚を超える場合は20枚まで
             return slides.slice(0, 20);
         }
 
-        // マークダウンをパース
-        function parseMarkdown() {
-            const markdownText = document.getElementById('markdownInput').value.trim();
-            if (!markdownText) {
-                alert('マークダウンを入力してください');
-                return;
-            }
+        // マークダウンテキスト装飾を解析
+        function parseMarkdownText(text) {
+            // マークダウン記法をHTMLタグに変換
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // **太文字**
+                .replace(/\*(.*?)\*/g, '<em>$1</em>') // *斜体*
+                .replace(/~~(.*?)~~/g, '<del>$1</del>') // ~~取り消し線~~
+                .replace(/`(.*?)`/g, '<code>$1</code>') // `コード`
+                .replace(/__(.*?)__/g, '<strong>$1</strong>') // __太文字__
+                .replace(/_(.*?)_/g, '<em>$1</em>'); // _斜体_
+        }
 
-            const parsedSlides = parseMarkdownToSlides(markdownText);
-            
-            if (parsedSlides.length === 0) {
-                alert('スライドを生成できませんでした。## でスライドを区切ってください。');
-                return;
-            }
+        // マークダウン記法を削除してプレーンテキストに変換（画像生成用）
+        function stripMarkdownToPlainText(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '$1') // **太文字** → 太文字
+                .replace(/\*(.*?)\*/g, '$1') // *斜体* → 斜体
+                .replace(/~~(.*?)~~/g, '$1') // ~~取り消し線~~ → 取り消し線
+                .replace(/`(.*?)`/g, '$1') // `コード` → コード
+                .replace(/__(.*?)__/g, '$1') // __太文字__ → 太文字
+                .replace(/_(.*?)_/g, '$1'); // _斜体_ → 斜体
+        }
+        
+        // HTMLタグを削除してプレーンテキストに変換
+        function stripHTMLToPlainText(html) {
+            return html
+                .replace(/<strong>(.*?)<\/strong>/g, '$1')
+                .replace(/<em>(.*?)<\/em>/g, '$1')
+                .replace(/<del>(.*?)<\/del>/g, '$1')
+                .replace(/<code>(.*?)<\/code>/g, '$1')
+                .replace(/<u>(.*?)<\/u>/g, '$1')
+                .replace(/<[^>]+>/g, ''); // その他のHTMLタグを削除
+        }
 
-            // スライドデータを初期化
-            slidesData = parsedSlides.map(slide => ({
-                ...slide,
+        // 手動で最初のスライドを作成
+        function createFirstSlide() {
+            // 最初のスライド（表紙）を作成
+            const firstSlide = {
+                title: 'タイトルを入力してください',
+                body: 'サブタイトルや説明文を入力してください',
                 backgroundColor: { type: 'gradient', colors: ['#667eea', '#764ba2'] },
                 layout: { verticalAlign: 'center', textAlign: 'center' },
-                fontSize: { titleSize: 68, bodySize: 44 }
-            }));
-
-            totalSlides = slidesData.length;
+                fontSize: { titleSize: 100, bodySize: 48 }
+            };
+            
+            slidesData = [firstSlide];
+            totalSlides = 1;
             currentSlide = 1;
-
+            
             // UI更新
             updateUI();
             showGenerationResult();
+            document.getElementById('editPanels').style.display = 'block';
+            // updateProgress(3); // ステップ3（スライド管理）に進行
+            document.getElementById('manualCreation').style.display = 'none';
+            updateEditControls();
+            
+            alert('✅ 最初のスライドを作成しました！右側で編集してください。');
+        }
+
+        // マークダウンをパースしてスライドを生成
+        function parseMarkdown() {
+            const markdownText = document.getElementById('markdownInput').value.trim();
+            if (!markdownText) {
+                alert('マークダウンテキストを入力してください');
+                return;
+            }
+
+            try {
+                const parsedSlides = parseMarkdownToSlides(markdownText);
+                
+                if (parsedSlides.length === 0) {
+                    alert('有効な見出しが見つかりませんでした。\n\n例：\n# メインタイトル\n## スライド2のタイトル\n## スライド3のタイトル');
+                    return;
+                }
+
+                // スライドデータを更新（デフォルト設定付き）
+                slidesData = parsedSlides.map((slide, index) => {
+                    const isFirstSlide = index === 0;
+                    return {
+                        ...slide,
+                        backgroundColor: isFirstSlide ? 
+                            { type: 'gradient', colors: ['#667eea', '#764ba2'] } :
+                            { type: 'solid', color: '#ffffff' },
+                        layout: isFirstSlide ? 
+                            { verticalAlign: 'center', textAlign: 'center' } :
+                            { verticalAlign: 'top', textAlign: 'left' },
+                        fontSize: isFirstSlide ? 
+                            { titleSize: 100, bodySize: 48 } :
+                            { titleSize: 68, bodySize: 44 }
+                    };
+                });
+
+                totalSlides = slidesData.length;
+                currentSlide = 1;
+
+                // UI更新
+                updateUI();
+                showGenerationResult();
+                document.getElementById('editPanels').style.display = 'block';
+                document.getElementById('manualCreation').style.display = 'none';
+                updateEditControls();
+                // updateProgress(3); // ステップ3（スライド管理）に進行
+
+                alert(`✅ ${slidesData.length}枚のスライドを生成しました！`);
+
+            } catch (error) {
+                alert('マークダウンの解析中にエラーが発生しました：\n' + error.message);
+            }
+        }
+
+        // 生成結果表示
+        function showGenerationResult() {
+            const resultDiv = document.getElementById('generationResult');
+            const countSpan = document.getElementById('generatedCount');
+            const listDiv = document.getElementById('slidesList');
+            
+            countSpan.textContent = totalSlides;
+            
+            let listHTML = '<ol style="text-align: left; margin-left: 15px;">';
+            slidesData.forEach((slide, index) => {
+                listHTML += `<li style="margin-bottom: 3px;">${slide.title}</li>`;
+            });
+            listHTML += '</ol>';
+            
+            listDiv.innerHTML = listHTML;
+            resultDiv.style.display = 'block';
         }
 
         // UI更新
         function updateUI() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const counter = document.getElementById('slideCounter');
+            
+            if (totalSlides === 0) {
+                counter.textContent = 'スライド - / -';
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                updatePreview();
+                return;
+            }
+            
+            counter.textContent = `スライド ${currentSlide} / ${totalSlides}`;
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+            
             updatePreview();
-            updateNavigationControls();
             updateEditControls();
         }
 
         // プレビュー更新
         function updatePreview() {
             const previewContent = document.getElementById('previewContent');
+            const previewFrame = document.getElementById('previewFrame');
             
             if (totalSlides === 0) {
-                previewContent.innerHTML = '<div>マークダウンを入力してください</div>';
+                previewFrame.style.background = 'white';
+                previewContent.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: #667eea;">
+                            マークダウンを入力してください
+                        </div>
+                        <div style="font-size: 10px; opacity: 0.7; line-height: 1.5;">
+                            見出し（# ## ###）で自動的にスライドが分割されます
+                        </div>
+                    </div>
+                `;
                 return;
             }
-
+            
             const slide = slidesData[currentSlide - 1];
+            const isFirstSlide = currentSlide === 1;
             
-            // プレビュー用の簡易表示
-            let html = `
-                <div style="padding: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px;">${slide.title}</h3>
-                    <div style="font-size: 14px; line-height: 1.6;">${slide.body.replace(/\n/g, '<br>')}</div>
-                </div>
-            `;
-            
-            previewContent.innerHTML = html;
-        }
-
-        // ナビゲーション更新
-        function updateNavigationControls() {
-            const navControls = document.getElementById('navigationControls');
-            const generateButton = document.getElementById('generateImagesButton');
-            const editSection = document.getElementById('editSection');
-            
-            if (totalSlides > 0) {
-                navControls.style.display = 'flex';
-                generateButton.style.display = 'block';
-                editSection.style.display = 'block';
-                
-                document.getElementById('currentSlide').textContent = currentSlide;
-                document.getElementById('totalSlides').textContent = totalSlides;
-                
-                document.getElementById('prevButton').disabled = currentSlide === 1;
-                document.getElementById('nextButton').disabled = currentSlide === totalSlides;
+            // 背景色を適用
+            const bg = slide.backgroundColor;
+            if (bg.type === 'gradient') {
+                previewFrame.style.background = `linear-gradient(135deg, ${bg.colors[0]} 0%, ${bg.colors[1]} 100%)`;
+                previewContent.style.color = 'white';
             } else {
-                navControls.style.display = 'none';
-                generateButton.style.display = 'none';
-                editSection.style.display = 'none';
+                previewFrame.style.background = bg.color;
+                const isDark = bg.color === '#1a1a1a' || bg.color === '#2c3e50';
+                previewContent.style.color = isDark ? 'white' : '#333';
+            }
+            
+            // レイアウトを適用
+            const layout = slide.layout;
+            previewContent.style.textAlign = layout.textAlign;
+            
+            if (layout.verticalAlign === 'center') {
+                previewContent.style.justifyContent = 'center';
+            } else if (layout.verticalAlign === 'bottom') {
+                previewContent.style.justifyContent = 'flex-end';
+            } else {
+                previewContent.style.justifyContent = 'flex-start';
+            }
+            
+            // コンテンツ更新
+            const title = slide.title || `スライド ${currentSlide}`;
+            const body = slide.body || '';
+            const fontSize = slide.fontSize;
+            
+            if (isFirstSlide) {
+                // 表紙のプレビュー
+                const previewTitleSize = Math.round(fontSize.titleSize * 0.25);
+                const previewBodySize = Math.round(fontSize.bodySize * 0.28);
+                
+                previewContent.innerHTML = `
+                    <div style="text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                        <div style="font-size: ${previewTitleSize}px; font-weight: bold; margin-bottom: 12px; line-height: 1.2;">${title}</div>
+                        <div style="font-size: ${previewBodySize}px; opacity: 0.9; line-height: 1.5;">${body.replace(/\n/g, '<br>').substring(0, 200)}${body.length > 200 ? '...' : ''}</div>
+                        <div style="position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); text-align: center;">
+                            <div style="font-size: 7px; opacity: 0.7;">スワイプして続きを読む →</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const isLastSlide = currentSlide === totalSlides;
+                
+                // コメント誘導型専用表示またはCTAコメント誘導型
+                if (isLastSlide && (slide.isCommentCTA || (slide.isCTA && slide.ctaType === 'comment'))) {
+                    // キーワード取得
+                    let keyword = '教えて';
+                    let contactMessage = 'コメントしてくれたら\nメッセージが届きます';
+                    
+                    if (slide.isCommentCTA) {
+                        // 専用ボタンで作成された場合
+                        keyword = slide.commentKeyword || '教えて';
+                        contactMessage = slide.commentMessage || 'コメントしてくれたら\nメッセージが届きます';
+                    } else if (slide.ctaActionText) {
+                        // CTAで作成された場合
+                        const keywordMatch = slide.ctaActionText.match(/「(.+?)」/);
+                        keyword = keywordMatch ? keywordMatch[1] : '教えて';
+                        contactMessage = slide.ctaContact || 'コメントしてくれたら\nメッセージが届きます';
+                    }
+                    
+                    previewContent.innerHTML = `
+                        <div class="cta-comment-layout">
+                            <div class="cta-comment-top" style="font-size: 18px; font-weight: bold; margin-bottom: 12px;">
+                                詳しく知りたい方は
+                            </div>
+                            <div style="font-size: 12px; margin-bottom: 15px;">
+                                詳細を知りたい人は、こちらの投稿に
+                            </div>
+                            <div class="cta-comment-keyword" style="font-size: 24px !important; font-weight: bold; color: #2c3e50; border: 2px solid #2c3e50; background: rgba(44, 62, 80, 0.05); padding: 6px 10px; border-radius: 6px; margin: 8px 0;">【 ${keyword} 】</div>
+                            <div class="cta-comment-bottom" style="font-size: 12px; margin-top: 15px;">とコメントください</div>
+                        </div>
+                    `;
+                } else {
+                    // 通常スライドのプレビュー
+                    const previewTitleSize = Math.round(fontSize.titleSize * 0.3);
+                    const previewBodySize = Math.round(fontSize.bodySize * 0.35);
+                    
+                    previewContent.innerHTML = `
+                        <div style="height: 100%; display: flex; flex-direction: column;">
+                            <div style="font-size: ${previewTitleSize}px; font-weight: bold; margin-bottom: 12px; line-height: 1.3;">${title}</div>
+                            <div style="font-size: ${previewBodySize}px; line-height: 1.6; flex: 1; overflow: hidden;">${body.replace(/\n/g, '<br>')}</div>
+                            ${currentSlide < totalSlides ? '<div style="position: absolute; bottom: 8px; right: 12px; font-size: 7px; opacity: 0.6;">続く →</div>' : ''}
+                        </div>
+                    `;
+                }
             }
         }
 
@@ -914,13 +1876,60 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
             if (totalSlides === 0) return;
             
             const slide = slidesData[currentSlide - 1];
+            const isLastSlide = currentSlide === totalSlides;
             
-            document.getElementById('editTitle').value = slide.title || '';
-            document.getElementById('editBody').value = slide.body || '';
+            // バッジ更新
             document.getElementById('currentSlideBadge').textContent = currentSlide;
             
+            // CTA設定の表示/非表示
+            const ctaSettings = document.getElementById('ctaSettings');
+            const ctaLabel = document.getElementById('ctaLabel');
+            const commentCtaButton = document.getElementById('commentCtaButton');
+            
+            if (isLastSlide) {
+                // コメント誘導型専用ボタンを表示
+                commentCtaButton.style.display = 'block';
+                
+                ctaSettings.style.display = 'block';
+                if (slide.isCTA) {
+                    ctaLabel.style.display = 'inline-block';
+                } else {
+                    ctaLabel.style.display = 'none';
+                }
+                
+                // CTA設定の同期
+                document.getElementById('enableCTA').checked = slide.isCTA || false;
+                document.getElementById('ctaOptions').style.display = slide.isCTA ? 'block' : 'none';
+                
+                if (slide.isCTA) {
+                    document.getElementById('ctaType').value = slide.ctaType || 'contact';
+                    document.getElementById('ctaActionText').value = slide.ctaActionText || '';
+                    document.getElementById('ctaContact').value = slide.ctaContact || '';
+                }
+            } else {
+                commentCtaButton.style.display = 'none';
+                ctaSettings.style.display = 'none';
+                ctaLabel.style.display = 'none';
+            }
+            
+            // テキスト編集欄更新
+            document.getElementById('editTitle').value = slide.title || '';
+            document.getElementById('editBody').value = slide.body || '';
+            
+            // マークダウンプレビュー更新
+            updateFormattingPreview('title');
+            updateFormattingPreview('body');
+            
+            // カラーパレット更新
             updateColorPalette();
+            
+            // カラーピッカー同期
+            syncColorPickers();
+            
+            // レイアウトコントロール更新
             updateLayoutControls();
+            
+            // フォントサイズコントロール更新
             updateFontSizeControls();
         }
 
@@ -929,7 +1938,10 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
             const slide = slidesData[currentSlide - 1];
             const palette = document.getElementById('colorPalette');
             
-            let html = '<span class="color-label">グラデーション:</span>';
+            let html = '';
+            
+            // グラデーションパレット
+            html += '<span class="color-label">グラデーション:</span>';
             colorPalettes.gradients.forEach((gradient, index) => {
                 const isSelected = slide.backgroundColor.type === 'gradient' && 
                                  slide.backgroundColor.colors[0] === gradient.colors[0];
@@ -942,6 +1954,7 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
                 `;
             });
             
+            // 単色パレット
             html += '<span class="color-label" style="margin-left: 8px;">単色:</span>';
             colorPalettes.solids.forEach((solid, index) => {
                 const isSelected = slide.backgroundColor.type === 'solid' && 
@@ -962,6 +1975,7 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
         function updateLayoutControls() {
             const slide = slidesData[currentSlide - 1];
             const layout = slide.layout;
+            const isFirstSlide = currentSlide === 1;
             const controls = document.getElementById('layoutControls');
             
             controls.innerHTML = `
@@ -969,22 +1983,28 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
                     <label>縦配置</label>
                     <div class="layout-options">
                         <div class="layout-option ${layout.verticalAlign === 'top' ? 'selected' : ''}" 
-                             onclick="selectLayout('verticalAlign', 'top')">↑</div>
+                             onclick="selectLayout('verticalAlign', 'top')"
+                             title="上寄せ">⬆️</div>
                         <div class="layout-option ${layout.verticalAlign === 'center' ? 'selected' : ''}" 
-                             onclick="selectLayout('verticalAlign', 'center')">●</div>
+                             onclick="selectLayout('verticalAlign', 'center')"
+                             title="中央">⏺️</div>
                         <div class="layout-option ${layout.verticalAlign === 'bottom' ? 'selected' : ''}" 
-                             onclick="selectLayout('verticalAlign', 'bottom')">↓</div>
+                             onclick="selectLayout('verticalAlign', 'bottom')"
+                             title="下寄せ">⬇️</div>
                     </div>
                 </div>
                 <div class="layout-group">
                     <label>横配置</label>
                     <div class="layout-options">
                         <div class="layout-option ${layout.textAlign === 'left' ? 'selected' : ''}" 
-                             onclick="selectLayout('textAlign', 'left')">←</div>
+                             onclick="selectLayout('textAlign', 'left')"
+                             title="左寄せ">⬅️</div>
                         <div class="layout-option ${layout.textAlign === 'center' ? 'selected' : ''}" 
-                             onclick="selectLayout('textAlign', 'center')">●</div>
+                             onclick="selectLayout('textAlign', 'center')"
+                             title="中央">⏺️</div>
                         <div class="layout-option ${layout.textAlign === 'right' ? 'selected' : ''}" 
-                             onclick="selectLayout('textAlign', 'right')">→</div>
+                             onclick="selectLayout('textAlign', 'right')"
+                             title="右寄せ">➡️</div>
                     </div>
                 </div>
             `;
@@ -993,32 +2013,60 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
         // フォントサイズコントロール更新
         function updateFontSizeControls() {
             const slide = slidesData[currentSlide - 1];
+            const fontSize = slide.fontSize;
+            const isFirstSlide = currentSlide === 1;
+            const controls = document.getElementById('fontSizeControls');
             
-            document.getElementById('titleSize').value = slide.fontSize.titleSize;
-            document.getElementById('titleSizeValue').textContent = slide.fontSize.titleSize + 'px';
+            // サイズの範囲設定
+            const titleMin = isFirstSlide ? 60 : 40;
+            const titleMax = isFirstSlide ? 140 : 100;
+            const bodyMin = isFirstSlide ? 24 : 20;
+            const bodyMax = isFirstSlide ? 80 : 60;
             
-            document.getElementById('bodySize').value = slide.fontSize.bodySize;
-            document.getElementById('bodySizeValue').textContent = slide.fontSize.bodySize + 'px';
+            controls.innerHTML = `
+                <div class="font-size-group">
+                    <label>${isFirstSlide ? 'メインタイトル' : 'タイトル'}サイズ</label>
+                    <div class="font-size-slider">
+                        <span style="font-size: 8px;">A</span>
+                        <input type="range" 
+                               class="font-size-input"
+                               min="${titleMin}" 
+                               max="${titleMax}" 
+                               value="${fontSize.titleSize}"
+                               oninput="updateFontSize('titleSize', this.value)">
+                        <div class="font-size-value" id="titleSizeValue">${fontSize.titleSize}px</div>
+                    </div>
+                </div>
+                <div class="font-size-group">
+                    <label>${isFirstSlide ? 'サブタイトル' : '本文'}サイズ</label>
+                    <div class="font-size-slider">
+                        <span style="font-size: 8px;">A</span>
+                        <input type="range" 
+                               class="font-size-input"
+                               min="${bodyMin}" 
+                               max="${bodyMax}" 
+                               value="${fontSize.bodySize}"
+                               oninput="updateFontSize('bodySize', this.value)">
+                        <div class="font-size-value" id="bodySizeValue">${fontSize.bodySize}px</div>
+                    </div>
+                </div>
+            `;
         }
 
-        // 生成結果表示
-        function showGenerationResult() {
-            alert(`✅ ${totalSlides}枚のスライドを生成しました！`);
-        }
-
-        // スライド内容更新
-        function updateSlideContent(field) {
+        // 現在のスライド更新
+        function updateCurrentSlide(property, value) {
             if (totalSlides === 0) return;
             
-            const slide = slidesData[currentSlide - 1];
+            slidesData[currentSlide - 1][property] = value;
+            updatePreview();
             
-            if (field === 'title') {
-                slide.title = document.getElementById('editTitle').value;
-            } else if (field === 'body') {
-                slide.body = document.getElementById('editBody').value;
+            // スライドリストも更新
+            if (property === 'title') {
+                showGenerationResult();
             }
             
-            updatePreview();
+            // 個別調整が行われたらステップ4に進行
+            // updateProgress(4);
         }
 
         // カラー選択
@@ -1056,6 +2104,7 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
             
             slidesData[currentSlide - 1].fontSize[property] = parseInt(value);
             
+            // 表示値更新
             const valueElement = document.getElementById(property + 'Value');
             if (valueElement) {
                 valueElement.textContent = value + 'px';
@@ -1080,51 +2129,6 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
             }
         }
 
-        // スライド追加
-        function addSlide() {
-            if (totalSlides >= 20) {
-                alert('最大20枚まで追加できます');
-                return;
-            }
-            
-            const newSlide = {
-                title: `新しいスライド ${totalSlides + 1}`,
-                body: '',
-                backgroundColor: { type: 'solid', color: '#ffffff' },
-                layout: { verticalAlign: 'top', textAlign: 'left' },
-                fontSize: { titleSize: 68, bodySize: 44 }
-            };
-            
-            slidesData.splice(currentSlide, 0, newSlide);
-            totalSlides = slidesData.length;
-            currentSlide++;
-            
-            updateUI();
-            alert(`✅ スライド ${currentSlide} を追加しました！`);
-        }
-
-        // 現在のスライドを削除
-        function deleteCurrentSlide() {
-            if (totalSlides <= 1) {
-                alert('最後のスライドは削除できません');
-                return;
-            }
-            
-            if (!confirm(`スライド ${currentSlide} を削除しますか？`)) {
-                return;
-            }
-            
-            slidesData.splice(currentSlide - 1, 1);
-            totalSlides = slidesData.length;
-            
-            if (currentSlide > totalSlides) {
-                currentSlide = totalSlides;
-            }
-            
-            updateUI();
-            alert(`✅ スライドを削除しました！（残り${totalSlides}枚）`);
-        }
-
         // 画像生成
         async function generateImages() {
             if (totalSlides === 0) {
@@ -1132,19 +2136,64 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
                 return;
             }
 
+            // ステップ5（画像生成）に進行
+            // updateProgress(5);
+            
+            // ローディング表示
             document.getElementById('loading').classList.add('active');
 
+            // 各スライドのCanvas描画
             const canvases = [];
             for (let i = 1; i <= totalSlides; i++) {
                 const canvas = await generateSlideCanvas(i);
                 canvases.push(canvas);
             }
 
+            // ローディング非表示
             document.getElementById('loading').classList.remove('active');
+
+            // ダウンロードモーダル表示
             showDownloadModal(canvases);
         }
 
-        // スライドをCanvasで生成（シンプル版）
+        // シンプルなテキスト描画関数（画像生成専用）
+        function drawSimpleText(ctx, text, x, y, maxWidth, font, color) {
+            ctx.font = font;
+            ctx.fillStyle = color;
+            
+            // HTMLタグを削除
+            const plainText = stripHTMLToPlainText(text);
+            
+            const words = plainText.split('');
+            const lines = [];
+            let currentLine = '';
+            
+            for (let word of words) {
+                const testLine = currentLine + word;
+                const metrics = ctx.measureText(testLine);
+                
+                if (metrics.width > maxWidth && currentLine !== '') {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            
+            if (currentLine !== '') {
+                lines.push(currentLine);
+            }
+            
+            let currentY = y;
+            for (let line of lines) {
+                ctx.fillText(line, x, currentY);
+                currentY += parseInt(font.match(/\d+/)[0]) * 1.5;
+            }
+            
+            return currentY;
+        }
+        
+        // スライドをCanvasで生成
         async function generateSlideCanvas(slideNum) {
             const canvas = document.createElement('canvas');
             
@@ -1159,8 +2208,8 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
                     canvas.height = 1080;
                     break;
                 case '16:9':
-                    canvas.width = 1920;
-                    canvas.height = 1080;
+                    canvas.width = 1080;
+                    canvas.height = 607;
                     break;
                 case '4:5':
                 default:
@@ -1170,7 +2219,12 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
             }
             
             const ctx = canvas.getContext('2d');
+            
             const slide = slidesData[slideNum - 1];
+            const isFirstSlide = slideNum === 1;
+            
+            // デバッグ用
+            console.log(`Generating slide ${slideNum}:`, slide);
             
             // 背景描画
             const bg = slide.backgroundColor;
@@ -1186,71 +2240,267 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
             
             // テキスト色の決定
             let textColor = '#333';
-            if (bg.type === 'gradient' || bg.color === '#1a1a1a' || bg.color === '#2c3e50') {
+            if (bg.type === 'gradient') {
+                textColor = '#fff';
+            } else if (bg.color === '#1a1a1a' || bg.color === '#2c3e50') {
                 textColor = '#fff';
             }
             
-            const padding = 120;
             const layout = slide.layout;
             const fontSize = slide.fontSize;
             
+            // 表紙専用のデザイン
+            if (isFirstSlide) {
+                // 装飾的な要素を追加
+                ctx.globalAlpha = 0.1;
+                ctx.fillStyle = textColor === '#fff' ? '#fff' : '#000';
+                ctx.beginPath();
+                ctx.arc(900, 200, 150, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(180, 1150, 200, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+                
+                // メインタイトル
+                ctx.fillStyle = textColor;
+                ctx.font = `bold ${fontSize.titleSize}px "Noto Sans JP", sans-serif`;
+                ctx.textAlign = layout.textAlign;
+                
+                if (bg.type === 'gradient') {
+                    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 4;
+                }
+                
+                const title = slide.title || 'タイトル';
+                let titleX = 540; // デフォルトは中央
+                
+                if (layout.textAlign === 'left') titleX = 120;
+                else if (layout.textAlign === 'right') titleX = 960;
+                else titleX = 540; // center
+                
+                let startY;
+                if (layout.verticalAlign === 'center') {
+                    startY = 675; // 中央
+                } else if (layout.verticalAlign === 'bottom') {
+                    startY = 1000; // 下寄せ
+                } else {
+                    startY = 300; // 上寄せ
+                }
+                
+                // タイトル描画（マークダウン装飾対応）
+                const baseFont = `bold ${fontSize.titleSize}px "Noto Sans JP", sans-serif`;
+                drawStyledText(ctx, title, titleX, startY, 800, baseFont, textColor);
+                
+                // サブタイトル
+                if (slide.body) {
+                    ctx.shadowBlur = 5;
+                    ctx.globalAlpha = 0.95;
+                    
+                    let bodyStartY;
+                    if (layout.verticalAlign === 'bottom') {
+                        // 下寄せの場合：タイトルの上に本文を配置
+                        bodyStartY = startY - 200;
+                    } else {
+                        // 上寄せ・中央の場合：タイトルの下に本文を配置
+                        bodyStartY = startY + fontSize.titleSize + 60;
+                    }
+                    
+                    // サブタイトル描画（マークダウン装飾対応）
+                    const bodyFont = `${fontSize.bodySize}px "Noto Sans JP", sans-serif`;
+                    drawStyledText(ctx, slide.body.substring(0, 150), titleX, bodyStartY, 700, bodyFont, textColor);
+                    ctx.globalAlpha = 1;
+                }
+                
+                // スワイプヒント
+                ctx.font = '24px sans-serif';
+                ctx.fillStyle = textColor;
+                ctx.globalAlpha = 0.7;
+                ctx.textAlign = 'center';
+                ctx.fillText('スワイプして続きを読む →', 540, 1250);
+                ctx.globalAlpha = 1;
+                
+                return canvas;
+            }
+            
+            // 2枚目以降の通常スライド
+            const padding = 120;
+            
             // タイトル描画
             ctx.fillStyle = textColor;
-            ctx.font = `bold ${fontSize.titleSize}px "Noto Sans JP", sans-serif`;
+            ctx.font = `bold ${fontSize.titleSize}px 'Noto Sans JP', sans-serif`;
             ctx.textAlign = layout.textAlign;
             
+            const title = slide.title || `スライド ${slideNum}`;
+            
+            // 横配置に応じてX座標を決定
             let titleX;
             if (layout.textAlign === 'center') {
-                titleX = canvas.width / 2;
+                titleX = 540;
             } else if (layout.textAlign === 'right') {
-                titleX = canvas.width - padding;
+                titleX = 1080 - padding;
             } else {
                 titleX = padding;
             }
             
+            // 縦配置に応じてY座標を決定
             let titleY;
             if (layout.verticalAlign === 'center') {
-                titleY = canvas.height / 2 - 100;
+                titleY = 675; // 中央
             } else if (layout.verticalAlign === 'bottom') {
-                titleY = canvas.height - 300;
+                titleY = 1150; // 下寄せ
             } else {
-                titleY = 200;
+                titleY = 200; // 上寄せ
             }
             
-            // タイトルを描画（マークダウン記法を削除）
-            const cleanTitle = removeMarkdown(slide.title);
-            ctx.fillText(cleanTitle, titleX, titleY);
+            // タイトル描画（マークダウン装飾対応）
+            const maxWidth = 1080 - (padding * 2);
+            const titleBaseFont = `bold ${fontSize.titleSize}px 'Noto Sans JP', sans-serif`;
+            drawStyledText(ctx, title, titleX, titleY, maxWidth, titleBaseFont, textColor);
             
             // 本文描画
             if (slide.body) {
-                ctx.font = `${fontSize.bodySize}px "Noto Sans JP", sans-serif`;
-                ctx.fillStyle = textColor;
-                ctx.textAlign = layout.textAlign;
+                let bodyY;
+                if (layout.verticalAlign === 'center') {
+                    bodyY = titleY + fontSize.titleSize + 50;
+                } else if (layout.verticalAlign === 'bottom') {
+                    // 下寄せの場合：タイトルの上に本文を配置
+                    bodyY = titleY - 200;
+                } else {
+                    bodyY = titleY + fontSize.titleSize + 60;
+                }
                 
-                let bodyY = titleY + fontSize.titleSize + 60;
+                // 本文描画（マークダウン装飾対応）
+                const bodyBaseFont = `${fontSize.bodySize}px 'Noto Sans JP', sans-serif`;
                 
-                // 本文を行ごとに描画（マークダウン記法を削除）
-                const cleanBody = removeMarkdown(slide.body);
-                const bodyLines = cleanBody.split('\n');
+                const bodyLines = slide.body.split('\n');
+                let currentY = bodyY;
+                const maxY = layout.verticalAlign === 'bottom' ? 1200 : 1250;
                 
                 for (let line of bodyLines) {
-                    if (line.trim()) {
-                        ctx.fillText(line, titleX, bodyY);
-                        bodyY += fontSize.bodySize * 1.5;
-                    } else {
-                        bodyY += fontSize.bodySize * 0.5; // 空行
-                    }
+                    if (currentY > maxY) break;
                     
-                    // 画面外に出ないようにする
-                    if (bodyY > canvas.height - 100) break;
+                    currentY = drawStyledText(ctx, line, titleX, currentY, maxWidth, bodyBaseFont, textColor);
+                    currentY += fontSize.bodySize * 0.5; // 行間調整
                 }
             }
             
-            // スライド番号（最後以外）
-            if (slideNum < totalSlides) {
-                ctx.font = '24px sans-serif';
+            // CTA情報の描画（最後のスライドでCTAまたはコメント誘導型が有効な場合）
+            if (slideNum === totalSlides && (slide.isCommentCTA || (slide.isCTA && slide.ctaActionText && slide.ctaContact))) {
+                
+                // コメント誘導型の特別レイアウト
+                if (slide.isCommentCTA || slide.ctaType === 'comment') {
+                    // キーワード取得
+                    let keyword = '教えて';
+                    let contactMessage = 'コメントしてくれたら\nメッセージが届きます';
+                    
+                    if (slide.isCommentCTA) {
+                        // 専用ボタンで作成された場合
+                        keyword = slide.commentKeyword || '教えて';
+                        contactMessage = slide.commentMessage || 'コメントしてくれたら\nメッセージが届きます';
+                    } else if (slide.ctaActionText) {
+                        // CTAで作成された場合
+                        const keywordMatch = slide.ctaActionText.match(/「(.+?)」/);
+                        keyword = keywordMatch ? keywordMatch[1] : '教えて';
+                        contactMessage = slide.ctaContact || 'コメントしてくれたら\nメッセージが届きます';
+                    }
+                    
+                    // スクリーンショット通りのレイアウト
+                    const centerY = canvas.height * 0.5;
+                    
+                    // 上部タイトル「詳しく知りたい方は」
+                    ctx.font = 'bold 48px "Noto Sans JP", sans-serif';
+                    ctx.fillStyle = textColor;
+                    ctx.textAlign = 'center';
+                    ctx.fillText('詳しく知りたい方は', canvas.width / 2, centerY - 200);
+                    
+                    // 説明文「詳細を知りたい人は、こちらの投稿に」
+                    ctx.font = '32px "Noto Sans JP", sans-serif';
+                    ctx.fillText('詳細を知りたい人は、こちらの投稿に', canvas.width / 2, centerY - 120);
+                    
+                    // メインキーワード【 インスタ 】（サイズ調整）
+                    ctx.font = 'bold 80px "Noto Sans JP", sans-serif';
+                    ctx.fillStyle = textColor === '#fff' ? '#fff' : '#2c3e50';
+                    
+                    // キーワードの幅を測定して、はみ出しないように調整
+                    const keywordText = `【 ${keyword} 】`;
+                    const keywordWidth = ctx.measureText(keywordText).width;
+                    const maxWidth = canvas.width - 120; // 左右のマージンを考慮
+                    
+                    if (keywordWidth > maxWidth) {
+                        // はみ出しそうな場合はサイズを小さくする
+                        const scale = maxWidth / keywordWidth;
+                        const newSize = Math.floor(80 * scale);
+                        ctx.font = `bold ${newSize}px "Noto Sans JP", sans-serif`;
+                    }
+                    
+                    ctx.fillText(keywordText, canvas.width / 2, centerY + 20);
+                    
+                    // 下部説明文「とコメントください」
+                    ctx.font = '32px "Noto Sans JP", sans-serif';
+                    ctx.fillStyle = textColor;
+                    ctx.fillText('とコメントください', canvas.width / 2, centerY + 120);
+                    
+                    // 最下部メッセージ（必要な場合のみ）
+                    if (contactMessage && contactMessage.trim()) {
+                        ctx.font = '24px "Noto Sans JP", sans-serif';
+                        ctx.globalAlpha = 0.8;
+                        
+                        const contactLines = contactMessage.split('\n').filter(line => line.trim());
+                        const lineHeight = 30;
+                        const startY = canvas.height - 100 - ((contactLines.length - 1) * lineHeight / 2);
+                        
+                        contactLines.forEach((line, index) => {
+                            ctx.fillText(line, canvas.width / 2, startY + (index * lineHeight));
+                        });
+                        
+                        ctx.globalAlpha = 1;
+                    }
+                    
+                } else {
+                    // 通常のCTAレイアウト
+                    const ctaY = canvas.height - 200;
+                    const ctaWidth = canvas.width - (padding * 2);
+                    const ctaHeight = 80;
+                    const ctaX = padding;
+                    
+                    // CTAボタンの背景
+                    ctx.fillStyle = textColor === '#fff' ? 'rgba(255,255,255,0.2)' : 'rgba(102, 126, 234, 0.1)';
+                    ctx.fillRect(ctaX, ctaY, ctaWidth, ctaHeight);
+                    
+                    // CTAボタンの枠線
+                    ctx.strokeStyle = textColor === '#fff' ? '#fff' : '#667eea';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(ctaX, ctaY, ctaWidth, ctaHeight);
+                    
+                    // CTAテキスト
+                    ctx.font = 'bold 32px "Noto Sans JP", sans-serif';
+                    ctx.fillStyle = textColor;
+                    ctx.textAlign = 'center';
+                    ctx.fillText(slide.ctaActionText, canvas.width / 2, ctaY + 50);
+                    
+                    // 連絡先情報（複数行対応）
+                    ctx.font = '24px "Noto Sans JP", sans-serif';
+                    ctx.fillStyle = textColor;
+                    ctx.globalAlpha = 0.9;
+                    
+                    const contactLines = slide.ctaContact.split('\n');
+                    const lineHeight = 30;
+                    const startY = canvas.height - 80 - ((contactLines.length - 1) * lineHeight / 2);
+                    
+                    contactLines.forEach((line, index) => {
+                        ctx.fillText(line, canvas.width / 2, startY + (index * lineHeight));
+                    });
+                    
+                    ctx.globalAlpha = 1;
+                }
+            } else if (slideNum < totalSlides) {
+                // 通常の「続く」表示
+                ctx.font = '22px sans-serif';
                 ctx.fillStyle = textColor;
-                ctx.globalAlpha = 0.5;
+                ctx.globalAlpha = 0.6;
                 ctx.textAlign = 'right';
                 ctx.fillText('続く →', canvas.width - padding, canvas.height - 60);
                 ctx.globalAlpha = 1;
@@ -1259,16 +2509,147 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
             return canvas;
         }
 
-        // マークダウン記法を削除
-        function removeMarkdown(text) {
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '$1') // **太字**
-                .replace(/\*(.*?)\*/g, '$1')     // *斜体*
-                .replace(/~~(.*?)~~/g, '$1')     // ~~取り消し線~~
-                .replace(/`(.*?)`/g, '$1')       // `コード`
-                .replace(/__(.*?)__/g, '$1')     // __太字__
-                .replace(/_(.*?)_/g, '$1')       // _斜体_
-                .replace(/<[^>]+>/g, '');        // HTMLタグ
+        // HTMLタグを含むテキストを描画
+        function drawStyledText(ctx, htmlText, x, y, maxWidth, baseFont, textColor) {
+            // マークダウンをHTMLに変換（既にHTML化されている場合はそのまま）
+            const convertedText = htmlText.includes('<') ? htmlText : parseMarkdownText(htmlText);
+            // HTMLタグを解析してテキスト要素に分割
+            const elements = parseHTMLText(convertedText);
+            let currentX = x;
+            let currentY = y;
+            
+            for (let element of elements) {
+                // フォント設定
+                let font = baseFont;
+                
+                // ベースフォントから bold/italic を一旦削除して再構築
+                // フォーマット: [bold] [italic] <size>px <family>
+                const fontParts = font.match(/(?:(bold|italic)\s+)?(?:(bold|italic)\s+)?(\d+px)\s+(.+)/);
+                if (fontParts) {
+                    const fontSize = fontParts[3];
+                    const fontFamily = fontParts[4];
+                    const baseBold = fontParts[1] === 'bold' || fontParts[2] === 'bold';
+                    const baseItalic = fontParts[1] === 'italic' || fontParts[2] === 'italic';
+                    
+                    let fontStyle = '';
+                    // ベースがboldまたは要素がboldの場合
+                    if (baseBold || element.bold) {
+                        fontStyle += 'bold ';
+                    }
+                    // ベースがitalicまたは要素がitalicの場合
+                    if (baseItalic || element.italic) {
+                        fontStyle += 'italic ';
+                    }
+                    
+                    font = `${fontStyle}${fontSize} ${fontFamily}`;
+                }
+                
+                ctx.font = font;
+                ctx.fillStyle = textColor;
+                
+                // テキストを描画
+                const lines = wrapTextWithStyle(ctx, element.text, maxWidth, currentX, x);
+                for (let i = 0; i < lines.length; i++) {
+                    if (i > 0) {
+                        currentY += parseInt(font.match(/\d+/)[0]) * 1.8;
+                        currentX = x;
+                    }
+                    
+                    ctx.fillText(lines[i], currentX, currentY);
+                    
+                    if (i === lines.length - 1) {
+                        currentX += ctx.measureText(lines[i]).width;
+                    }
+                }
+            }
+            
+            return currentY;
+        }
+        
+        // HTMLテキストを要素に分解
+        function parseHTMLText(htmlText) {
+            const elements = [];
+            const regex = /<(strong|em|del|u|code)>(.*?)<\/\1>|([^<]+)/g;
+            let match;
+            
+            while ((match = regex.exec(htmlText)) !== null) {
+                if (match[1]) {
+                    // タグ付きテキスト
+                    elements.push({
+                        text: match[2],
+                        bold: match[1] === 'strong',
+                        italic: match[1] === 'em',
+                        strikethrough: match[1] === 'del',
+                        underline: match[1] === 'u',
+                        code: match[1] === 'code'
+                    });
+                } else if (match[3]) {
+                    // 通常テキスト
+                    elements.push({
+                        text: match[3],
+                        bold: false,
+                        italic: false,
+                        strikethrough: false,
+                        underline: false,
+                        code: false
+                    });
+                }
+            }
+            
+            return elements;
+        }
+        
+        // スタイル付きテキストの折り返し処理
+        function wrapTextWithStyle(ctx, text, maxWidth, startX, baseX) {
+            const words = text.split('');
+            const lines = [];
+            let currentLine = '';
+            let currentWidth = startX - baseX;
+            
+            for (let word of words) {
+                const testLine = currentLine + word;
+                const testWidth = currentWidth + ctx.measureText(word).width;
+                
+                if (testWidth > maxWidth && currentLine !== '') {
+                    lines.push(currentLine);
+                    currentLine = word;
+                    currentWidth = ctx.measureText(word).width;
+                } else {
+                    currentLine = testLine;
+                    currentWidth = testWidth;
+                }
+            }
+            
+            if (currentLine !== '') {
+                lines.push(currentLine);
+            }
+            
+            return lines;
+        }
+
+        // テキスト折り返し処理（従来版）
+        function wrapText(ctx, text, maxWidth) {
+            const words = text.split('');
+            const lines = [];
+            let currentLine = '';
+            
+            for (let word of words) {
+                const testLine = currentLine + word;
+                const metrics = ctx.measureText(testLine);
+                
+                if (metrics.width > maxWidth && currentLine !== '') {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            
+            if (currentLine !== '') {
+                lines.push(currentLine);
+            }
+            
+            return lines;
         }
 
         // ダウンロードモーダル表示
@@ -1285,7 +2666,9 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
                 grid.appendChild(div);
             });
             
+            // 一時的に保存
             window.generatedCanvases = canvases;
+            
             modal.classList.add('active');
         }
 
@@ -1312,10 +2695,542 @@ ChatGPTに「**メルマガの返信文作って**」って投げました。
             }
         }
 
+        // スライド追加
+        function addSlide() {
+            if (totalSlides >= 20) {
+                alert('最大20枚まで追加できます');
+                return;
+            }
+            
+            // 新しいスライドを現在のスライドの後に追加
+            const newSlide = {
+                title: `新しいスライド ${totalSlides + 1}`,
+                body: '',
+                backgroundColor: { type: 'solid', color: '#ffffff' },
+                layout: { verticalAlign: 'top', textAlign: 'left' },
+                fontSize: { titleSize: 68, bodySize: 44 }
+            };
+            
+            slidesData.splice(currentSlide, 0, newSlide);
+            totalSlides = slidesData.length;
+            currentSlide++; // 新しいスライドに移動
+            
+            updateUI();
+            showGenerationResult();
+            updateEditControls();
+            
+            alert(`✅ スライド ${currentSlide} を追加しました！`);
+        }
+        
+        // 現在のスライドを削除
+        function deleteCurrentSlide() {
+            if (totalSlides <= 1) {
+                alert('最後のスライドは削除できません');
+                return;
+            }
+            
+            if (!confirm(`スライド ${currentSlide} を削除しますか？`)) {
+                return;
+            }
+            
+            slidesData.splice(currentSlide - 1, 1);
+            totalSlides = slidesData.length;
+            
+            // 削除後のスライド位置調整
+            if (currentSlide > totalSlides) {
+                currentSlide = totalSlides;
+            }
+            
+            updateUI();
+            showGenerationResult();
+            updateEditControls();
+            
+            alert(`✅ スライドを削除しました！（残り${totalSlides}枚）`);
+        }
+
+        // カラータイプ切り替え
+        function switchColorType(type) {
+            const solidBtn = document.getElementById('solidTypeBtn');
+            const gradientBtn = document.getElementById('gradientTypeBtn');
+            const solidPicker = document.getElementById('solidColorPicker');
+            const gradientPicker = document.getElementById('gradientColorPicker');
+            
+            if (type === 'solid') {
+                solidBtn.classList.add('active');
+                gradientBtn.classList.remove('active');
+                solidPicker.style.display = 'block';
+                gradientPicker.style.display = 'none';
+            } else {
+                solidBtn.classList.remove('active');
+                gradientBtn.classList.add('active');
+                solidPicker.style.display = 'none';
+                gradientPicker.style.display = 'block';
+                updateGradientPreview();
+            }
+        }
+        
+        // カスタム単色適用
+        function applyCustomColor(type, color) {
+            if (totalSlides === 0) return;
+            
+            slidesData[currentSlide - 1].backgroundColor = {
+                type: 'solid',
+                color: color
+            };
+            
+            updatePreview();
+            updateColorPalette();
+        }
+        
+        // カスタムグラデーション更新
+        function updateCustomGradient() {
+            const color1 = document.getElementById('customGradientColor1').value;
+            const color2 = document.getElementById('customGradientColor2').value;
+            
+            updateGradientPreview();
+            
+            if (totalSlides > 0) {
+                slidesData[currentSlide - 1].backgroundColor = {
+                    type: 'gradient',
+                    colors: [color1, color2]
+                };
+                
+                updatePreview();
+                updateColorPalette();
+            }
+        }
+        
+        // グラデーションプレビュー更新
+        function updateGradientPreview() {
+            const color1 = document.getElementById('customGradientColor1').value;
+            const color2 = document.getElementById('customGradientColor2').value;
+            const preview = document.getElementById('gradientPreview');
+            
+            if (preview) {
+                preview.style.setProperty('--preview-color1', color1);
+                preview.style.setProperty('--preview-color2', color2);
+            }
+        }
+        
+        // カラーピッカーを現在の色に同期
+        function syncColorPickers() {
+            if (totalSlides === 0) return;
+            
+            const slide = slidesData[currentSlide - 1];
+            const bg = slide.backgroundColor;
+            
+            if (bg.type === 'solid') {
+                document.getElementById('customSolidColor').value = bg.color;
+                switchColorType('solid');
+            } else if (bg.type === 'gradient') {
+                document.getElementById('customGradientColor1').value = bg.colors[0];
+                document.getElementById('customGradientColor2').value = bg.colors[1];
+                updateGradientPreview();
+                switchColorType('gradient');
+            }
+        }
+
+        // Word風の装飾を適用
+        function applyFormatting(field, type) {
+            const inputId = field === 'title' ? 'editTitle' : 'editBody';
+            const input = document.getElementById(inputId);
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            const text = input.value;
+            const selectedText = text.substring(start, end);
+            
+            let newText = '';
+            let cursorOffset = 0;
+            
+            switch (type) {
+                case 'bold':
+                    newText = selectedText ? `<strong>${selectedText}</strong>` : '<strong>太文字</strong>';
+                    cursorOffset = selectedText ? 8 : 8;
+                    break;
+                case 'italic':
+                    newText = selectedText ? `<em>${selectedText}</em>` : '<em>斜体</em>';
+                    cursorOffset = selectedText ? 4 : 4;
+                    break;
+                case 'underline':
+                    newText = selectedText ? `<u>${selectedText}</u>` : '<u>下線</u>';
+                    cursorOffset = selectedText ? 3 : 3;
+                    break;
+                case 'strike':
+                    newText = selectedText ? `<del>${selectedText}</del>` : '<del>取り消し線</del>';
+                    cursorOffset = selectedText ? 5 : 5;
+                    break;
+            }
+            
+            const beforeText = text.substring(0, start);
+            const afterText = text.substring(end);
+            const finalText = beforeText + newText + afterText;
+            
+            input.value = finalText;
+            
+            // カーソル位置を調整
+            const newCursorPos = selectedText ? 
+                start + newText.length : 
+                start + cursorOffset;
+            input.setSelectionRange(newCursorPos, newCursorPos);
+            
+            // スライドデータを更新
+            updateCurrentSlide(field, finalText);
+            updateFormattingPreview(field);
+            
+            input.focus();
+        }
+        
+        // 改行挿入
+        function insertLineBreak(field) {
+            const inputId = field === 'title' ? 'editTitle' : 'editBody';
+            const input = document.getElementById(inputId);
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            const text = input.value;
+            
+            const beforeText = text.substring(0, start);
+            const afterText = text.substring(end);
+            const finalText = beforeText + '\n' + afterText;
+            
+            input.value = finalText;
+            input.setSelectionRange(start + 1, start + 1);
+            
+            updateCurrentSlide(field, finalText);
+            updateFormattingPreview(field);
+            
+            input.focus();
+        }
+        
+        // 装飾プレビュー更新
+        function updateFormattingPreview(field) {
+            const inputId = field === 'title' ? 'editTitle' : 'editBody';
+            const previewId = field === 'title' ? 'titlePreview' : 'bodyPreview';
+            
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            if (!input || !preview) return;
+            
+            const text = input.value;
+            const htmlText = convertFormattingToPreview(text);
+            preview.innerHTML = htmlText;
+        }
+        
+        // HTMLタグをプレビュー用CSSクラスに変換
+        function convertFormattingToPreview(text) {
+            return text
+                .replace(/<strong>(.*?)<\/strong>/g, '<span class="markdown-bold">$1</span>')
+                .replace(/<em>(.*?)<\/em>/g, '<span class="markdown-italic">$1</span>')
+                .replace(/<u>(.*?)<\/u>/g, '<span class="markdown-underline">$1</span>')
+                .replace(/<del>(.*?)<\/del>/g, '<span class="markdown-strike">$1</span>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // CTA機能の切り替え
+        function toggleCTA(enabled) {
+            if (totalSlides === 0) return;
+            
+            const slide = slidesData[currentSlide - 1];
+            slide.isCTA = enabled;
+            
+            const ctaOptions = document.getElementById('ctaOptions');
+            const ctaLabel = document.getElementById('ctaLabel');
+            
+            ctaOptions.style.display = enabled ? 'block' : 'none';
+            ctaLabel.style.display = enabled ? 'inline-block' : 'none';
+            
+            if (enabled) {
+                updateCTATemplate();
+            }
+            
+            // プレビューを更新
+            updatePreview();
+        }
+
+        // CTAテンプレートの更新
+        function updateCTATemplate() {
+            if (totalSlides === 0) return;
+            
+            const slide = slidesData[currentSlide - 1];
+            const ctaType = document.getElementById('ctaType').value;
+            
+            slide.ctaType = ctaType;
+            
+            const templates = {
+                contact: {
+                    actionText: '今すぐお問い合わせください',
+                    contact: '@suzaki_junichi',
+                    title: 'お気軽にご相談ください',
+                    body: 'ご質問やご相談がございましたら\nお気軽にDMでお声かけください\n\n一緒に成果を作っていきましょう！'
+                },
+                comment: {
+                    actionText: '詳しく知りたい人は「教えて」とコメント',
+                    contact: 'コメントしてくれたら\nメッセージが届きます',
+                    title: '詳しく知りたい方へ',
+                    body: '今回の内容についてもっと詳しく知りたい方は\nコメント欄に「教えて」と書いてください\n\nコメントしてくれた方には\n特別な情報をお送りします！'
+                },
+                follow: {
+                    actionText: 'フォローして最新情報をチェック',
+                    contact: '@suzaki_junichi',
+                    title: 'フォローしてください',
+                    body: '最新のビジネス情報や\n成功事例を毎日発信しています\n\nフォローして見逃さないように！'
+                },
+                website: {
+                    actionText: 'ウェブサイトをチェック',
+                    contact: 'suzakijunichi.com',
+                    title: '詳細はウェブサイトで',
+                    body: 'さらに詳しい情報や\n無料コンテンツは\nウェブサイトでご確認ください'
+                },
+                download: {
+                    actionText: '無料資料をダウンロード',
+                    contact: 'プロフィールのリンクから',
+                    title: '無料資料プレゼント',
+                    body: '今回の内容をまとめた\nPDF資料を無料で\nプレゼントしています'
+                },
+                custom: {
+                    actionText: 'アクション内容を入力',
+                    contact: '連絡先を入力',
+                    title: 'カスタムCTA',
+                    body: '自由にメッセージを\n入力してください'
+                }
+            };
+            
+            const template = templates[ctaType];
+            if (template) {
+                document.getElementById('ctaActionText').value = template.actionText;
+                document.getElementById('ctaContact').value = template.contact;
+                
+                // コメント誘導型の場合のみサジェスト表示
+                const commentSuggestions = document.getElementById('commentSuggestions');
+                if (ctaType === 'comment') {
+                    commentSuggestions.style.display = 'block';
+                } else {
+                    commentSuggestions.style.display = 'none';
+                }
+                
+                if (ctaType !== 'custom') {
+                    document.getElementById('editTitle').value = template.title;
+                    document.getElementById('editBody').value = template.body;
+                    
+                    slide.title = template.title;
+                    slide.body = template.body;
+                }
+                
+                slide.ctaActionText = template.actionText;
+                slide.ctaContact = template.contact;
+                
+                updatePreview();
+                updateFormattingPreview('title');
+                updateFormattingPreview('body');
+            }
+            
+            // プレビューを更新（CTA設定変更時）
+            updatePreview();
+        }
+
+        // CTAコンテンツの更新
+        function updateCTAContent() {
+            if (totalSlides === 0) return;
+            
+            const slide = slidesData[currentSlide - 1];
+            slide.ctaActionText = document.getElementById('ctaActionText').value;
+            slide.ctaContact = document.getElementById('ctaContact').value;
+        }
+
+        // コメントサジェストの適用
+        function setCommentSuggestion(keyword) {
+            const actionTextInput = document.getElementById('ctaActionText');
+            const currentText = actionTextInput.value;
+            
+            // 角括弧付きの形式に更新
+            const newText = `詳しく知りたい人は【 ${keyword} 】とコメント`;
+            actionTextInput.value = newText;
+            
+            // スライドデータも更新
+            if (totalSlides > 0) {
+                const slide = slidesData[currentSlide - 1];
+                slide.ctaActionText = newText;
+                
+                // 専用ボタン用のデータも更新
+                if (slide.isCommentCTA) {
+                    slide.commentKeyword = keyword;
+                }
+            }
+            
+            updateCTAContent();
+            
+            // プレビューを更新
+            updatePreview();
+        }
+
+        // コメント誘導型CTA専用関数
+        function applyCommentCTA() {
+            if (totalSlides === 0) return;
+            
+            const slide = slidesData[currentSlide - 1];
+            
+            // コメント誘導型専用の設定を適用
+            slide.isCommentCTA = true;
+            slide.title = '詳しく知りたい方は';
+            slide.body = '詳細を知りたい人は、こちらの投稿に\n\n【 インスタ 】\n\nとコメントください';
+            slide.commentKeyword = 'インスタ';
+            slide.commentMessage = '';
+            
+            // UI更新
+            document.getElementById('editTitle').value = slide.title;
+            document.getElementById('editBody').value = slide.body;
+            
+            updatePreview();
+            updateFormattingPreview('title');
+            updateFormattingPreview('body');
+            
+            // 成功メッセージ
+            alert('✅ コメント誘導ページに変更しました！\n「教えて」が大きく表示される特別なデザインが適用されます。');
+        }
+
         // モーダルを閉じる
         function closeModal() {
             document.getElementById('downloadModal').classList.remove('active');
         }
+        
+        // キーボードショートカット機能
+        let shortcutHintVisible = false;
+        
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + ? でショートカットヘルプ表示
+            if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                e.preventDefault();
+                toggleShortcutHint();
+                return;
+            }
+            
+            // ESCでショートカットヘルプを閉じる
+            if (e.key === 'Escape') {
+                hideShortcutHint();
+                return;
+            }
+            
+            // モーダルが開いている時はショートカットを無効化
+            if (document.getElementById('downloadModal').classList.contains('active')) {
+                return;
+            }
+            
+            // スライドナビゲーション
+            if (totalSlides > 0) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                    case 'a':
+                        e.preventDefault();
+                        if (currentSlide > 1) {
+                            currentSlide--;
+                            updateUI();
+                            updateEditControls();
+                            addPreviewAnimation();
+                        }
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                        e.preventDefault();
+                        if (currentSlide < totalSlides) {
+                            currentSlide++;
+                            updateUI();
+                            updateEditControls();
+                            addPreviewAnimation();
+                        }
+                        break;
+                    case 'g':
+                        if (e.ctrlKey || e.metaKey) {
+                            e.preventDefault();
+                            generateImages();
+                        }
+                        break;
+                    case '+':
+                        if (e.ctrlKey || e.metaKey) {
+                            e.preventDefault();
+                            addSlide();
+                        }
+                        break;
+                    case '-':
+                        if (e.ctrlKey || e.metaKey) {
+                            e.preventDefault();
+                            deleteCurrentSlide();
+                        }
+                        break;
+                }
+            }
+        });
+        
+        function toggleShortcutHint() {
+            const hint = document.getElementById('shortcutHint');
+            if (shortcutHintVisible) {
+                hideShortcutHint();
+            } else {
+                showShortcutHint();
+            }
+        }
+        
+        function showShortcutHint() {
+            const hint = document.getElementById('shortcutHint');
+            hint.classList.add('show');
+            shortcutHintVisible = true;
+        }
+        
+        function hideShortcutHint() {
+            const hint = document.getElementById('shortcutHint');
+            hint.classList.remove('show');
+            shortcutHintVisible = false;
+        }
+        
+        // ツールチップ初期化
+        function initializeTooltips() {
+            // アスペクト比ボタンにツールチップを追加
+            const aspectButtons = document.querySelectorAll('.aspect-ratio-option');
+            aspectButtons.forEach(btn => {
+                if (!btn.querySelector('.tooltiptext')) {
+                    btn.classList.add('tooltip');
+                    const tooltip = document.createElement('span');
+                    tooltip.className = 'tooltiptext';
+                    const ratio = btn.dataset.ratio;
+                    const descriptions = {
+                        '4:5': '投稿用・縦長レイアウト',
+                        '9:16': 'ストーリー用・縦長レイアウト',
+                        '1:1': '正方形・バランス型',
+                        '16:9': '横長・プレゼン用'
+                    };
+                    tooltip.textContent = descriptions[ratio] || 'カスタムサイズ';
+                    btn.appendChild(tooltip);
+                }
+            });
+        }
     </script>
+    
+    <!-- キーボードショートカットヘルプ -->
+    <div id="shortcutHint" class="shortcut-hint">
+        <h4 style="margin: 0 0 10px 0; color: #fff;">キーボードショートカット</h4>
+        <div class="shortcut-item">
+            <span>スライド移動</span>
+            <span><span class="key">←</span> <span class="key">→</span> または <span class="key">A</span> <span class="key">D</span></span>
+        </div>
+        <div class="shortcut-item">
+            <span>画像生成</span>
+            <span><span class="key">Ctrl</span> + <span class="key">G</span></span>
+        </div>
+        <div class="shortcut-item">
+            <span>スライド追加</span>
+            <span><span class="key">Ctrl</span> + <span class="key">+</span></span>
+        </div>
+        <div class="shortcut-item">
+            <span>スライド削除</span>
+            <span><span class="key">Ctrl</span> + <span class="key">-</span></span>
+        </div>
+        <div class="shortcut-item">
+            <span>ヘルプ表示</span>
+            <span><span class="key">Ctrl</span> + <span class="key">?</span></span>
+        </div>
+        <div class="shortcut-item">
+            <span>閉じる</span>
+            <span><span class="key">ESC</span></span>
+        </div>
+    </div>
 </body>
 </html>
