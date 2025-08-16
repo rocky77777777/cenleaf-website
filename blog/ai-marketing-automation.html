@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIとマーケティングの自動化で、時間と場所の自由を手に入れた話 | CENLEAF BLOG</title>
+    <meta name="description" content="ブラック企業でうつ病になった私が、AIとウェビナー自動化の専門家として独立し、時間と場所の自由を手に入れるまでの道のり">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* ヘッダー */
+        .header {
+            padding: 20px 0;
+            border-bottom: 2px solid #00ffff;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ffff;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            color: #00ffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #00ffff;
+            border-radius: 4px;
+        }
+
+        .back-btn:hover {
+            background: #00ffff;
+            color: #0a0a0a;
+        }
+
+        /* 記事ヘッダー */
+        .article-header {
+            margin-bottom: 40px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            background: #00ffff;
+            color: #0a0a0a;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* 記事本文 */
+        .article-content {
+            font-size: 16px;
+            color: #ddd;
+        }
+
+        .article-content h2 {
+            font-size: 24px;
+            color: #00ffff;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .article-content h3 {
+            font-size: 20px;
+            color: #fff;
+            margin: 30px 0 15px;
+        }
+
+        .article-content p {
+            margin-bottom: 20px;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        .article-content li {
+            margin-bottom: 10px;
+        }
+
+        .article-content blockquote {
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 4px solid #00ffff;
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+        }
+
+        .highlight-box {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 128, 0.1));
+            border-radius: 10px;
+            padding: 40px;
+            margin: 60px 0 40px;
+            text-align: center;
+        }
+
+        .cta-section h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #00ffff;
+        }
+
+        .cta-section p {
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #00ffff;
+            color: #0a0a0a;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
+        }
+
+        /* フッター */
+        .article-footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+
+        .share-buttons {
+            margin-bottom: 30px;
+        }
+
+        .share-btn {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            text-decoration: none;
+            color: #fff;
+            transition: background 0.3s;
+        }
+
+        .share-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+            
+            .article-content h2 {
+                font-size: 20px;
+            }
+            
+            .cta-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <a href="/" class="logo">CENLEAF</a>
+            <a href="/blog/" class="back-btn">ブログ一覧へ</a>
+        </div>
+
+        <!-- 記事ヘッダー -->
+        <header class="article-header">
+            <span class="category-tag">自己紹介</span>
+            <h1>AIとマーケティングの自動化で、時間と場所の自由を手に入れた話</h1>
+            <div class="article-meta">
+                <span>✍️ 須崎純一</span>
+                <span>📅 2025年8月16日</span>
+                <span>⏱️ 5分で読めます</span>
+            </div>
+        </header>
+
+        <!-- 記事本文 -->
+        <article class="article-content">
+            <p>はじめまして、須崎純一です。</p>
+            
+            <p>今ではAIとウェビナー自動化の専門家として、全国のホテルを転々としながら自由に仕事をしていますが、ここまでの道のりは決して平坦ではありませんでした。</p>
+
+            <h2>ブラック企業でうつ病に</h2>
+            
+            <p>新卒で入った会社は、典型的なブラック企業でした。朝9時から深夜2時まで働き、土日も出勤。そんな生活を続けているうちに、ついに心が壊れてしまいました。</p>
+            
+            <blockquote>
+                「トイレットペーパーが1年間で1本も減らない」
+            </blockquote>
+            
+            <p>これが当時の私の生活を物語っています。食事も満足に取れず、トイレに行く回数すら極端に減っていました。</p>
+
+            <h2>転機となった出会い</h2>
+            
+            <p>うつ病から回復し、いくつかの会社を転々とした後、30歳で独立を決意。しかし、最初は全くうまくいきませんでした。FXで200万円を溶かし、途方に暮れていた時期もあります。</p>
+            
+            <p>そんな時、月収1.4万円で苦しんでいたコーチングの先生と出会いました。私は彼女のビジネスを3ヶ月で月収100万円超えまで成長させることに成功。これが私の転機となりました。</p>
+
+            <h2>ウェビナー自動化との出会い</h2>
+            
+            <p>その後、様々なマーケティング手法を試す中で、ウェビナー（オンラインセミナー）の自動化に出会いました。</p>
+            
+            <div class="highlight-box">
+                <h3>ウェビナー自動化のメリット</h3>
+                <ul>
+                    <li>一度録画すれば、24時間365日働いてくれる</li>
+                    <li>寝ている間も売上が上がる</li>
+                    <li>時間と場所に縛られない</li>
+                    <li>高単価商品でも売れる仕組みが作れる</li>
+                </ul>
+            </div>
+
+            <h2>AIで更なる進化を</h2>
+            
+            <p>2023年からはChatGPTを始めとするAIツールを積極的に活用。今まで3時間かかっていた作業が5分で終わるようになりました。</p>
+            
+            <p>特に力を入れているのが、n8nという自動化ツールとAIの組み合わせです。これにより、以下のような自動化を実現しています：</p>
+            
+            <ol>
+                <li><strong>コンテンツ作成の自動化</strong> - ブログ記事、SNS投稿、メルマガを自動生成</li>
+                <li><strong>顧客対応の自動化</strong> - よくある質問への回答、初期対応の自動化</li>
+                <li><strong>データ分析の自動化</strong> - 売上分析、顧客分析を自動でレポート化</li>
+                <li><strong>営業プロセスの自動化</strong> - リード獲得から成約までの流れを自動化</li>
+            </ol>
+
+            <h2>全国ホテル暮らし4年間の学び</h2>
+            
+            <p>2020年から2024年まで、全国のホテルを転々としながら仕事をしてきました。47都道府県すべてを制覇し、各地で素晴らしい出会いと学びがありました。</p>
+            
+            <p>この経験から学んだのは、「場所に縛られない働き方」の本当の価値です。好きな場所で、好きな時に、好きな人と仕事ができる。これこそが私が目指していた自由でした。</p>
+
+            <h2>これからの展望</h2>
+            
+            <p>現在は大阪を拠点に、全国の個人起業家や小規模ビジネスオーナーの方々に、AIとマーケティング自動化の導入支援を行っています。</p>
+            
+            <p>私のミッションは、「いつかやりたいを今やろう」という想いを持つ人たちが、時間とお金の制約から解放され、本当にやりたいことに集中できる環境を作ることです。</p>
+            
+            <div class="highlight-box">
+                <h3>提供しているサービス</h3>
+                <ul>
+                    <li>ウェビナー自動化システムの構築</li>
+                    <li>AI活用によるコンテンツ作成支援</li>
+                    <li>n8nを使った業務自動化の導入</li>
+                    <li>オンライン講座の制作・販売支援</li>
+                </ul>
+            </div>
+
+            <p>もし、あなたも「時間と場所に縛られない働き方」を実現したいと思っているなら、ぜひ一緒に取り組んでいきましょう。</p>
+            
+            <p>最後まで読んでいただき、ありがとうございました。</p>
+        </article>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <h3>無料ウェビナーのご案内</h3>
+            <p>「AIとウェビナー自動化で月商300万円を達成する方法」<br>を無料で公開しています</p>
+            <a href="https://utage-system.com/p/FJgT2MxZMHGE" class="cta-btn">無料ウェビナーに参加する</a>
+        </div>
+
+        <!-- フッター -->
+        <footer class="article-footer">
+            <div class="share-buttons">
+                <a href="#" class="share-btn">Xでシェア</a>
+                <a href="#" class="share-btn">Facebookでシェア</a>
+                <a href="#" class="share-btn">LINEで送る</a>
+            </div>
+            <p style="color: #666; font-size: 14px;">© 2025 CENLEAF. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
