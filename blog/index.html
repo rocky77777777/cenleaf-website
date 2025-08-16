@@ -273,9 +273,15 @@
                 categories[categoryName] = (categories[categoryName] || 0) + 1;
             });
 
-            // すべてボタンを追加
+            // すべてボタンを追加（コラムを除いた記事数）
+            const nonColumnCount = posts.filter(post => {
+                const categoryName = post.category ? 
+                    (typeof post.category === 'object' ? post.category.name : post.category) : 
+                    '未分類';
+                return categoryName !== 'コラム';
+            }).length;
             let filterHTML = `<button class="category-btn active" data-category="すべて" onclick="filterByCategory('すべて')">
-                すべて<span class="article-count">(${posts.length})</span>
+                すべて<span class="article-count">(${nonColumnCount})</span>
             </button>`;
 
             // 各カテゴリーのボタンを追加（コラムを最後に配置）
@@ -315,6 +321,14 @@
                         (typeof post.category === 'object' ? post.category.name : post.category) : 
                         '未分類';
                     return categoryName === category;
+                });
+            } else {
+                // 「すべて」の場合はコラムカテゴリーを除外
+                filteredPosts = allPosts.filter(post => {
+                    const categoryName = post.category ? 
+                        (typeof post.category === 'object' ? post.category.name : post.category) : 
+                        '未分類';
+                    return categoryName !== 'コラム';
                 });
             }
 
@@ -388,8 +402,8 @@
                     allPosts = data.contents;
                     // カテゴリーフィルターを作成
                     createCategoryFilter(allPosts);
-                    // microCMSの記事を表示
-                    displayPosts(allPosts);
+                    // デフォルトで「すべて」フィルターを適用（コラムを除外）
+                    filterByCategory('すべて');
                 } else {
                     // 記事がない場合はデモデータを表示
                     console.warn('⚠️ 記事がありません。デモデータを表示します。');
@@ -398,7 +412,7 @@
                         console.log('🔄 デモデータを表示中...');
                         allPosts = demoData;
                         createCategoryFilter(allPosts);
-                        displayPosts(allPosts);
+                        filterByCategory('すべて');
                     }, 2000);
                 }
 
@@ -411,7 +425,7 @@
                     console.log('🔄 エラー時のデモデータを表示中...');
                     allPosts = demoData;
                     createCategoryFilter(allPosts);
-                    displayPosts(allPosts);
+                    filterByCategory('すべて');
                 }, 2000);
             }
         }
