@@ -130,6 +130,46 @@
             color: #999999;
         }
 
+        /* カテゴリーフィルター */
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background: #ffffff;
+            border: 2px solid #007acc;
+            color: #007acc;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .category-btn:hover {
+            background: #007acc;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
+        }
+
+        .category-btn.active {
+            background: #007acc;
+            color: #ffffff;
+        }
+
+        .article-count {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-left: 5px;
+        }
+
         /* レスポンシブ */
         @media (max-width: 768px) {
             .blog-grid {
@@ -143,6 +183,15 @@
             
             h1 {
                 font-size: 28px;
+            }
+
+            .category-filter {
+                gap: 10px;
+            }
+
+            .category-btn {
+                padding: 8px 16px;
+                font-size: 13px;
             }
         }
     </style>
@@ -158,6 +207,11 @@
         <!-- タイトル -->
         <h1>CENLEAF BLOG</h1>
 
+        <!-- カテゴリーフィルター -->
+        <div id="category-filter" class="category-filter">
+            <!-- カテゴリーボタンは動的に生成されます -->
+        </div>
+
         <!-- ブログ記事コンテナ -->
         <div id="blog-grid" class="blog-grid">
             <div class="loading">記事を読み込み中...</div>
@@ -169,6 +223,10 @@
         const API_KEY = 'gfvzXw58nnvw3daLCbWS9z22SMKeIhxa1KWw';
         const SERVICE_ID = 'cenleaf';
         const ENDPOINT = 'blogs';
+
+        // グローバル変数
+        let allPosts = [];
+        let currentCategory = 'すべて';
 
         // 日付フォーマット
         function formatDate(dateString) {
@@ -195,6 +253,62 @@
                 slug: 'webinar-automation-guide'
             }
         ];
+
+        // カテゴリーフィルターを作成
+        function createCategoryFilter(posts) {
+            const filterContainer = document.getElementById('category-filter');
+            
+            // カテゴリーを集計
+            const categories = {};
+            posts.forEach(post => {
+                const categoryName = post.category ? 
+                    (typeof post.category === 'object' ? post.category.name : post.category) : 
+                    '未分類';
+                categories[categoryName] = (categories[categoryName] || 0) + 1;
+            });
+
+            // すべてボタンを追加
+            let filterHTML = `<button class="category-btn active" data-category="すべて" onclick="filterByCategory('すべて')">
+                すべて<span class="article-count">(${posts.length})</span>
+            </button>`;
+
+            // 各カテゴリーのボタンを追加
+            Object.entries(categories).sort((a, b) => b[1] - a[1]).forEach(([category, count]) => {
+                filterHTML += `<button class="category-btn" data-category="${category}" onclick="filterByCategory('${category}')">
+                    ${category}<span class="article-count">(${count})</span>
+                </button>`;
+            });
+
+            filterContainer.innerHTML = filterHTML;
+        }
+
+        // カテゴリーでフィルタリング
+        function filterByCategory(category) {
+            currentCategory = category;
+            
+            // ボタンのアクティブ状態を更新
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // 記事をフィルタリング
+            let filteredPosts = allPosts;
+            if (category !== 'すべて') {
+                filteredPosts = allPosts.filter(post => {
+                    const categoryName = post.category ? 
+                        (typeof post.category === 'object' ? post.category.name : post.category) : 
+                        '未分類';
+                    return categoryName === category;
+                });
+            }
+
+            // 記事を表示
+            displayPosts(filteredPosts);
+        }
 
         // ブログ記事を表示
         function displayPosts(posts) {
@@ -257,15 +371,21 @@
                 if (data.contents && data.contents.length > 0) {
                     console.log('🎉 microCMSの記事を表示します');
                     console.log('記事タイトル一覧:', data.contents.map(post => post.title));
+                    // 記事を保存
+                    allPosts = data.contents;
+                    // カテゴリーフィルターを作成
+                    createCategoryFilter(allPosts);
                     // microCMSの記事を表示
-                    displayPosts(data.contents);
+                    displayPosts(allPosts);
                 } else {
                     // 記事がない場合はデモデータを表示
                     console.warn('⚠️ 記事がありません。デモデータを表示します。');
                     blogGrid.innerHTML = '<div class="error">まだ記事が投稿されていません。<br>microCMS管理画面から記事を投稿してください。</div>';
                     setTimeout(() => {
                         console.log('🔄 デモデータを表示中...');
-                        displayPosts(demoData);
+                        allPosts = demoData;
+                        createCategoryFilter(allPosts);
+                        displayPosts(allPosts);
                     }, 2000);
                 }
 
@@ -276,7 +396,9 @@
                 blogGrid.innerHTML = '<div class="error">記事の取得に失敗しました。デモデータを表示します。</div>';
                 setTimeout(() => {
                     console.log('🔄 エラー時のデモデータを表示中...');
-                    displayPosts(demoData);
+                    allPosts = demoData;
+                    createCategoryFilter(allPosts);
+                    displayPosts(allPosts);
                 }, 2000);
             }
         }
