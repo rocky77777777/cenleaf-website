@@ -247,67 +247,74 @@
             margin: 50px 0;
             padding: 40px 0;
             border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
         }
 
         .related-articles h3 {
-            font-size: 24px;
-            color: #007acc;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .related-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .related-card {
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.3s ease;
-            display: block;
-        }
-
-        .related-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 122, 204, 0.2);
-            border-color: #007acc;
-        }
-
-        .related-card .category {
-            display: inline-block;
-            background: #007acc;
-            color: #ffffff;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-bottom: 10px;
+            font-size: 18px;
+            color: #333333;
+            margin-bottom: 20px;
             font-weight: bold;
         }
 
-        .related-card h4 {
-            font-size: 16px;
-            margin-bottom: 10px;
+        .related-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .related-article {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .related-article:last-child {
+            border-bottom: none;
+        }
+
+        .related-article:hover {
+            padding-left: 10px;
+        }
+
+        .related-article:hover h3 {
+            color: #007acc;
+        }
+
+        .related-article .category {
+            display: inline-block;
+            background: #007acc;
+            color: #ffffff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .related-article h3 {
+            font-size: 15px;
+            margin: 0;
             color: #333333;
-            line-height: 1.4;
-        }
-
-        .related-card .excerpt {
-            font-size: 13px;
-            color: #666666;
             line-height: 1.5;
-            margin-bottom: 15px;
+            font-weight: normal;
+            flex: 1;
         }
 
+        /* 古いスタイルは削除 */
+        .related-card {
+            display: none;
+        }
+
+        .related-card h4,
+        .related-card .excerpt,
         .related-card .date {
-            font-size: 12px;
-            color: #999999;
+            display: none;
         }
 
         /* フッター */
@@ -571,21 +578,15 @@
                     return;
                 }
 
-                // 関連記事を表示
+                // 関連記事を表示（シンプルにタイトルとカテゴリーのみ）
                 let html = '';
                 scoredArticles.forEach(article => {
-                    // 記事の抜粋を作成（contentからHTMLタグを除去して最初の100文字）
-                    const excerpt = article.content ? 
-                        article.content.replace(/<[^>]*>/g, '').substring(0, 100) + '...' : 
-                        '';
-                    
                     const href = `/blog/article.html?id=${article.id}`;
                     
                     html += `
                         <a href="${href}" class="related-article">
                             <span class="category">${article.categoryName || '未分類'}</span>
                             <h3>${article.title}</h3>
-                            <p>${excerpt}</p>
                         </a>
                     `;
                 });
@@ -631,10 +632,9 @@
             let html = '';
             relatedArticles.forEach(article => {
                 html += `
-                    <a href="${article.href}" class="related-card">
+                    <a href="${article.href}" class="related-article">
                         <span class="category">${article.category}</span>
-                        <h4>${article.title}</h4>
-                        <p class="excerpt">${article.excerpt}</p>
+                        <h3>${article.title}</h3>
                     </a>
                 `;
             });
