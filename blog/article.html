@@ -464,10 +464,8 @@
                     </div>
 
                     <!-- CTA -->
-                    <div class="cta-section">
-                        <h3>無料ウェビナーのご案内</h3>
-                        <p>「AIとウェビナー自動化で月商300万円を達成する方法」<br>を無料で公開しています</p>
-                        <a href="https://sub.cenleaf.com/p/b1158hnensub?ftid=Tcdgf8HDMj5w" class="cta-btn">無料ウェビナーに参加する</a>
+                    <div class="cta-section" id="cta-section">
+                        <!-- CTAはJavaScriptで動的に生成されます -->
                     </div>
 
                     <!-- フッター -->
@@ -481,6 +479,9 @@
                     </footer>
                 </article>
             `;
+            
+            // カテゴリーに応じてCTAを生成
+            generateCTA(categoryName);
         }
 
         // エラー表示
@@ -493,6 +494,27 @@
                     <a href="/blog/">ブログ一覧に戻る</a>
                 </div>
             `;
+        }
+
+        // カテゴリーに応じてCTAを生成
+        function generateCTA(categoryName) {
+            const ctaSection = document.getElementById('cta-section');
+            
+            if (categoryName === 'オートウェビナー') {
+                // オートウェビナーカテゴリーの場合は無料ウェビナーを案内
+                ctaSection.innerHTML = `
+                    <h3>無料ウェビナーのご案内</h3>
+                    <p>「AIとウェビナー自動化で月商300万円を達成する方法」<br>を無料で公開しています</p>
+                    <a href="https://sub.cenleaf.com/p/b1158hnensub?ftid=Tcdgf8HDMj5w" class="cta-btn">無料ウェビナーに参加する</a>
+                `;
+            } else {
+                // その他のカテゴリーの場合はメルマガを案内
+                ctaSection.innerHTML = `
+                    <h3>メルマガのご案内</h3>
+                    <p>AIマーケティングの最新情報や実践的なノウハウを<br>無料でお届けしています</p>
+                    <a href="https://sub.cenleaf.com/p/xNPD9jrlTTSx?ftid=nU1AfsRTq9C4" class="cta-btn">メルマガに登録する</a>
+                `;
+            }
         }
 
         // microCMSから記事を取得
