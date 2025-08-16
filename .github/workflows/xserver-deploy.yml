@@ -16,9 +16,9 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: sv7749.xserver.jp
-        username: cenleaf
+        username: chi58824
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: /public_html/
+        server-dir: /cenleaf.com/public_html/
         exclude: |
           **/.git*
           **/.git*/**
