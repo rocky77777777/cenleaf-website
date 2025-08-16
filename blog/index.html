@@ -353,8 +353,8 @@
                 console.log('🚀 microCMSから記事を取得開始...');
                 console.log('API設定:', { SERVICE_ID, ENDPOINT, API_KEY: API_KEY.substring(0, 10) + '...' });
                 
-                // microCMS APIエンドポイント
-                const url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}`;
+                // microCMS APIエンドポイント（全記事を取得）
+                const url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?limit=100`;
                 console.log('🔗 リクエストURL:', url);
                 
                 // APIリクエスト
