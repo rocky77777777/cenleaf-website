@@ -423,11 +423,16 @@
                 metaDescription.content = article.excerpt;
             }
             
+            // カテゴリー名を取得
+            const categoryName = article.category ? 
+                (typeof article.category === 'object' ? article.category.name : article.category) : 
+                '';
+            
             // 記事HTML生成
             content.innerHTML = `
                 <article>
                     <header class="article-header">
-                        ${article.category ? `<span class="category-tag">${article.category}</span>` : ''}
+                        ${categoryName ? `<span class="category-tag">${categoryName}</span>` : ''}
                         <h1>${article.title}</h1>
                         ${article.readTime ? `<div class="article-meta"><span>⏱️ ${article.readTime}分で読めます</span></div>` : ''}
                     </header>
