@@ -169,22 +169,11 @@
         </div>
     </div>
 
-    <!-- Sanity Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@sanity/client@6/dist/index.browser.min.js"></script>
-    
     <script>
-        // Sanity設定
-        const projectId = 'wr3iko59';
-        const dataset = 'production';
-        const apiVersion = '2024-01-01';
-        
-        // Sanityクライアントの初期化
-        const client = window.sanityClient({
-            projectId: projectId,
-            dataset: dataset,
-            apiVersion: apiVersion,
-            useCdn: true
-        });
+        // microCMS設定
+        const API_KEY = 'gfvzXw58nnvw3daLCbWS9z22SMKeIhxa1KWw';
+        const SERVICE_ID = 'cenleaf';
+        const ENDPOINT = 'blog';
 
         // 日付フォーマット
         function formatDate(dateString) {
@@ -196,40 +185,28 @@
             }).replace(/\//g, '/');
         }
 
-        // カテゴリマッピング
-        const categoryMap = {
-            'marketing': 'マーケティング',
-            'ai': 'AIツール',
-            'automation': '自動化',
-            'business': 'ビジネス',
-            'intro': '自己紹介'
-        };
-
-        // デモデータ
+        // デモデータ（記事がない場合の表示用）
         const demoData = [
             {
                 title: 'AIとマーケティングの自動化で、時間と場所の自由を手に入れた話',
                 category: '自己紹介',
                 excerpt: 'はじめまして、須崎純一です。今ではAIとウェビナー自動化の専門家として活動していますが、ここまでの道のりは決して平坦ではありませんでした。',
-                author: '須崎純一',
                 publishedAt: '2025-08-15',
-                slug: { current: 'introduction' }
+                slug: 'introduction'
             },
             {
                 title: 'ウェビナー自動化で月商300万円を達成した3つのステップ',
                 category: 'マーケティング',
                 excerpt: 'セミナーを自動化して、寝ている間も売上が上がる仕組みを作りたい」そんな夢のような話を現実にする方法をお伝えします。',
-                author: '須崎純一',
                 publishedAt: '2025-08-10',
-                slug: { current: 'webinar-automation' }
+                slug: 'webinar-automation'
             },
             {
                 title: 'ChatGPT×n8nで作る最強の業務自動化システム',
                 category: 'AIツール',
                 excerpt: 'AIと自動化ツールを組み合わせることで、今まで3時間かかっていた作業を5分に短縮できました。',
-                author: '須崎純一',
                 publishedAt: '2025-08-05',
-                slug: { current: 'chatgpt-n8n' }
+                slug: 'chatgpt-n8n'
             }
         ];
 
@@ -243,58 +220,58 @@
             }
 
             blogGrid.innerHTML = posts.map(post => `
-                <a href="https://suzakijunichi.com/${post.slug?.current || post.slug || '#'}" target="_blank" class="blog-card">
+                <a href="/blog/${post.slug || post.id}.html" class="blog-card">
                     <span class="category">${post.category || '一般'}</span>
                     <h2 class="blog-title">${post.title}</h2>
                     <p class="blog-excerpt">${post.excerpt || ''}</p>
                     <div class="blog-footer">
-                        <span>✍️ ${post.author || '須崎純一'}</span>
-                        <span>${formatDate(post.publishedAt || post._createdAt || new Date())}</span>
+                        <span>✍️ 須崎純一</span>
+                        <span>${formatDate(post.publishedAt || post.createdAt || new Date())}</span>
                     </div>
                 </a>
             `).join('');
         }
 
-        // Sanityから記事を取得
+        // microCMSから記事を取得
         async function fetchPosts() {
             const blogGrid = document.getElementById('blog-grid');
             
             try {
-                console.log('Fetching posts from Sanity...');
+                console.log('microCMSから記事を取得中...');
                 
-                // Sanityクエリ
-                const query = `*[_type == "post"] | order(publishedAt desc) {
-                    _id,
-                    title,
-                    slug,
-                    publishedAt,
-                    _createdAt,
-                    excerpt,
-                    "category": category->title,
-                    "categorySlug": category->slug.current,
-                    "author": author->name
-                }[0...10]`;
+                // microCMS APIエンドポイント
+                const url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}`;
+                
+                // APIリクエスト
+                const response = await fetch(url, {
+                    headers: {
+                        'X-MICROCMS-API-KEY': API_KEY
+                    }
+                });
 
-                const posts = await client.fetch(query);
-                console.log('Fetched posts:', posts);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
-                if (posts && posts.length > 0) {
-                    // カテゴリ名を日本語に変換
-                    const processedPosts = posts.map(post => ({
-                        ...post,
-                        category: categoryMap[post.categorySlug] || post.category || '一般'
-                    }));
-                    displayPosts(processedPosts);
+                const data = await response.json();
+                console.log('取得したデータ:', data);
+
+                if (data.contents && data.contents.length > 0) {
+                    // microCMSの記事を表示
+                    displayPosts(data.contents);
                 } else {
-                    // Sanityにデータがない場合はデモデータを表示
-                    console.log('No posts found, showing demo data');
-                    displayPosts(demoData);
+                    // 記事がない場合はデモデータを表示
+                    console.log('記事がありません。デモデータを表示します。');
+                    blogGrid.innerHTML = '<div class="error">まだ記事が投稿されていません。<br>microCMS管理画面から記事を投稿してください。</div>';
+                    setTimeout(() => {
+                        displayPosts(demoData);
+                    }, 2000);
                 }
 
             } catch (error) {
-                console.error('Error fetching posts:', error);
+                console.error('エラー:', error);
                 // エラー時はデモデータを表示
-                blogGrid.innerHTML = '<div class="error">Sanityから記事を取得できませんでした。デモデータを表示します。</div>';
+                blogGrid.innerHTML = '<div class="error">記事の取得に失敗しました。デモデータを表示します。</div>';
                 setTimeout(() => {
                     displayPosts(demoData);
                 }, 2000);
