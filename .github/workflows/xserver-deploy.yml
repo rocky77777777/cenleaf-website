@@ -21,6 +21,7 @@ jobs:
         server-dir: /public_html/
         protocol: ftps
         port: 21
+        dangerous-clean-slate: true
         exclude: |
           **/.git*
           **/.git*/**
