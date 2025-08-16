@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Test | Cenleaf</title>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #00ffff;
+        }
+        .success {
+            color: #4caf50;
+        }
+        .error {
+            color: #f44336;
+        }
+        pre {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sanity API接続テスト</h1>
+    
+    <div class="test-section">
+        <h2>テスト1: Sanity Client SDK使用</h2>
+        <div id="test1-result">テスト中...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>テスト2: 直接API呼び出し (apicdn)</h2>
+        <div id="test2-result">テスト中...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>テスト3: 直接API呼び出し (api)</h2>
+        <div id="test3-result">テスト中...</div>
+    </div>
+
+    <!-- Sanity Client -->
+    <script src="https://unpkg.com/@sanity/client/umd/sanityClient.min.js"></script>
+    
+    <script>
+        // テスト1: Sanity Client SDK
+        async function test1() {
+            const result = document.getElementById('test1-result');
+            try {
+                const client = window.SanityClient({
+                    projectId: 'wr3iko59',
+                    dataset: 'production',
+                    useCdn: true,
+                    apiVersion: '2024-01-01'
+                });
+                
+                const query = `*[_type == "post"][0..2] { title, slug }`;
+                const posts = await client.fetch(query);
+                
+                result.innerHTML = `<div class="success">成功！ ${posts.length}件の記事を取得</div>
+                    <pre>${JSON.stringify(posts, null, 2)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">エラー: ${error.message}</div>`;
+                console.error('Test 1 error:', error);
+            }
+        }
+        
+        // テスト2: 直接API呼び出し (apicdn)
+        async function test2() {
+            const result = document.getElementById('test2-result');
+            try {
+                const query = `*[_type == "post"][0..2] { title, slug }`;
+                const encodedQuery = encodeURIComponent(query);
+                const url = `https://wr3iko59.apicdn.sanity.io/v2024-01-01/data/query/production?query=${encodedQuery}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                result.innerHTML = `<div class="success">成功！ ${data.result.length}件の記事を取得</div>
+                    <pre>${JSON.stringify(data.result, null, 2)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">エラー: ${error.message}</div>`;
+                console.error('Test 2 error:', error);
+            }
+        }
+        
+        // テスト3: 直接API呼び出し (api)
+        async function test3() {
+            const result = document.getElementById('test3-result');
+            try {
+                const query = `*[_type == "post"][0..2] { title, slug }`;
+                const encodedQuery = encodeURIComponent(query);
+                const url = `https://wr3iko59.api.sanity.io/v2024-01-01/data/query/production?query=${encodedQuery}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                result.innerHTML = `<div class="success">成功！ ${data.result.length}件の記事を取得</div>
+                    <pre>${JSON.stringify(data.result, null, 2)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">エラー: ${error.message}</div>`;
+                console.error('Test 3 error:', error);
+            }
+        }
+        
+        // 全テスト実行
+        window.addEventListener('load', () => {
+            test1();
+            test2();
+            test3();
+        });
+    </script>
+</body>
+</html>
