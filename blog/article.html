@@ -185,6 +185,19 @@
         .article-content p {
             margin-bottom: 24px;
             line-height: 1.8;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* 改行タグの表示改善 */
+        .article-content br {
+            line-height: 2.0;
+            margin: 8px 0;
+        }
+
+        /* 連続する改行の表示改善 */
+        .article-content p + p {
+            margin-top: 16px;
         }
 
         /* 見出し直後の段落の余白を調整 */
