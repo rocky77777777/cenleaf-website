@@ -3,17 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-        <meta name="description" content="マークダウンで文章を入れるだけでInstagramカルーセル投稿がサクッとできる無料ツール | CENLEAF">
-    <meta name="keywords" content="Instagram,カルーセル,画像作成,マークダウン,SNS,ツール,無料">
-    <meta name="author" content="CENLEAF">
-    <meta property="og:title" content="Instagram画像作成ツール | CENLEAF">
-    <meta property="og:description" content="マークダウンで文章を入れるだけでカルーセル投稿がサクッとできる">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://cenleaf.com/tools/instagram-carousel-generator.html">
-    <meta name="twitter:card" content="summary_large_image">
     <title>Instagram画像作成ツール | 須崎スタイル</title>
     <style>
         * {
@@ -1099,7 +1088,6 @@
     <div class="container">
         <div class="header">
             <h1>📱 Instagram画像作成ツール</h1>
-            <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">Powered by <a href="https://cenleaf.com" style="color: white; text-decoration: none;">CENLEAF</a></div>
             <p>マークダウンで文章を入れるだけでカルーセル投稿がサクッとできる</p>
         </div>
 
@@ -1559,8 +1547,8 @@
             let currentSlide = null;
             let isFirstSlide = true;
 
-            for (let line of lines) {
-                line = line.trim();
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
                 
                 // # で始まる行（メインタイトル - 1枚目用）
                 if (line.startsWith('# ') && isFirstSlide) {
@@ -1588,12 +1576,20 @@
                         body: ''
                     };
                 }
-                // 空行でない場合は本文に追加
-                else if (line && currentSlide) {
-                    if (currentSlide.body) {
-                        currentSlide.body += '\n' + parseMarkdownText(line);
+                // 本文に追加（空行も改行として保持）
+                else if (currentSlide) {
+                    if (line === '') {
+                        // 空行の場合は改行を追加
+                        if (currentSlide.body) {
+                            currentSlide.body += '\n';
+                        }
                     } else {
-                        currentSlide.body = parseMarkdownText(line);
+                        // テキストがある場合
+                        if (currentSlide.body) {
+                            currentSlide.body += '\n' + parseMarkdownText(line);
+                        } else {
+                            currentSlide.body = parseMarkdownText(line);
+                        }
                     }
                 }
             }
