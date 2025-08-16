@@ -327,6 +327,33 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
+        /* プロフィール紹介セクション */
+        .profile-intro {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .profile-intro p {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .profile-intro a {
+            color: #007acc;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .profile-intro a:hover {
+            color: #005a99;
+            text-decoration: none;
+        }
+
         /* レスポンシブ対応 */
         @media (max-width: 768px) {
             .article-content .pros-cons {
@@ -341,6 +368,15 @@
             .article-content .step-number {
                 margin-right: 0;
                 margin-bottom: 10px;
+            }
+
+            .profile-intro {
+                padding: 15px;
+                margin: 20px 0;
+            }
+
+            .profile-intro p {
+                font-size: 14px;
             }
         }
 
@@ -920,6 +956,13 @@
             // 記事内容を読みやすく構造化
             const enhancedContent = enhanceArticleContent(article.content || article.body || '');
             
+            // プロフィール紹介文を追加
+            const profileIntro = `
+                <div class="profile-intro">
+                    <p>こんにちは、須崎純一です。<a href="/blog/article.html?slug=ai-marketing-automation" style="color: #007acc; text-decoration: underline;">プロフィールはこちら</a>。</p>
+                </div>
+            `;
+
             // 記事HTML生成
             content.innerHTML = `
                 <article>
@@ -928,6 +971,8 @@
                         <h1>${article.title}</h1>
                         ${article.readTime ? `<div class="article-meta"><span>⏱️ ${article.readTime}分で読めます</span></div>` : ''}
                     </header>
+
+                    ${profileIntro}
 
                     <div class="article-content">
                         ${enhancedContent}
