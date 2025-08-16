@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ツール一覧 | CENLEAF</title>
+    <meta name="description" content="CENLEAFが提供する無料ツール一覧。Instagram画像作成ツールなど、便利なツールを無料で提供">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px;
+        }
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            transition: transform 0.3s ease;
+            border: 2px solid #f0f0f0;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .tool-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .tool-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .tool-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .tool-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        .tool-link:hover {
+            transform: translateY(-2px);
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            text-align: center;
+            color: #666;
+        }
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            .header {
+                padding: 30px 20px;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ CENLEAFツール一覧</h1>
+            <p>無料で使える便利なツールを提供しています</p>
+        </div>
+        
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-icon">📱</div>
+                <div class="tool-title">Instagram画像作成ツール</div>
+                <div class="tool-description">
+                    マークダウンで文章を入れるだけで、Instagramカルーセル投稿がサクッと作成できます。
+                    最大20枚のスライド対応、個別調整機能、CTA機能付き。
+                </div>
+                <a href="instagram-carousel-generator.html" class="tool-link">
+                    ツールを使う
+                </a>
+            </div>
+            
+            <!-- 今後のツール追加エリア -->
+            <div class="tool-card" style="border: 2px dashed #ddd; opacity: 0.6;">
+                <div class="tool-icon">🚀</div>
+                <div class="tool-title">新しいツール準備中</div>
+                <div class="tool-description">
+                    より便利なツールを準備中です。お楽しみに！
+                </div>
+                <span style="background: #ccc; color: white; padding: 12px 24px; border-radius: 8px; font-weight: bold;">
+                    準備中
+                </span>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 <a href="https://cenleaf.com">CENLEAF</a>. All rights reserved.</p>
+            <p>お問い合わせ: <a href="mailto:info@cenleaf.com">info@cenleaf.com</a></p>
+        </div>
+    </div>
+</body>
+</html>
