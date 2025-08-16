@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instagram画像作成ツール | 須崎スタイル</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>📱</text></svg>" type="image/svg+xml">
     <style>
         * {
             margin: 0;
@@ -1628,6 +1629,17 @@
                 .replace(/__(.*?)__/g, '$1') // __太文字__ → 太文字
                 .replace(/_(.*?)_/g, '$1'); // _斜体_ → 斜体
         }
+        
+        // HTMLタグを削除してプレーンテキストに変換
+        function stripHTMLToPlainText(html) {
+            return html
+                .replace(/<strong>(.*?)<\/strong>/g, '$1')
+                .replace(/<em>(.*?)<\/em>/g, '$1')
+                .replace(/<del>(.*?)<\/del>/g, '$1')
+                .replace(/<code>(.*?)<\/code>/g, '$1')
+                .replace(/<u>(.*?)<\/u>/g, '$1')
+                .replace(/<[^>]+>/g, ''); // その他のHTMLタグを削除
+        }
 
         // 手動で最初のスライドを作成
         function createFirstSlide() {
@@ -2144,6 +2156,43 @@
             showDownloadModal(canvases);
         }
 
+        // シンプルなテキスト描画関数（画像生成専用）
+        function drawSimpleText(ctx, text, x, y, maxWidth, font, color) {
+            ctx.font = font;
+            ctx.fillStyle = color;
+            
+            // HTMLタグを削除
+            const plainText = stripHTMLToPlainText(text);
+            
+            const words = plainText.split('');
+            const lines = [];
+            let currentLine = '';
+            
+            for (let word of words) {
+                const testLine = currentLine + word;
+                const metrics = ctx.measureText(testLine);
+                
+                if (metrics.width > maxWidth && currentLine !== '') {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            
+            if (currentLine !== '') {
+                lines.push(currentLine);
+            }
+            
+            let currentY = y;
+            for (let line of lines) {
+                ctx.fillText(line, x, currentY);
+                currentY += parseInt(font.match(/\d+/)[0]) * 1.5;
+            }
+            
+            return currentY;
+        }
+        
         // スライドをCanvasで生成
         async function generateSlideCanvas(slideNum) {
             const canvas = document.createElement('canvas');
@@ -2173,6 +2222,9 @@
             
             const slide = slidesData[slideNum - 1];
             const isFirstSlide = slideNum === 1;
+            
+            // デバッグ用
+            console.log(`Generating slide ${slideNum}:`, slide);
             
             // 背景描画
             const bg = slide.backgroundColor;
@@ -2240,7 +2292,7 @@
                 
                 // タイトル描画（マークダウン装飾対応）
                 const baseFont = `bold ${fontSize.titleSize}px "Noto Sans JP", sans-serif`;
-                drawStyledText(ctx, parseMarkdownText(title), titleX, startY, 800, baseFont, textColor);
+                drawStyledText(ctx, title, titleX, startY, 800, baseFont, textColor);
                 
                 // サブタイトル
                 if (slide.body) {
@@ -2258,7 +2310,7 @@
                     
                     // サブタイトル描画（マークダウン装飾対応）
                     const bodyFont = `${fontSize.bodySize}px "Noto Sans JP", sans-serif`;
-                    drawStyledText(ctx, parseMarkdownText(slide.body.substring(0, 150)), titleX, bodyStartY, 700, bodyFont, textColor);
+                    drawStyledText(ctx, slide.body.substring(0, 150), titleX, bodyStartY, 700, bodyFont, textColor);
                     ctx.globalAlpha = 1;
                 }
                 
@@ -2306,7 +2358,7 @@
             // タイトル描画（マークダウン装飾対応）
             const maxWidth = 1080 - (padding * 2);
             const titleBaseFont = `bold ${fontSize.titleSize}px 'Noto Sans JP', sans-serif`;
-            drawStyledText(ctx, parseMarkdownText(title), titleX, titleY, maxWidth, titleBaseFont, textColor);
+            drawStyledText(ctx, title, titleX, titleY, maxWidth, titleBaseFont, textColor);
             
             // 本文描画
             if (slide.body) {
@@ -2330,7 +2382,7 @@
                 for (let line of bodyLines) {
                     if (currentY > maxY) break;
                     
-                    currentY = drawStyledText(ctx, parseMarkdownText(line), titleX, currentY, maxWidth, bodyBaseFont, textColor);
+                    currentY = drawStyledText(ctx, line, titleX, currentY, maxWidth, bodyBaseFont, textColor);
                     currentY += fontSize.bodySize * 0.5; // 行間調整
                 }
             }
