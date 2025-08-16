@@ -326,9 +326,15 @@
             }
 
             blogGrid.innerHTML = posts.map(post => {
-                // microCMSの記事の場合はarticle.htmlを使用、デモデータの場合は個別HTMLを使用
-                const isDemo = post.slug === 'ai-marketing-automation' || post.slug === 'webinar-automation-guide';
-                const href = isDemo ? `/blog/${post.slug}.html` : `/blog/article.html?id=${post.id || post.slug}`;
+                // slugがある場合はslugベースのURL、ない場合はIDベースのURL
+                let href;
+                if (post.slug) {
+                    // slugベースのURL（推奨）
+                    href = `/blog/${post.slug}`;
+                } else {
+                    // IDベースのURL（フォールバック）
+                    href = `/blog/article.html?id=${post.id}`;
+                }
                 
                 // カテゴリーの表示処理を修正
                 const categoryName = post.category ? 

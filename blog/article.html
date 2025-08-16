@@ -382,27 +382,39 @@
         </div>
     </div>
 
+    <!-- URLマッピング -->
+    <script src="/blog/url-mapping.js"></script>
+    
     <script>
         // microCMS設定
         const API_KEY = 'gfvzXw58nnvw3daLCbWS9z22SMKeIhxa1KWw';
         const SERVICE_ID = 'cenleaf';
         const ENDPOINT = 'blogs';
 
-        // URLパラメータから記事IDを取得
+        // URLパラメータから記事IDまたはslugを取得
         function getArticleId() {
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
+            const slug = params.get('slug');
             
-            // パスから記事IDを取得する場合（/blog/article-id.html形式）
-            if (!id) {
-                const path = window.location.pathname;
-                const match = path.match(/\/blog\/([^\/]+)\.html$/);
-                if (match) {
-                    return match[1];
-                }
+            // slugがある場合は、それを優先して返す
+            if (slug) {
+                return { type: 'slug', value: slug };
             }
             
-            return id;
+            // IDがある場合
+            if (id) {
+                return { type: 'id', value: id };
+            }
+            
+            // パスから記事IDを取得する場合（/blog/article-id.html形式）
+            const path = window.location.pathname;
+            const match = path.match(/\/blog\/([^\/]+)\.html$/);
+            if (match && match[1] !== 'article') {
+                return { type: 'slug', value: match[1] };
+            }
+            
+            return null;
         }
 
         // 日付フォーマット
@@ -488,18 +500,24 @@
 
         // microCMSから記事を取得
         async function fetchArticle() {
-            const articleId = getArticleId();
+            const articleInfo = getArticleId();
             
-            if (!articleId) {
-                displayError('記事IDが指定されていません。');
+            if (!articleInfo) {
+                displayError('記事が指定されていません。');
                 return;
             }
             
             try {
-                console.log('記事を取得中...', articleId);
+                console.log('記事を取得中...', articleInfo);
                 
-                // microCMS APIエンドポイント
-                const url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}/${articleId}`;
+                let url;
+                if (articleInfo.type === 'slug') {
+                    // slugで検索する場合
+                    url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?filters=slug[equals]${articleInfo.value}`;
+                } else {
+                    // IDで直接取得する場合
+                    url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}/${articleInfo.value}`;
+                }
                 
                 // APIリクエスト
                 const response = await fetch(url, {
@@ -515,7 +533,18 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                const article = await response.json();
+                let article;
+                if (articleInfo.type === 'slug') {
+                    const data = await response.json();
+                    if (data.contents && data.contents.length > 0) {
+                        article = data.contents[0];
+                    } else {
+                        throw new Error('記事が見つかりません');
+                    }
+                } else {
+                    article = await response.json();
+                }
+                
                 console.log('取得した記事:', article);
                 
                 displayArticle(article);
@@ -526,10 +555,11 @@
             } catch (error) {
                 console.error('エラー:', error);
                 
-                // デモコンテンツを表示
-                if (articleId === 'ai-marketing-automation') {
+                // デモコンテンツを表示（slugベース）
+                const slug = articleInfo.type === 'slug' ? articleInfo.value : articleInfo.value;
+                if (slug === 'ai-marketing-automation') {
                     displayDemoArticle1();
-                } else if (articleId === 'webinar-automation-guide') {
+                } else if (slug === 'webinar-automation-guide') {
                     displayDemoArticle2();
                 } else {
                     displayError('記事の取得に失敗しました。URLをご確認ください。');
@@ -591,7 +621,8 @@
                 // 関連記事を表示（シンプルにタイトルとカテゴリーのみ）
                 let html = '';
                 scoredArticles.forEach(article => {
-                    const href = `/blog/article.html?id=${article.id}`;
+                    // slugがある場合はslugベースのURL、ない場合はIDベースのURL
+                    const href = article.slug ? `/blog/${article.slug}` : `/blog/article.html?id=${article.id}`;
                     
                     html += `
                         <a href="${href}" class="related-article">
