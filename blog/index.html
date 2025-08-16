@@ -333,6 +333,8 @@
         async function loadPosts(category = 'all') {
             const blogGrid = document.getElementById('blog-grid');
             blogGrid.innerHTML = '<div class="loading">記事を読み込み中...</div>';
+            
+            console.log('記事を読み込み中...', { category });
 
             try {
                 let query = `*[_type == "post"`;
@@ -350,15 +352,27 @@
                     "author": author->{ name }
                 }`;
 
-                // Sanity APIを直接呼び出し
+                // Sanity APIを直接呼び出し（CORSヘッダー付き）
                 const encodedQuery = encodeURIComponent(query);
-                const url = `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodedQuery}`;
+                const url = `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodedQuery}`;
                 
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 const posts = data.result;
+                
+                console.log('取得した記事:', posts);
 
-                if (posts.length === 0) {
+                if (!posts || posts.length === 0) {
                     blogGrid.innerHTML = '<p style="text-align: center; color: #888;">記事がまだありません。</p>';
                     return;
                 }
