@@ -1559,7 +1559,7 @@
                     };
                     isFirstSlide = false;
                 }
-                // ## で始まる行（サブタイトル - 2枚目以降用）
+                // ## で始まる行（サブタイトル - 新しいスライドを作成）
                 else if (line.startsWith('## ')) {
                     if (currentSlide) slides.push(currentSlide);
                     currentSlide = {
@@ -1568,13 +1568,16 @@
                     };
                     isFirstSlide = false;
                 }
-                // ### で始まる行（サブサブタイトル - 見出しとして扱う）
+                // ### で始まる行（小見出し - 本文の一部として扱う、改ページしない）
                 else if (line.startsWith('### ')) {
-                    if (currentSlide) slides.push(currentSlide);
-                    currentSlide = {
-                        title: parseMarkdownText(line.substring(4).trim()),
-                        body: ''
-                    };
+                    if (currentSlide) {
+                        const subheading = parseMarkdownText(line.substring(4).trim());
+                        if (currentSlide.body) {
+                            currentSlide.body += '\n\n**' + subheading + '**';
+                        } else {
+                            currentSlide.body = '**' + subheading + '**';
+                        }
+                    }
                 }
                 // 本文に追加（空行も改行として保持）
                 else if (currentSlide) {
