@@ -236,10 +236,12 @@
             const blogGrid = document.getElementById('blog-grid');
             
             try {
-                console.log('microCMSから記事を取得中...');
+                console.log('🚀 microCMSから記事を取得開始...');
+                console.log('API設定:', { SERVICE_ID, ENDPOINT, API_KEY: API_KEY.substring(0, 10) + '...' });
                 
                 // microCMS APIエンドポイント
                 const url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}`;
+                console.log('🔗 リクエストURL:', url);
                 
                 // APIリクエスト
                 const response = await fetch(url, {
@@ -248,30 +250,39 @@
                     }
                 });
 
+                console.log('📡 レスポンス状況:', response.status, response.statusText);
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
                 const data = await response.json();
-                console.log('取得したデータ:', data);
+                console.log('✅ 取得したデータ:', data);
+                console.log('📊 記事数:', data.totalCount);
+                console.log('📝 コンテンツ数:', data.contents ? data.contents.length : 0);
 
                 if (data.contents && data.contents.length > 0) {
+                    console.log('🎉 microCMSの記事を表示します');
+                    console.log('記事タイトル一覧:', data.contents.map(post => post.title));
                     // microCMSの記事を表示
                     displayPosts(data.contents);
                 } else {
                     // 記事がない場合はデモデータを表示
-                    console.log('記事がありません。デモデータを表示します。');
+                    console.warn('⚠️ 記事がありません。デモデータを表示します。');
                     blogGrid.innerHTML = '<div class="error">まだ記事が投稿されていません。<br>microCMS管理画面から記事を投稿してください。</div>';
                     setTimeout(() => {
+                        console.log('🔄 デモデータを表示中...');
                         displayPosts(demoData);
                     }, 2000);
                 }
 
             } catch (error) {
-                console.error('エラー:', error);
+                console.error('❌ エラーが発生:', error);
+                console.error('エラー詳細:', error.message);
                 // エラー時はデモデータを表示
                 blogGrid.innerHTML = '<div class="error">記事の取得に失敗しました。デモデータを表示します。</div>';
                 setTimeout(() => {
+                    console.log('🔄 エラー時のデモデータを表示中...');
                     displayPosts(demoData);
                 }, 2000);
             }
