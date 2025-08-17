@@ -79,40 +79,44 @@
             cursor: auto;
         }
         
-        /* 絵文字レイン */
-        .emoji-rain {
+        /* 光の粒子エフェクト */
+        .light-particle {
             position: fixed;
-            top: -100px;
-            font-size: 30px;
-            z-index: 9999;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(0, 188, 212, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
             pointer-events: none;
-            animation: emojifall linear;
+            opacity: 0;
+            animation: lightFloat 15s infinite;
         }
         
-        @keyframes emojifall {
-            to {
-                transform: translateY(calc(100vh + 100px)) rotate(360deg);
-            }
-        }
-        
-        /* 紙吹雪エフェクト */
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            z-index: 9999;
-            pointer-events: none;
-        }
-        
-        @keyframes confettiFall {
-            0% {
-                transform: translateY(0) rotateZ(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotateZ(720deg);
+        @keyframes lightFloat {
+            0%, 100% {
                 opacity: 0;
+                transform: translateY(100vh) scale(0);
             }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(10vh) scale(1);
+            }
+        }
+        
+        /* マウス追従グロウ */
+        .mouse-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.05) 0%, transparent 50%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            transition: transform 0.2s ease-out;
+            transform: translate(-50%, -50%);
         }
         
         /* 流体背景 */
@@ -185,13 +189,8 @@
         }
         
         .logo:hover {
-            animation: rainbowText 2s linear infinite;
-            transform: scale(1.1) rotate(-5deg);
-        }
-        
-        @keyframes rainbowText {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
+            transform: scale(1.05) translateY(-2px);
+            filter: drop-shadow(0 5px 15px rgba(0, 102, 255, 0.4));
         }
         
         @keyframes logoGlow {
@@ -828,7 +827,7 @@
                 align-items: center;
             }
             
-            .emoji-rain {
+            .light-particle {
                 display: none;
             }
         }
@@ -837,6 +836,7 @@
 <body>
     <!-- 遊び心要素のコンテナ -->
     <div id="fun-elements"></div>
+    <div class="mouse-glow" id="mouseGlow"></div>
     
     <!-- 流体背景 -->
     <canvas id="fluid-background"></canvas>
@@ -1055,73 +1055,94 @@
     </footer>
     
     <script>
-        // 絵文字レイン機能
-        const emojis = ['🚀', '✨', '💫', '⭐', '🌟', '💎', '🎯', '🔥', '💡', '🎨', '🎪', '🎭', '🎪', '🦄', '🌈'];
-        
-        function createEmojiRain() {
-            const emoji = document.createElement('div');
-            emoji.className = 'emoji-rain';
-            emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
-            emoji.style.left = Math.random() * window.innerWidth + 'px';
-            emoji.style.animationDuration = Math.random() * 3 + 2 + 's';
-            document.body.appendChild(emoji);
-            
-            setTimeout(() => {
-                emoji.remove();
-            }, 5000);
-        }
-        
-        // 5秒ごとにランダムで絵文字を降らせる
-        setInterval(createEmojiRain, 500);
-        
-        // 紙吹雪エフェクト
-        function createConfetti(x, y) {
-            const colors = ['#0066ff', '#00bcd4', '#7c4dff', '#ff0080', '#00ff41'];
-            
-            for (let i = 0; i < 30; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = x + 'px';
-                confetti.style.top = y + 'px';
-                confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s ease-out`;
-                document.body.appendChild(confetti);
-                
-                // ランダムな方向に飛ばす
-                const angle = Math.random() * Math.PI * 2;
-                const velocity = Math.random() * 50 + 50;
-                confetti.style.transform = `translate(${Math.cos(angle) * velocity}px, ${Math.sin(angle) * velocity}px)`;
-                
-                setTimeout(() => {
-                    confetti.remove();
-                }, 3000);
+        // 光の粒子エフェクト（控えめ）
+        function createLightParticles() {
+            for (let i = 0; i < 5; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'light-particle';
+                particle.style.left = Math.random() * window.innerWidth + 'px';
+                particle.style.animationDelay = i * 3 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                document.getElementById('fun-elements').appendChild(particle);
             }
         }
         
-        // ボタンクリックで紙吹雪
+        // ページ読み込み時に一度だけ実行
+        window.addEventListener('load', createLightParticles);
+        
+        // リップルエフェクト（クリック時）
+        function createRipple(x, y) {
+            const ripple = document.createElement('div');
+            ripple.style.position = 'fixed';
+            ripple.style.width = '20px';
+            ripple.style.height = '20px';
+            ripple.style.background = 'radial-gradient(circle, rgba(0, 102, 255, 0.3) 0%, transparent 70%)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.left = (x - 10) + 'px';
+            ripple.style.top = (y - 10) + 'px';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.opacity = '1';
+            ripple.style.transition = 'transform 0.8s ease-out, opacity 0.8s ease-out';
+            ripple.style.zIndex = '9999';
+            
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.style.transform = 'scale(10)';
+                ripple.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 800);
+        }
+        
+        // ボタンクリックでリップルエフェクト
         document.querySelectorAll('.interactive-button').forEach(button => {
             button.addEventListener('click', (e) => {
-                createConfetti(e.clientX, e.clientY);
+                createRipple(e.clientX, e.clientY);
                 
-                // ボタンが踊る
-                button.style.animation = 'buttonDance 0.5s ease';
+                // ボタンのパルスアニメーション
+                button.style.animation = 'buttonPulse 0.4s ease';
                 setTimeout(() => {
                     button.style.animation = '';
-                }, 500);
+                }, 400);
             });
         });
         
-        // ボタンダンスアニメーション
+        // ボタンパルスアニメーション
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes buttonDance {
-                0%, 100% { transform: scale(1) rotate(0deg); }
-                25% { transform: scale(1.1) rotate(-10deg); }
-                50% { transform: scale(1.2) rotate(10deg); }
-                75% { transform: scale(1.1) rotate(-10deg); }
+            @keyframes buttonPulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
             }
         `;
         document.head.appendChild(style);
+        
+        // マウス追従グロウエフェクト
+        const mouseGlow = document.getElementById('mouseGlow');
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        function animateMouseGlow() {
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+            
+            mouseGlow.style.left = currentX + 'px';
+            mouseGlow.style.top = currentY + 'px';
+            
+            requestAnimationFrame(animateMouseGlow);
+        }
+        animateMouseGlow();
         
         // 高度な3D背景
         const scene = new THREE.Scene();
