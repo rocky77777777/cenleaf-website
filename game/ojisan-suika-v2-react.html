@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>おじさんスイカゲーム v2.0 - React版</title>
+    
+    <!-- PWA対応 -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- React & Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Matter.js (物理エンジン) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    
+    <!-- Confetti (パーティクルエフェクト) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            overflow: hidden;
+        }
+        
+        #root {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .game-container {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .high-score {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .game-canvas {
+            width: 100%;
+            border: 4px solid #333;
+            border-radius: 15px;
+            background: linear-gradient(to bottom, #f0f0f0, #fafafa);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .game-canvas:active {
+            transform: scale(0.98);
+        }
+        
+        .next-ojisan {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .next-ojisan-preview {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .game-over-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            animation: bounceIn 0.5s;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .modal-score {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #333;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        @media (max-width: 600px) {
+            .game-container {
+                border-radius: 0;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .game-header {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback } = React;
+        
+        // おじさんの種類と進化
+        const OJISAN_TYPES = [
+            { emoji: '👶', size: 20, level: 1, name: 'ベビー' },
+            { emoji: '👦', size: 25, level: 2, name: 'キッズ' },
+            { emoji: '🧑', size: 30, level: 3, name: 'ヤング' },
+            { emoji: '👨', size: 35, level: 4, name: 'アダルト' },
+            { emoji: '🧔', size: 40, level: 5, name: 'ヒゲ' },
+            { emoji: '👨‍🦰', size: 45, level: 6, name: 'レッド' },
+            { emoji: '👨‍🦱', size: 50, level: 7, name: 'カーリー' },
+            { emoji: '👨‍🦳', size: 55, level: 8, name: 'グレイ' },
+            { emoji: '👨‍🦲', size: 60, level: 9, name: 'ボールド' },
+            { emoji: '👴', size: 65, level: 10, name: 'シニア' },
+            { emoji: '🎅', size: 75, level: 11, name: 'サンタ' }
+        ];
+        
+        // ゲームコンポーネント
+        function OjisanSuikaGame() {
+            const canvasRef = useRef(null);
+            const engineRef = useRef(null);
+            const [score, setScore] = useState(0);
+            const [highScore, setHighScore] = useState(() => {
+                return parseInt(localStorage.getItem('ojisanHighScore') || '0');
+            });
+            const [nextOjisan, setNextOjisan] = useState(0);
+            const [gameOver, setGameOver] = useState(false);
+            const [ojisans, setOjisans] = useState([]);
+            const [isPaused, setIsPaused] = useState(false);
+            const [combo, setCombo] = useState(0);
+            
+            // 物理エンジン初期化
+            useEffect(() => {
+                if (!canvasRef.current) return;
+                
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                
+                // Matter.js設定
+                const Engine = Matter.Engine;
+                const World = Matter.World;
+                const Bodies = Matter.Bodies;
+                const Body = Matter.Body;
+                const Events = Matter.Events;
+                
+                const engine = Engine.create();
+                engine.world.gravity.y = 1;
+                engineRef.current = engine;
+                
+                // 壁を作成
+                const walls = [
+                    Bodies.rectangle(200, 590, 400, 20, { isStatic: true }), // 床
+                    Bodies.rectangle(10, 300, 20, 600, { isStatic: true }),  // 左壁
+                    Bodies.rectangle(390, 300, 20, 600, { isStatic: true })  // 右壁
+                ];
+                World.add(engine.world, walls);
+                
+                // ゲームループ
+                const gameLoop = () => {
+                    if (!isPaused && !gameOver) {
+                        Engine.update(engine, 1000 / 60);
+                        render();
+                    }
+                    requestAnimationFrame(gameLoop);
+                };
+                
+                // レンダリング
+                const render = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // グラデーション背景
+                    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                    gradient.addColorStop(0, '#f0f0f0');
+                    gradient.addColorStop(1, '#fafafa');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // おじさんを描画
+                    ojisans.forEach(ojisan => {
+                        ctx.save();
+                        ctx.translate(ojisan.position.x, ojisan.position.y);
+                        ctx.rotate(ojisan.angle);
+                        ctx.font = `${ojisan.size}px Arial`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(ojisan.emoji, 0, 0);
+                        ctx.restore();
+                    });
+                    
+                    // 壁を描画
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(20, 0);
+                    ctx.lineTo(20, 580);
+                    ctx.lineTo(380, 580);
+                    ctx.lineTo(380, 0);
+                    ctx.stroke();
+                    
+                    // 危険ライン
+                    ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([10, 5]);
+                    ctx.beginPath();
+                    ctx.moveTo(20, 100);
+                    ctx.lineTo(380, 100);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                };
+                
+                gameLoop();
+                
+                // 衝突検出
+                Events.on(engine, 'collisionStart', (event) => {
+                    event.pairs.forEach(pair => {
+                        const bodyA = pair.bodyA;
+                        const bodyB = pair.bodyB;
+                        
+                        if (bodyA.ojisan && bodyB.ojisan && bodyA.ojisan.level === bodyB.ojisan.level) {
+                            // 同じレベルのおじさんが衝突
+                            mergeOjisans(bodyA, bodyB);
+                        }
+                    });
+                });
+                
+                return () => {
+                    World.clear(engine.world);
+                    Engine.clear(engine);
+                };
+            }, [isPaused, gameOver, ojisans]);
+            
+            // おじさんを落とす
+            const dropOjisan = useCallback((x) => {
+                if (gameOver || isPaused) return;
+                
+                const ojisanType = OJISAN_TYPES[nextOjisan];
+                const body = Matter.Bodies.circle(x, 50, ojisanType.size / 2, {
+                    restitution: 0.4,
+                    friction: 0.3,
+                    density: 0.001
+                });
+                
+                body.ojisan = ojisanType;
+                Matter.World.add(engineRef.current.world, body);
+                
+                setOjisans(prev => [...prev, body]);
+                setNextOjisan(Math.floor(Math.random() * 5));
+                
+                // ゲームオーバーチェック
+                setTimeout(() => {
+                    if (body.position.y < 120) {
+                        endGame();
+                    }
+                }, 2000);
+            }, [gameOver, isPaused, nextOjisan]);
+            
+            // おじさんを合体
+            const mergeOjisans = (bodyA, bodyB) => {
+                const nextLevel = bodyA.ojisan.level + 1;
+                if (nextLevel >= OJISAN_TYPES.length) return;
+                
+                const newOjisan = OJISAN_TYPES[nextLevel - 1];
+                const newBody = Matter.Bodies.circle(
+                    (bodyA.position.x + bodyB.position.x) / 2,
+                    (bodyA.position.y + bodyB.position.y) / 2,
+                    newOjisan.size / 2,
+                    {
+                        restitution: 0.4,
+                        friction: 0.3,
+                        density: 0.001
+                    }
+                );
+                
+                newBody.ojisan = newOjisan;
+                
+                // エフェクト
+                confetti({
+                    particleCount: 30,
+                    spread: 70,
+                    origin: {
+                        x: bodyA.position.x / 400,
+                        y: bodyA.position.y / 600
+                    }
+                });
+                
+                // スコア加算
+                const points = newOjisan.level * 100;
+                setScore(prev => prev + points);
+                setCombo(prev => prev + 1);
+                
+                // 古いおじさんを削除
+                Matter.World.remove(engineRef.current.world, bodyA);
+                Matter.World.remove(engineRef.current.world, bodyB);
+                Matter.World.add(engineRef.current.world, newBody);
+                
+                setOjisans(prev => {
+                    const filtered = prev.filter(o => o !== bodyA && o !== bodyB);
+                    return [...filtered, newBody];
+                });
+            };
+            
+            // ゲーム終了
+            const endGame = () => {
+                setGameOver(true);
+                if (score > highScore) {
+                    setHighScore(score);
+                    localStorage.setItem('ojisanHighScore', score.toString());
+                    
+                    // 大量の紙吹雪
+                    confetti({
+                        particleCount: 100,
+                        spread: 160,
+                        origin: { y: 0.6 }
+                    });
+                }
+            };
+            
+            // リセット
+            const resetGame = () => {
+                setScore(0);
+                setGameOver(false);
+                setOjisans([]);
+                setCombo(0);
+                setNextOjisan(Math.floor(Math.random() * 5));
+                
+                if (engineRef.current) {
+                    Matter.World.clear(engineRef.current.world);
+                    Matter.Engine.clear(engineRef.current);
+                }
+            };
+            
+            // SNSシェア
+            const shareToTwitter = () => {
+                const text = `おじさんスイカゲームで${score}点を獲得しました！🎮\n`;
+                const url = 'https://cenleaf.com/game/ojisan-suika-v2.html';
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`, '_blank');
+            };
+            
+            const shareToLine = () => {
+                const text = `おじさんスイカゲームで${score}点を獲得しました！🎮`;
+                window.open(`https://line.me/R/msg/text/?${encodeURIComponent(text)}`, '_blank');
+            };
+            
+            // キャンバスクリック処理
+            const handleCanvasClick = (e) => {
+                const rect = canvasRef.current.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                dropOjisan(x);
+            };
+            
+            // タッチ処理
+            const handleTouch = (e) => {
+                e.preventDefault();
+                const rect = canvasRef.current.getBoundingClientRect();
+                const touch = e.touches[0];
+                const x = touch.clientX - rect.left;
+                dropOjisan(x);
+            };
+            
+            return (
+                <div className="game-container">
+                    <div className="game-header">
+                        <div>
+                            <div className="score">スコア: {score.toLocaleString()}</div>
+                            <div className="high-score">ハイスコア: {highScore.toLocaleString()}</div>
+                        </div>
+                        {combo > 1 && (
+                            <div className="combo" style={{fontSize: '20px', color: '#ffeb3b'}}>
+                                {combo}コンボ! 🔥
+                            </div>
+                        )}
+                    </div>
+                    
+                    <canvas
+                        ref={canvasRef}
+                        className="game-canvas"
+                        width={400}
+                        height={600}
+                        onClick={handleCanvasClick}
+                        onTouchStart={handleTouch}
+                    />
+                    
+                    <div className="next-ojisan">
+                        <div style={{fontSize: '14px', color: '#666', marginBottom: '5px'}}>次のおじさん</div>
+                        <div className="next-ojisan-preview">
+                            {OJISAN_TYPES[nextOjisan].emoji}
+                        </div>
+                    </div>
+                    
+                    <div className="controls">
+                        <button className="btn btn-secondary" onClick={() => setIsPaused(!isPaused)}>
+                            {isPaused ? '▶️ 再開' : '⏸️ 一時停止'}
+                        </button>
+                        <button className="btn btn-success" onClick={resetGame}>
+                            🔄 リセット
+                        </button>
+                    </div>
+                    
+                    {gameOver && (
+                        <div className="game-over-modal">
+                            <div className="modal-content">
+                                <div className="modal-title">ゲームオーバー！</div>
+                                <div className="modal-score">{score.toLocaleString()}点</div>
+                                {score > highScore && (
+                                    <div style={{color: '#ff6b6b', fontSize: '20px', marginBottom: '10px'}}>
+                                        🎉 新記録達成！ 🎉
+                                    </div>
+                                )}
+                                <div className="share-buttons">
+                                    <button className="btn" onClick={shareToTwitter}>
+                                        🐦 Twitter
+                                    </button>
+                                    <button className="btn btn-success" onClick={shareToLine}>
+                                        💚 LINE
+                                    </button>
+                                </div>
+                                <button 
+                                    className="btn btn-secondary" 
+                                    onClick={resetGame}
+                                    style={{marginTop: '10px', width: '100%'}}
+                                >
+                                    もう一度プレイ
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+        
+        // アプリをレンダリング
+        ReactDOM.render(<OjisanSuikaGame />, document.getElementById('root'));
+    </script>
+</body>
+</html>
