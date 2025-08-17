@@ -212,18 +212,21 @@
         }
         
         .parallax-layer-1 {
-            background: radial-gradient(circle at 30% 50%, rgba(0, 102, 255, 0.1) 0%, transparent 50%);
+            background: radial-gradient(circle at 30% 50%, rgba(0, 102, 255, 0.3) 0%, transparent 70%);
             transition: transform 0.1s ease-out;
+            will-change: transform;
         }
         
         .parallax-layer-2 {
-            background: radial-gradient(circle at 70% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            background: radial-gradient(circle at 70% 50%, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
             transition: transform 0.15s ease-out;
+            will-change: transform;
         }
         
         .parallax-layer-3 {
-            background: radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.05) 0%, transparent 60%);
+            background: radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.2) 0%, transparent 70%);
             transition: transform 0.2s ease-out;
+            will-change: transform;
         }
         
         /* マウス追従グロー */
@@ -231,12 +234,14 @@
             position: absolute;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(0, 102, 255, 0.15) 0%, transparent 50%);
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.3) 0%, transparent 60%);
             border-radius: 50%;
             pointer-events: none;
             transition: transform 0.2s ease-out;
-            opacity: 0.5;
-            filter: blur(40px);
+            opacity: 0.7;
+            filter: blur(60px);
+            mix-blend-mode: screen;
+            will-change: transform;
         }
         
         /* 浮遊パーティクル */
@@ -960,52 +965,70 @@
         });
         
         // パララックス背景効果
-        const hero = document.getElementById('hero');
-        const parallaxLayers = document.querySelectorAll('.parallax-layer');
-        const mouseGlow = document.querySelector('.mouse-glow');
-        
-        let mouseX = 0;
-        let mouseY = 0;
-        let currentX = 0;
-        let currentY = 0;
-        
-        hero.addEventListener('mousemove', (e) => {
-            const rect = hero.getBoundingClientRect();
-            mouseX = e.clientX - rect.left;
-            mouseY = e.clientY - rect.top;
+        document.addEventListener('DOMContentLoaded', () => {
+            const hero = document.getElementById('hero');
+            const parallaxLayers = document.querySelectorAll('.parallax-layer');
+            const mouseGlow = document.querySelector('.mouse-glow');
             
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const percentX = (mouseX - centerX) / centerX;
-            const percentY = (mouseY - centerY) / centerY;
-            
-            // パララックスレイヤーを動かす
-            parallaxLayers.forEach(layer => {
-                const speed = layer.dataset.speed || 0.5;
-                const x = percentX * 50 * speed;
-                const y = percentY * 50 * speed;
-                layer.style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
-            });
-        });
-        
-        // マウスグローのスムースな追従
-        function animateMouseGlow() {
-            currentX += (mouseX - currentX) * 0.1;
-            currentY += (mouseY - currentY) * 0.1;
-            
-            if (mouseGlow) {
-                mouseGlow.style.transform = `translate(${currentX - 300}px, ${currentY - 300}px)`;
+            if (!hero || !parallaxLayers.length) {
+                console.log('Hero elements not found');
+                return;
             }
             
-            requestAnimationFrame(animateMouseGlow);
-        }
-        animateMouseGlow();
-        
-        // ヒーローを離れたらリセット
-        hero.addEventListener('mouseleave', () => {
-            parallaxLayers.forEach(layer => {
-                layer.style.transform = 'translate(0, 0) scale(1.1)';
+            let mouseX = 0;
+            let mouseY = 0;
+            let currentX = 0;
+            let currentY = 0;
+            let animationId = null;
+            
+            // マウス移動イベント
+            hero.addEventListener('mousemove', (e) => {
+                const rect = hero.getBoundingClientRect();
+                mouseX = e.clientX - rect.left;
+                mouseY = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const percentX = (mouseX - centerX) / centerX;
+                const percentY = (mouseY - centerY) / centerY;
+                
+                // パララックスレイヤーを動かす
+                parallaxLayers.forEach((layer, index) => {
+                    const speed = parseFloat(layer.dataset.speed) || (0.5 - index * 0.2);
+                    const x = percentX * 100 * speed;
+                    const y = percentY * 100 * speed;
+                    layer.style.transform = `translate(${x}px, ${y}px) scale(1.2)`;
+                });
+            });
+            
+            // マウスグローのスムースな追従
+            function animateMouseGlow() {
+                currentX += (mouseX - currentX) * 0.1;
+                currentY += (mouseY - currentY) * 0.1;
+                
+                if (mouseGlow) {
+                    mouseGlow.style.transform = `translate(${currentX - 300}px, ${currentY - 300}px)`;
+                }
+                
+                animationId = requestAnimationFrame(animateMouseGlow);
+            }
+            animateMouseGlow();
+            
+            // ヒーローを離れたらリセット
+            hero.addEventListener('mouseleave', () => {
+                parallaxLayers.forEach(layer => {
+                    layer.style.transform = 'translate(0, 0) scale(1.2)';
+                });
+                mouseX = hero.offsetWidth / 2;
+                mouseY = hero.offsetHeight / 2;
+            });
+            
+            // クリーンアップ
+            window.addEventListener('beforeunload', () => {
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
             });
         });
         
