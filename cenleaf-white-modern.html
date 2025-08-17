@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENLEAF - AI×自動化コンサルティング | 須崎純一</title>
+    <meta name="description" content="オートウェビナーとAIで個人・小規模ビジネスの「集客〜販売」を自動運転化">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;300;400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-blue: #0066ff;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-cyan: #06b6d4;
+            --bg-white: #ffffff;
+            --bg-gray: #fafafa;
+            --text-dark: #1a1a1a;
+            --text-gray: #666666;
+            --border-light: #e5e7eb;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* ノイズオーバーレイ（薄く） */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: 1;
+            pointer-events: none;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj4KPGZpbHRlciBpZD0ibm9pc2UiPgo8ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz4KPC9maWx0ZXI+CjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjEiLz4KPC9zdmc+');
+        }
+        
+        /* WebGLキャンバス */
+        #webgl {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+        
+        /* グラデーション背景 */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, 
+                rgba(0, 102, 255, 0.05) 0%, 
+                rgba(139, 92, 246, 0.05) 50%, 
+                rgba(236, 72, 153, 0.05) 100%);
+            animation: gradientShift 20s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* メインコンテナ */
+        .main-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* ナビゲーション */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 50px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            letter-spacing: 4px;
+            color: var(--text-dark);
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+            color: var(--primary-blue);
+        }
+        
+        .logo::after {
+            content: 'CENLEAF';
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            color: var(--accent-purple);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .logo:hover::after {
+            opacity: 0.5;
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+        
+        .nav-menu a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 2px;
+            font-weight: 500;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary-blue);
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        /* ヒーローセクション */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(180deg, var(--bg-white) 0%, var(--bg-gray) 100%);
+        }
+        
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(80px, 15vw, 180px);
+            line-height: 0.8;
+            letter-spacing: -5px;
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 50%, var(--accent-pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .hero-subtitle {
+            font-size: 18px;
+            letter-spacing: 8px;
+            margin-top: 30px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* CTA ボタン */
+        .cta-button {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 20px 60px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.2);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 102, 255, 0.3);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* セクション */
+        .section {
+            min-height: 100vh;
+            padding: 100px 50px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section:nth-child(even) {
+            background: var(--bg-gray);
+        }
+        
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(60px, 8vw, 100px);
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* グリッド */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .grid-item {
+            background: white;
+            border: 1px solid var(--border-light);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .grid-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-purple) 50%, var(--accent-pink) 100%);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .grid-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .grid-item:hover::before {
+            transform: translateX(0);
+        }
+        
+        .grid-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 80px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.3;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+        
+        .grid-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+        
+        .grid-description {
+            color: var(--text-gray);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        
+        /* About セクション */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .about-name {
+            font-size: 36px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .about-text {
+            font-size: 20px;
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+        }
+        
+        .about-subtext {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-gray);
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 60px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-top: 10px;
+        }
+        
+        /* フッター */
+        .footer {
+            padding: 60px 50px;
+            background: var(--text-dark);
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+        }
+        
+        /* スクロールインジケーター */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        /* フローティングシェイプ */
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .shape-1 {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .shape-2 {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+        
+        .shape-3 {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 30%;
+            animation-delay: 10s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(100px, -100px) rotate(120deg);
+            }
+            66% {
+                transform: translate(-100px, 100px) rotate(240deg);
+            }
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: clamp(60px, 12vw, 100px);
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 30px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ノイズオーバーレイ -->
+    <div class="noise-overlay"></div>
+    
+    <!-- グラデーション背景 -->
+    <div class="gradient-bg"></div>
+    
+    <!-- WebGLキャンバス -->
+    <canvas id="webgl"></canvas>
+    
+    <!-- フローティングシェイプ -->
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    
+    <!-- メインコンテナ -->
+    <div class="main-container">
+        <!-- ナビゲーション -->
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="#" class="logo">CENLEAF</a>
+                <ul class="nav-menu">
+                    <li><a href="#services">SERVICES</a></li>
+                    <li><a href="#about">ABOUT</a></li>
+                    <li><a href="#contact">CONTACT</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- ヒーロー -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">AI×AUTOMATION</h1>
+                <p class="hero-subtitle">集客から販売まで完全自動化</p>
+                <a href="#contact" class="cta-button">無料相談を予約</a>
+            </div>
+            <div class="scroll-indicator">SCROLL DOWN</div>
+        </section>
+        
+        <!-- サービスセクション -->
+        <section class="section" id="services">
+            <h2 class="section-title">SERVICES</h2>
+            <div class="grid">
+                <div class="grid-item">
+                    <div class="grid-number">01</div>
+                    <h3 class="grid-title">オートウェビナー構築</h3>
+                    <p class="grid-description">
+                        24時間365日稼働する自動セミナーシステムを構築。
+                        UTAGEやエキスパを活用し、月商100万→1000万円への成長を実現。
+                    </p>
+                </div>
+                
+                <div class="grid-item">
+                    <div class="grid-number">02</div>
+                    <h3 class="grid-title">AI導入支援</h3>
+                    <p class="grid-description">
+                        ChatGPT、Claude、Geminiを業務に統合。
+                        コンテンツ制作から顧客対応まで、AIで効率化を実現。
+                    </p>
+                </div>
+                
+                <div class="grid-item">
+                    <div class="grid-number">03</div>
+                    <h3 class="grid-title">業務自動化フロー</h3>
+                    <p class="grid-description">
+                        Zapier、Make、n8nで複雑な業務を完全自動化。
+                        集客→育成→販売→フォローまで、すべてを仕組み化。
+                    </p>
+                </div>
+                
+                <div class="grid-item">
+                    <div class="grid-number">04</div>
+                    <h3 class="grid-title">高単価商品設計</h3>
+                    <p class="grid-description">
+                        30万〜100万円の高単価商品を設計・販売支援。
+                        講師業・士業・コンサルの成約率を飛躍的に向上。
+                    </p>
+                </div>
+                
+                <div class="grid-item">
+                    <div class="grid-number">05</div>
+                    <h3 class="grid-title">コンテンツマーケティング</h3>
+                    <p class="grid-description">
+                        ブログ、SNS、動画コンテンツを戦略的に展開。
+                        集客から育成まで、コンテンツで自動化を実現。
+                    </p>
+                </div>
+                
+                <div class="grid-item">
+                    <div class="grid-number">06</div>
+                    <h3 class="grid-title">データ分析・改善</h3>
+                    <p class="grid-description">
+                        成約率、LTV、ROIをリアルタイムで可視化。
+                        データに基づいた継続的な改善を支援。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Aboutセクション -->
+        <section class="section" id="about">
+            <h2 class="section-title">ABOUT</h2>
+            <div class="about-content">
+                <h3 class="about-name">須崎 純一</h3>
+                <p class="about-text">
+                    「いつかやりたいを今やろう」をモットーに、
+                    個人・小規模ビジネスの「集客〜販売」を自動運転化。
+                </p>
+                <p class="about-subtext">
+                    元NTT系ベンチャー出身。4年間の全国ホテル暮らしで47都道府県制覇。<br>
+                    月収1.4万円のコーチを3ヶ月で100万円超へ導いた実績を持つ。<br>
+                    オートウェビナーとAIを組み合わせ、働く時間を減らしながら<br>
+                    売上を伸ばす仕組みづくりを支援しています。
+                </p>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">導入実績</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">47</div>
+                        <div class="stat-label">都道府県制覇</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">4年</div>
+                        <div class="stat-label">ホテル暮らし</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- フッター -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    © 2024 CENLEAF. All rights reserved.
+                </div>
+                <div class="footer-links">
+                    <a href="https://twitter.com/suzakijunichi" target="_blank">Twitter</a>
+                    <a href="https://www.instagram.com/cenleaf/" target="_blank">Instagram</a>
+                    <a href="https://note.com/suzakijun1" target="_blank">note</a>
+                    <a href="https://suzakijunichi.com" target="_blank">Blog</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Three.js セットアップ（軽量版）
+        const canvas = document.getElementById('webgl');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            alpha: true,
+            antialias: false // パフォーマンス向上のため無効化
+        });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 最大2に制限
+        
+        // パーティクル（数を減らして軽量化）
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 500; // 3000から500に削減
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 10;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.005,
+            color: 0x0066ff,
+            transparent: true,
+            opacity: 0.5
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // 単一のワイヤーフレームトーラス
+        const torusGeometry = new THREE.TorusKnotGeometry(1, 0.3, 50, 8); // 詳細度を下げる
+        const torusMaterial = new THREE.MeshBasicMaterial({
+            color: 0x8b5cf6,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.2
+        });
+        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+        scene.add(torus);
+        
+        camera.position.z = 5;
+        
+        // シンプルなアニメーション
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // パーティクル回転（ゆっくり）
+            particlesMesh.rotation.y += 0.001;
+            
+            // トーラス回転（ゆっくり）
+            torus.rotation.x += 0.002;
+            torus.rotation.y += 0.001;
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // リサイズ対応
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // GSAP スクロールアニメーション
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // グリッドアイテムのアニメーション
+        gsap.utils.toArray('.grid-item').forEach((item, i) => {
+            gsap.from(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.1,
+                ease: 'power2.out'
+            });
+        });
+        
+        // セクションタイトルのアニメーション
+        gsap.utils.toArray('.section-title').forEach(title => {
+            gsap.from(title, {
+                scrollTrigger: {
+                    trigger: title,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                scale: 0.8,
+                opacity: 0,
+                duration: 1,
+                ease: 'power2.out'
+            });
+        });
+        
+        // スクロールインジケーターを非表示
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollIndicator) {
+                if (window.scrollY > 100) {
+                    scrollIndicator.style.opacity = '0';
+                } else {
+                    scrollIndicator.style.opacity = '1';
+                }
+            }
+        });
+        
+        // スムーススクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
