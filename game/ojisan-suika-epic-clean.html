@@ -187,6 +187,148 @@
             margin-top: 15px;
         }
         
+        #rulesModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        #rulesContent {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        #rulesClose {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            padding: 5px;
+        }
+        
+        #rulesContent h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        #rulesContent h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 18px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+        
+        #rulesContent p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #444;
+        }
+        
+        #rulesContent ul {
+            margin: 10px 0 15px 20px;
+        }
+        
+        #rulesContent li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            color: #555;
+        }
+        
+        .evolutionChain {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 18px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .powerUpGrid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .powerUpCard {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        
+        .powerUpCard .icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .powerUpCard .name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        
+        .powerUpCard .desc {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .tipBox {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .tipBox h4 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 600px) {
+            #rulesContent {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            #rulesContent h2 {
+                font-size: 20px;
+            }
+            
+            #rulesContent h3 {
+                font-size: 16px;
+            }
+            
+            .powerUpGrid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         .btn {
             flex: 1;
             padding: 12px;
@@ -351,6 +493,7 @@
         </div>
         
         <div id="controls">
+            <button class="btn" onclick="showRules()">❓ ルール</button>
             <button class="btn" onclick="resetGame()">🔄 リセット</button>
             <button class="btn" id="musicBtn" onclick="toggleMusic()">🎵 音楽</button>
             <button class="btn" onclick="shareScore()">📤 シェア</button>
@@ -365,6 +508,83 @@
             <button class="btn" onclick="resetGame()" style="width: 100%;">
                 ⚡ RESTART ⚡
             </button>
+        </div>
+    </div>
+    
+    <div id="rulesModal">
+        <div id="rulesContent">
+            <button id="rulesClose" onclick="hideRules()">×</button>
+            
+            <h2>🎮 おじさんスイカゲーム EPIC 🎮</h2>
+            
+            <h3>📜 基本ルール</h3>
+            <p>スイカゲームのルールに基づいた、おじさん版落下パズルゲームです。</p>
+            <ul>
+                <li><strong>同じレベルのおじさん同士が合体</strong>すると、次のレベルに進化します</li>
+                <li><strong>赤い危険ライン</strong>を超えたおじさんが静止するとゲームオーバー</li>
+                <li><strong>高いレベルほど高得点</strong>！最高レベルのレジェンド（🎅）を目指そう</li>
+                <li><strong>コンボ</strong>で得点倍率がアップ！</li>
+            </ul>
+            
+            <h3>🎯 操作方法</h3>
+            <ul>
+                <li><strong>PC</strong>：マウスで位置を決めて、クリックで落下</li>
+                <li><strong>スマホ</strong>：タップした位置におじさんが落下</li>
+                <li><strong>音楽切り替え</strong>：🎵音楽ボタンでON/OFF</li>
+            </ul>
+            
+            <h3>👴 おじさん進化チェーン</h3>
+            <div class="evolutionChain">
+                👶 → 👦 → 🧒 → 👨 → 🧔 → 👨‍🦰 → 👨‍🦱 → 👨‍🦳 → 👨‍🦲 → 👴 → 🎅
+                <br><small>ベビー → キッズ → ジュニア → ヤング → ビアード → レッド → カーリー → シルバー → ボールド → マスター → <strong>レジェンド</strong></small>
+            </div>
+            
+            <h3>⚡ パワーアップ</h3>
+            <div class="powerUpGrid">
+                <div class="powerUpCard">
+                    <div class="icon">❄️</div>
+                    <div class="name">時間停止</div>
+                    <div class="desc">2.5秒間おじさんが止まる</div>
+                </div>
+                <div class="powerUpCard">
+                    <div class="icon">🌍</div>
+                    <div class="name">重力反転</div>
+                    <div class="desc">4秒間軽い重力になる</div>
+                </div>
+                <div class="powerUpCard">
+                    <div class="icon">🧲</div>
+                    <div class="name">磁力発動</div>
+                    <div class="desc">5秒間同レベル同士が引き寄せ合う</div>
+                </div>
+                <div class="powerUpCard">
+                    <div class="icon">💎</div>
+                    <div class="name">倍率アップ</div>
+                    <div class="desc">8秒間スコアが1.5倍</div>
+                </div>
+            </div>
+            <p><small>※各パワーアップは8秒のクールダウンがあります</small></p>
+            
+            <h3>🔥 特殊システム</h3>
+            <ul>
+                <li><strong>コンボシステム</strong>：2.5秒以内に次の合体で継続</li>
+                <li><strong>フィーバーモード</strong>：5コンボ以上で4秒間発動、スコア2倍</li>
+                <li><strong>スペシャル攻撃</strong>：メーターが満タンで全おじさんに衝撃波</li>
+                <li><strong>実績システム</strong>：マスターコンボ、レジェンド達成等</li>
+            </ul>
+            
+            <div class="tipBox">
+                <h4>💡 攻略のコツ</h4>
+                <ul style="margin: 0; padding-left: 20px;">
+                    <li>小さいおじさんは端に、大きいおじさんは中央に</li>
+                    <li>同レベルを近くに配置してコンボを狙う</li>
+                    <li>パワーアップは危険な時に使う</li>
+                    <li>スペシャル攻撃は行き詰まった時の切り札</li>
+                </ul>
+            </div>
+            
+            <p style="text-align: center; margin-top: 25px;">
+                <strong>目指せハイスコア！レジェンドおじさんを作ろう！🎅</strong>
+            </p>
         </div>
     </div>
     
@@ -938,6 +1158,22 @@
                 }
             }
         }
+        
+        // ルール表示・非表示
+        function showRules() {
+            document.getElementById('rulesModal').style.display = 'flex';
+        }
+        
+        function hideRules() {
+            document.getElementById('rulesModal').style.display = 'none';
+        }
+        
+        // ルールモーダルの外側クリックで閉じる
+        document.getElementById('rulesModal').addEventListener('click', (e) => {
+            if (e.target.id === 'rulesModal') {
+                hideRules();
+            }
+        });
         
         // 操作
         canvas.addEventListener('mousemove', (e) => {
