@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENLEAF - Digital Creative Studio</title>
+    <meta name="description" content="Next Generation Digital Experience">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@200;300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+        
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-pink: #ff00ff;
+            --neon-yellow: #ffff00;
+            --neon-green: #00ff00;
+            --dark-bg: #000000;
+            --dark-gray: #0a0a0a;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* カスタムカーソル */
+        .cursor {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            transition: all 0.1s ease;
+            z-index: 10000;
+            mix-blend-mode: difference;
+        }
+        
+        .cursor-follower {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-pink);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+        }
+        
+        .cursor.active {
+            transform: translate(-50%, -50%) scale(0.5);
+            background: var(--neon-cyan);
+        }
+        
+        /* ノイズオーバーレイ */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: 1;
+            pointer-events: none;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj4KPGZpbHRlciBpZD0ibm9pc2UiPgo8ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz4KPC9maWx0ZXI+CjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjEiLz4KPC9zdmc+');
+        }
+        
+        /* WebGLキャンバス */
+        #webgl {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        /* 流体背景 */
+        #fluid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, 
+                rgba(0, 255, 255, 0.1) 0%, 
+                rgba(255, 0, 255, 0.05) 40%, 
+                transparent 70%);
+            filter: blur(60px);
+            animation: fluidMove 20s ease-in-out infinite;
+        }
+        
+        @keyframes fluidMove {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            33% { transform: scale(1.1) rotate(120deg); }
+            66% { transform: scale(0.9) rotate(240deg); }
+        }
+        
+        /* メインコンテナ */
+        .main-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* ナビゲーション */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 50px;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+        
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        .logo::after {
+            content: 'CENLEAF';
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            color: var(--neon-cyan);
+            z-index: -1;
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { 
+                transform: translate(0);
+                opacity: 0.5;
+            }
+            20% {
+                transform: translate(-2px, 2px);
+                opacity: 0.8;
+            }
+            40% {
+                transform: translate(-2px, -2px);
+                opacity: 0.3;
+            }
+            60% {
+                transform: translate(2px, 2px);
+                opacity: 0.6;
+            }
+            80% {
+                transform: translate(2px, -2px);
+                opacity: 0.4;
+            }
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+        
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 2px;
+            font-weight: 500;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        
+        /* ヒーローセクション */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(80px, 15vw, 200px);
+            line-height: 0.8;
+            letter-spacing: -5px;
+            position: relative;
+            display: inline-block;
+            color: transparent;
+            -webkit-text-stroke: 2px #ffffff;
+            text-stroke: 2px #ffffff;
+        }
+        
+        .hero-title-filled {
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: #ffffff;
+            -webkit-text-stroke: 0;
+            text-stroke: 0;
+            clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+            animation: fillAnimation 4s ease-in-out infinite;
+        }
+        
+        @keyframes fillAnimation {
+            0%, 100% {
+                clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+            }
+            50% {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+        }
+        
+        .hero-subtitle {
+            font-size: 18px;
+            letter-spacing: 8px;
+            margin-top: 30px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        /* グリッチテキスト */
+        .glitch-text {
+            position: relative;
+            color: #ffffff;
+            font-size: 120px;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 8px;
+            animation: textGlitch 3s infinite;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            animation: glitchOne 0.5s infinite;
+            color: var(--neon-cyan);
+            z-index: -1;
+        }
+        
+        .glitch-text::after {
+            animation: glitchTwo 0.5s infinite;
+            color: var(--neon-pink);
+            z-index: -2;
+        }
+        
+        @keyframes textGlitch {
+            0%, 100% {
+                text-shadow: 
+                    0.05em 0 0 var(--neon-cyan),
+                    -0.05em -0.025em 0 var(--neon-pink),
+                    0.025em 0.05em 0 var(--neon-yellow);
+            }
+            15% {
+                text-shadow: 
+                    0.05em 0 0 var(--neon-cyan),
+                    -0.05em -0.025em 0 var(--neon-pink),
+                    0.025em 0.05em 0 var(--neon-yellow);
+            }
+            16% {
+                text-shadow: 
+                    -0.05em -0.025em 0 var(--neon-cyan),
+                    0.025em 0.025em 0 var(--neon-pink),
+                    -0.05em -0.05em 0 var(--neon-yellow);
+            }
+            49% {
+                text-shadow: 
+                    -0.05em -0.025em 0 var(--neon-cyan),
+                    0.025em 0.025em 0 var(--neon-pink),
+                    -0.05em -0.05em 0 var(--neon-yellow);
+            }
+            50% {
+                text-shadow: 
+                    0.025em 0.05em 0 var(--neon-cyan),
+                    0.05em 0 0 var(--neon-pink),
+                    0 -0.05em 0 var(--neon-yellow);
+            }
+            99% {
+                text-shadow: 
+                    0.025em 0.05em 0 var(--neon-cyan),
+                    0.05em 0 0 var(--neon-pink),
+                    0 -0.05em 0 var(--neon-yellow);
+            }
+        }
+        
+        @keyframes glitchOne {
+            0%, 100% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+        }
+        
+        @keyframes glitchTwo {
+            0%, 100% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(2px, -2px);
+            }
+            40% {
+                transform: translate(2px, 2px);
+            }
+            60% {
+                transform: translate(-2px, -2px);
+            }
+            80% {
+                transform: translate(-2px, 2px);
+            }
+        }
+        
+        /* セクション */
+        .section {
+            min-height: 100vh;
+            padding: 100px 50px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(60px, 8vw, 120px);
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+            text-stroke: 1px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* グリッド */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .grid-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .grid-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .grid-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
+        }
+        
+        .grid-item:hover::before {
+            opacity: 0.05;
+        }
+        
+        .grid-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 80px;
+            color: var(--neon-cyan);
+            opacity: 0.2;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+        
+        .grid-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .grid-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        /* スクロールテキスト */
+        .scroll-text {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.5;
+            animation: scrollBounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        /* メッシュグラデーション */
+        .mesh-gradient {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+            opacity: 0.3;
+            filter: blur(100px);
+            background: 
+                radial-gradient(at 20% 80%, var(--neon-pink) 0%, transparent 50%),
+                radial-gradient(at 80% 20%, var(--neon-cyan) 0%, transparent 50%),
+                radial-gradient(at 40% 40%, var(--neon-yellow) 0%, transparent 50%),
+                radial-gradient(at 60% 60%, var(--neon-green) 0%, transparent 50%);
+            animation: meshMove 30s ease-in-out infinite;
+        }
+        
+        @keyframes meshMove {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+            }
+            25% {
+                transform: rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1);
+            }
+            75% {
+                transform: rotate(270deg) scale(0.9);
+            }
+        }
+        
+        /* フッター */
+        .footer {
+            padding: 60px 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: clamp(60px, 12vw, 100px);
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cursor,
+            .cursor-follower {
+                display: none;
+            }
+            
+            * {
+                cursor: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- カスタムカーソル -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- ノイズオーバーレイ -->
+    <div class="noise-overlay"></div>
+    
+    <!-- メッシュグラデーション -->
+    <div class="mesh-gradient"></div>
+    
+    <!-- 流体背景 -->
+    <div id="fluid-bg"></div>
+    
+    <!-- WebGLキャンバス -->
+    <canvas id="webgl"></canvas>
+    
+    <!-- メインコンテナ -->
+    <div class="main-container">
+        <!-- ナビゲーション -->
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="#" class="logo">CENLEAF</a>
+                <ul class="nav-menu">
+                    <li><a href="#work">WORK</a></li>
+                    <li><a href="#about">ABOUT</a></li>
+                    <li><a href="#services">SERVICES</a></li>
+                    <li><a href="#contact">CONTACT</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- ヒーロー -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    DIGITAL<br>CREATIVE
+                    <span class="hero-title-filled">DIGITAL<br>CREATIVE</span>
+                </h1>
+                <p class="hero-subtitle">Next Generation Experience</p>
+            </div>
+        </section>
+        
+        <!-- セクション：WORK -->
+        <section class="section" id="work">
+            <h2 class="section-title glitch-text" data-text="OUR WORK">OUR WORK</h2>
+            <div class="grid">
+                <div class="grid-item">
+                    <div class="grid-number">01</div>
+                    <h3 class="grid-title">3D WEB EXPERIENCE</h3>
+                    <p class="grid-description">
+                        WebGL、Three.jsを駆使した没入型3Dウェブ体験。
+                        ユーザーの記憶に残る革新的なデジタル空間を創造します。
+                    </p>
+                </div>
+                
+                <div class="grid-item">
+                    <div class="grid-number">02</div>
+                    <h3 class="grid-title">INTERACTIVE DESIGN</h3>
+                    <p class="grid-description">
+                        マウス、タッチ、ジェスチャーに反応する
+                        直感的でダイナミックなインターフェースデザイン。
+                    </p>
+                </div>
+                
+                <div class="grid-item">
+                    <div class="grid-number">03</div>
+                    <h3 class="grid-title">MOTION GRAPHICS</h3>
+                    <p class="grid-description">
+                        GSAPやLottieを活用した滑らかで美しい
+                        モーショングラフィックスとアニメーション。
+                    </p>
+                </div>
+                
+                <div class="grid-item">
+                    <div class="grid-number">04</div>
+                    <h3 class="grid-title">AI INTEGRATION</h3>
+                    <p class="grid-description">
+                        最新のAI技術を統合した次世代のウェブ体験。
+                        ChatGPT、Claude、Stable Diffusionなど。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- セクション：ABOUT -->
+        <section class="section" id="about">
+            <h2 class="section-title">ABOUT US</h2>
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <p style="font-size: 24px; line-height: 1.8; color: rgba(255, 255, 255, 0.8);">
+                    私たちは、最先端のテクノロジーとクリエイティビティを融合させ、
+                    これまでにないデジタル体験を創造するクリエイティブスタジオです。
+                </p>
+                <p style="font-size: 18px; line-height: 1.8; margin-top: 30px; color: rgba(255, 255, 255, 0.6);">
+                    WebGL、Three.js、GSAP、AI技術を駆使し、
+                    ブランドの本質を表現する革新的なデジタルソリューションを提供します。
+                </p>
+            </div>
+        </section>
+        
+        <!-- フッター -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    © 2024 CENLEAF. All rights reserved.
+                </div>
+                <div class="footer-links">
+                    <a href="https://twitter.com" target="_blank">Twitter</a>
+                    <a href="https://instagram.com" target="_blank">Instagram</a>
+                    <a href="https://github.com" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- スクロールテキスト -->
+    <div class="scroll-text">SCROLL DOWN</div>
+    
+    <script>
+        // カスタムカーソル
+        const cursor = document.querySelector('.cursor');
+        const follower = document.querySelector('.cursor-follower');
+        let mouseX = 0, mouseY = 0;
+        let followerX = 0, followerY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+        
+        setInterval(() => {
+            followerX += (mouseX - followerX) * 0.1;
+            followerY += (mouseY - followerY) * 0.1;
+            
+            follower.style.left = followerX + 'px';
+            follower.style.top = followerY + 'px';
+        }, 20);
+        
+        // カーソルアクティブ状態
+        const links = document.querySelectorAll('a, button');
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursor.classList.add('active');
+            });
+            link.addEventListener('mouseleave', () => {
+                cursor.classList.remove('active');
+            });
+        });
+        
+        // Three.js セットアップ
+        const canvas = document.getElementById('webgl');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            alpha: true,
+            antialias: true
+        });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        
+        // ライト
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        
+        const pointLight = new THREE.PointLight(0x00ffff, 1);
+        pointLight.position.set(10, 10, 10);
+        scene.add(pointLight);
+        
+        // パーティクル
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 3000;
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 10;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.005,
+            color: 0x00ffff,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // ワイヤーフレームトーラス
+        const torusGeometry = new THREE.TorusKnotGeometry(1, 0.3, 100, 16);
+        const torusMaterial = new THREE.MeshBasicMaterial({
+            color: 0xff00ff,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3
+        });
+        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+        scene.add(torus);
+        
+        // 二番目のトーラス
+        const torus2Geometry = new THREE.TorusGeometry(1.5, 0.5, 16, 100);
+        const torus2Material = new THREE.MeshBasicMaterial({
+            color: 0xffff00,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.2
+        });
+        const torus2 = new THREE.Mesh(torus2Geometry, torus2Material);
+        scene.add(torus2);
+        
+        camera.position.z = 5;
+        
+        // マウス座標
+        let mouse = { x: 0, y: 0 };
+        
+        document.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+        
+        // アニメーションループ
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const elapsedTime = clock.getElapsedTime();
+            
+            // パーティクル回転
+            particlesMesh.rotation.y = elapsedTime * 0.05;
+            particlesMesh.rotation.x = elapsedTime * 0.03;
+            
+            // トーラス回転
+            torus.rotation.x = elapsedTime * 0.5;
+            torus.rotation.y = elapsedTime * 0.3;
+            
+            torus2.rotation.x = -elapsedTime * 0.3;
+            torus2.rotation.y = -elapsedTime * 0.5;
+            
+            // マウス追従
+            camera.position.x = mouse.x * 0.5;
+            camera.position.y = mouse.y * 0.5;
+            camera.lookAt(0, 0, 0);
+            
+            // トーラスをマウスに追従
+            torus.position.x = mouse.x * 1;
+            torus.position.y = mouse.y * 1;
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // リサイズ対応
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // GSAP スクロールアニメーション
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // グリッドアイテムのアニメーション
+        gsap.utils.toArray('.grid-item').forEach((item, i) => {
+            gsap.from(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 100,
+                opacity: 0,
+                duration: 1,
+                delay: i * 0.1,
+                ease: 'power3.out'
+            });
+        });
+        
+        // セクションタイトルのアニメーション
+        gsap.utils.toArray('.section-title').forEach(title => {
+            gsap.from(title, {
+                scrollTrigger: {
+                    trigger: title,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                scale: 0.5,
+                opacity: 0,
+                duration: 1.5,
+                ease: 'power3.out'
+            });
+        });
+        
+        // スクロールでスクロールテキストを非表示
+        window.addEventListener('scroll', () => {
+            const scrollText = document.querySelector('.scroll-text');
+            if (window.scrollY > 100) {
+                scrollText.style.opacity = '0';
+            } else {
+                scrollText.style.opacity = '0.5';
+            }
+        });
+        
+        // テキストスプリット効果
+        const heroTitle = document.querySelector('.hero-title');
+        const text = heroTitle.textContent;
+        heroTitle.innerHTML = text.split('').map((char, i) => 
+            `<span style="animation-delay: ${i * 0.05}s">${char}</span>`
+        ).join('');
+    </script>
+</body>
+</html>
