@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コラム | CENLEAF - 須崎純一のビジネスコラム</title>
+    <meta name="description" content="須崎純一のビジネスコラム。起業・経営・マーケティングに関する考察や、日々の気づきを綴っています。">
+    <meta name="keywords" content="コラム,ビジネスコラム,須崎純一,起業,経営,マーケティング">
+    <meta name="author" content="須崎純一">
+    <link rel="canonical" href="https://cenleaf.com/blog/column.html">
+    
+    <!-- OGP メタタグ -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="コラム | CENLEAF - 須崎純一のビジネスコラム">
+    <meta property="og:description" content="須崎純一のビジネスコラム。起業・経営・マーケティングに関する考察や、日々の気づきを綴っています。">
+    <meta property="og:url" content="https://cenleaf.com/blog/column.html">
+    <meta property="og:site_name" content="CENLEAF">
+    <meta property="og:image" content="https://cenleaf.com/images/ogp-banner.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="コラム | CENLEAF - 須崎純一のビジネスコラム">
+    <meta name="twitter:description" content="須崎純一のビジネスコラム。起業・経営・マーケティングに関する考察や、日々の気づきを綴っています。">
+    <meta name="twitter:image" content="https://cenleaf.com/images/ogp-banner.png">
+    <meta name="twitter:site" content="@suzakijunichi">
+    
+    <!-- ファビコン -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- 構造化データ (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": "https://cenleaf.com/#website",
+                "url": "https://cenleaf.com/",
+                "name": "CENLEAF",
+                "description": "AIマーケティング・オートウェビナーの専門サイト",
+                "publisher": {
+                    "@id": "https://cenleaf.com/#person"
+                }
+            },
+            {
+                "@type": "CollectionPage",
+                "@id": "https://cenleaf.com/blog/column.html#collection",
+                "url": "https://cenleaf.com/blog/column.html",
+                "name": "コラム",
+                "description": "須崎純一のビジネスコラム",
+                "inLanguage": "ja",
+                "author": {
+                    "@id": "https://cenleaf.com/#person"
+                },
+                "publisher": {
+                    "@id": "https://cenleaf.com/#person"
+                }
+            },
+            {
+                "@type": "Person",
+                "@id": "https://cenleaf.com/#person",
+                "name": "須崎純一",
+                "url": "https://cenleaf.com/",
+                "image": "https://cenleaf.com/images/profile/suzaki.jpg",
+                "description": "AIマーケティング・オートウェビナーの専門家。個人・小規模ビジネスの集客〜販売を自動運転化するコンサルタント。",
+                "jobTitle": "マーケティングコンサルタント",
+                "worksFor": {
+                    "@type": "Organization",
+                    "name": "CENLEAF"
+                }
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "ホーム",
+                        "item": "https://cenleaf.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "ブログ",
+                        "item": "https://cenleaf.com/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "コラム",
+                        "item": "https://cenleaf.com/blog/column.html"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ヘッダー */
+        .header {
+            padding: 20px 0;
+            border-bottom: 2px solid #764ba2;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            color: #764ba2;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 2px solid #764ba2;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(118, 75, 162, 0.3);
+        }
+
+        /* タイトル */
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-size: 42px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666666;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        /* ローディング */
+        .loading {
+            text-align: center;
+            color: #764ba2;
+            font-size: 18px;
+            padding: 40px;
+        }
+
+        /* エラーメッセージ */
+        .error {
+            text-align: center;
+            color: #d32f2f;
+            font-size: 16px;
+            padding: 40px;
+        }
+
+        /* ブログカード */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .blog-card {
+            background: #ffffff;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(118, 75, 162, 0.2);
+            border-color: #764ba2;
+        }
+
+        .blog-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .category {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .blog-title {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #333333;
+            line-height: 1.5;
+            font-weight: 600;
+        }
+
+        .blog-excerpt {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .blog-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999999;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .no-posts {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666666;
+        }
+
+        .no-posts-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .no-posts-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #764ba2;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-btn {
+                text-align: center;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <a href="/" class="logo">CENLEAF</a>
+            <div class="nav-links">
+                <a href="/blog/" class="nav-btn">ブログ一覧</a>
+                <a href="/" class="nav-btn">トップページ</a>
+            </div>
+        </div>
+
+        <!-- タイトル -->
+        <h1>📝 コラム</h1>
+        <p class="subtitle">ビジネスの気づきと日々の考察</p>
+
+        <!-- ブログ記事コンテナ -->
+        <div id="blog-grid" class="blog-grid">
+            <div class="loading">コラム記事を読み込み中...</div>
+        </div>
+    </div>
+
+    <script>
+        // microCMS設定
+        const API_KEY = 'gfvzXw58nnvw3daLCbWS9z22SMKeIhxa1KWw';
+        const SERVICE_ID = 'cenleaf';
+        const ENDPOINT = 'blogs';
+
+        // 日付フォーマット
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ja-JP', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).replace(/\//g, '/');
+        }
+
+        // ブログ記事を表示
+        function displayPosts(posts) {
+            const blogGrid = document.getElementById('blog-grid');
+            
+            if (posts.length === 0) {
+                blogGrid.innerHTML = `
+                    <div class="no-posts">
+                        <div class="no-posts-icon">📄</div>
+                        <div class="no-posts-title">コラム記事はまだありません</div>
+                        <p>新しいコラムを準備中です。<br>しばらくお待ちください。</p>
+                    </div>
+                `;
+                return;
+            }
+
+            blogGrid.innerHTML = posts.map(post => {
+                // 常にarticle.htmlを使用
+                const param = post.slug ? `slug=${post.slug}` : `id=${post.id}`;
+                const href = `/blog/article.html?${param}`;
+                
+                // カテゴリー名（コラムで固定されているはず）
+                const categoryName = post.category ? 
+                    (typeof post.category === 'object' ? post.category.name : post.category) : 
+                    'コラム';
+                
+                // 概要文（contentの最初の100文字を表示）
+                let excerpt = '';
+                if (post.content) {
+                    // HTMLタグを除去
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = post.content;
+                    const textContent = tempDiv.textContent || tempDiv.innerText || '';
+                    excerpt = textContent.substring(0, 100) + (textContent.length > 100 ? '...' : '');
+                }
+                
+                return `
+                    <a href="${href}" class="blog-card">
+                        <span class="category">${categoryName}</span>
+                        <h2 class="blog-title">${post.title}</h2>
+                        ${excerpt ? `<p class="blog-excerpt">${excerpt}</p>` : ''}
+                        <div class="blog-footer">
+                            <span>${formatDate(post.publishedAt || post.createdAt)}</span>
+                            <span>→ 続きを読む</span>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // microCMSから記事を取得（コラムカテゴリーのみ）
+        async function fetchColumnPosts() {
+            const blogGrid = document.getElementById('blog-grid');
+            
+            try {
+                console.log('🚀 microCMSからコラム記事を取得開始...');
+                
+                // microCMS APIエンドポイント（全記事を取得）
+                const url = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?limit=100`;
+                
+                // APIリクエスト
+                const response = await fetch(url, {
+                    headers: {
+                        'X-MICROCMS-API-KEY': API_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('✅ 取得したデータ:', data);
+
+                if (data.contents && data.contents.length > 0) {
+                    // コラムカテゴリーの記事のみフィルタリング
+                    const columnPosts = data.contents.filter(post => {
+                        const categoryName = post.category ? 
+                            (typeof post.category === 'object' ? post.category.name : post.category) : 
+                            '';
+                        return categoryName === 'コラム';
+                    });
+                    
+                    console.log('📝 コラム記事数:', columnPosts.length);
+                    
+                    // 日付順でソート（新しい順）
+                    columnPosts.sort((a, b) => {
+                        const dateA = new Date(a.publishedAt || a.createdAt);
+                        const dateB = new Date(b.publishedAt || b.createdAt);
+                        return dateB - dateA;
+                    });
+                    
+                    displayPosts(columnPosts);
+                } else {
+                    displayPosts([]);
+                }
+
+            } catch (error) {
+                console.error('❌ エラーが発生:', error);
+                blogGrid.innerHTML = '<div class="error">コラム記事の取得に失敗しました。<br>しばらく経ってから再度お試しください。</div>';
+            }
+        }
+
+        // ページ読み込み時に記事を取得
+        fetchColumnPosts();
+    </script>
+</body>
+</html>
