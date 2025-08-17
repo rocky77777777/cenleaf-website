@@ -188,14 +188,6 @@
             text-align: center;
         }
 
-        .article-content .big-number {
-            font-size: 36px;
-            font-weight: bold;
-            color: #ff9800;
-            display: inline;
-            white-space: nowrap;
-        }
-
         /* 改善されたリスト表示 */
         .article-content .step-list {
             background: #f8f9fa;
@@ -919,11 +911,6 @@
             // メリットを含むセクションをハイライトボックスに変換
             content = content.replace(/(メリット[^<]*?)(<br\s*\/?>|\n)([^<]+)/g, 
                 '<div class="highlight-box"><h4>✨ $1</h4><p>$3</p></div>');
-
-            // 数字や統計をハイライト（カンマ付き数字にも対応）
-            content = content.replace(/([\d,]+%)(?:\s*の)/g, '<span class="big-number">$1</span>の');
-            content = content.replace(/([\d,]+倍)/g, '<span class="big-number">$1</span>');
-            content = content.replace(/([\d,]+円)/g, '<span class="big-number">$1</span>');
 
             // 重要なポイントをハイライトボックスで囲む
             content = content.replace(/(重要なのは[^<]+)/g, 
