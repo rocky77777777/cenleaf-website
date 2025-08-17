@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>おじさんスイカゲーム</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            touch-action: none;
+            overflow: hidden;
+        }
+        
+        #gameContainer {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 100vw;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+        
+        @media (max-width: 600px) {
+            #gameContainer {
+                padding: 5px;
+                border-radius: 10px;
+                width: 100%;
+                height: 100vh;
+                box-shadow: none;
+            }
+        }
+        
+        #gameCanvas {
+            border: 4px solid #333;
+            background: #fafafa;
+            cursor: pointer;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+        
+        #score {
+            font-size: 24px;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        @media (max-width: 600px) {
+            #score {
+                font-size: 20px;
+                margin: 8px 0;
+            }
+        }
+        
+        #nextOjisan {
+            margin: 8px 0;
+            font-size: 18px;
+            color: #555;
+        }
+        
+        @media (max-width: 600px) {
+            #nextOjisan {
+                font-size: 16px;
+                margin: 5px 0;
+            }
+        }
+        
+        #gameOver {
+            display: none;
+            font-size: 28px;
+            color: #ff3333;
+            margin: 15px 0;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+        
+        @media (max-width: 600px) {
+            #gameOver {
+                font-size: 24px;
+                margin: 10px 0;
+            }
+        }
+        
+        #dangerWarning {
+            display: none;
+            font-size: 48px;
+            color: #ff0000;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: blink 0.5s infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        
+        @media (max-width: 600px) {
+            #dangerWarning {
+                font-size: 36px;
+            }
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        #highScoreForm {
+            display: none;
+            margin: 15px 0;
+        }
+        
+        #playerName {
+            font-size: 16px;
+            padding: 8px 12px;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            margin-right: 10px;
+            width: 150px;
+        }
+        
+        #highScores {
+            margin-top: 15px;
+            background: rgba(0,0,0,0.05);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 600px) {
+            #highScores {
+                display: none;
+            }
+        }
+        
+        #highScores h3 {
+            margin: 0 0 8px 0;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        .scoreEntry {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 10px;
+            margin: 4px 0;
+            background: white;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .rank {
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 8px;
+        }
+        
+        .playerInfo {
+            flex-grow: 1;
+            text-align: left;
+        }
+        
+        .scoreValue {
+            font-weight: bold;
+            color: #764ba2;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        button {
+            font-size: 18px;
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        
+        @media (max-width: 600px) {
+            button {
+                font-size: 16px;
+                padding: 8px 20px;
+            }
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+        
+        .instructions {
+            margin-top: 15px;
+            color: #666;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 600px) {
+            .instructions {
+                display: none;
+            }
+        }
+        
+        h1 {
+            margin: 8px 0;
+            color: #333;
+            font-size: 22px;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 18px;
+                margin: 5px 0;
+            }
+        }
+        
+        .evolution {
+            font-size: 14px;
+            margin: 8px 0;
+            color: #777;
+        }
+        
+        @media (max-width: 600px) {
+            .evolution {
+                font-size: 11px;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <h1>🎮 おじさんスイカゲーム 🎮</h1>
+        <div id="score">スコア: 0</div>
+        <div id="nextOjisan">次: <span id="nextFace" style="font-size: 24px;"></span></div>
+        <div style="position: relative; display: inline-block;">
+            <canvas id="gameCanvas"></canvas>
+            <div id="dangerWarning">⚠️ <span id="dangerCount">3</span> ⚠️</div>
+        </div>
+        <div id="gameOver">💥 ゲームオーバー！ 💥</div>
+        <div id="highScoreForm">
+            <input type="text" id="playerName" placeholder="名前を入力" maxlength="20">
+            <button onclick="saveHighScore()">スコアを記録</button>
+        </div>
+        <button onclick="resetGame()">🔄 リセット</button>
+        <div id="highScores">
+            <h3>🏆 ハイスコア 🏆</h3>
+            <div id="scoreList"></div>
+        </div>
+        <div class="evolution">
+            進化: 👶→👦→👴→🧔→👨‍🦱→👨‍🦰→🧑‍🦲→👨‍🦳→🎅→🧙‍♂️
+        </div>
+        <div class="instructions">
+            タップで落とす！同じ顔が合体すると進化するよ！
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const gameOverElement = document.getElementById('gameOver');
+        const nextFaceElement = document.getElementById('nextFace');
+        const highScoreFormElement = document.getElementById('highScoreForm');
+        const playerNameElement = document.getElementById('playerName');
+        const scoreListElement = document.getElementById('scoreList');
+        
+        // キャンバスサイズを設定
+        function setCanvasSize() {
+            const container = document.getElementById('gameContainer');
+            const maxWidth = Math.min(400, window.innerWidth - 30);
+            const maxHeight = Math.min(600, window.innerHeight - 250);
+            
+            // アスペクト比を保つ
+            if (maxWidth / 400 < maxHeight / 600) {
+                canvas.width = maxWidth;
+                canvas.height = maxWidth * 1.5;
+            } else {
+                canvas.height = maxHeight;
+                canvas.width = maxHeight / 1.5;
+            }
+            
+            // ゲーム内の座標をスケール
+            canvas.scale = canvas.width / 400;
+        }
+        
+        setCanvasSize();
+        window.addEventListener('resize', setCanvasSize);
+        
+        // ゲーム設定
+        const GRAVITY = 0.8;  // 重力を2倍に増加
+        const BOUNCE_DAMPING = 0.2;  // バウンド減衰を半分に（弾みにくく）
+        const FRICTION = 0.85;  // 摩擦を増やして動きにくく
+        const DROP_LINE_Y = 80;  // ドロップライン（ここから落とす）
+        const DANGER_LINE_Y = 150;  // デンジャーラインを下げて狭く
+        const DROP_COOLDOWN = 0;  // クールダウンなし（連続で落とせる）
+        
+        // おじさんの種類
+        const ojisanTypes = [
+            { radius: 18, face: '👶', points: 1 },     // 0: 赤ちゃん
+            { radius: 24, face: '👦', points: 2 },     // 1: 子供
+            { radius: 30, face: '👴', points: 5 },     // 2: おじいさん
+            { radius: 36, face: '🧔', points: 10 },    // 3: ひげおじさん
+            { radius: 42, face: '👨‍🦱', points: 20 },   // 4: 普通のおじさん
+            { radius: 48, face: '👨‍🦰', points: 50 },   // 5: 赤毛おじさん
+            { radius: 54, face: '🧑‍🦲', points: 100 },  // 6: はげおじさん
+            { radius: 60, face: '👨‍🦳', points: 200 },  // 7: 白髪おじさん
+            { radius: 66, face: '🎅', points: 500 },   // 8: サンタ
+            { radius: 72, face: '🧙‍♂️', points: 1000 }  // 9: 魔法使い
+        ];
+        
+        let ojisans = [];
+        let score = 0;
+        let gameOver = false;
+        let nextType = 0;
+        let mouseX = 200;  // 初期値を400の半分に固定
+        let canDrop = true;
+        let lastDropTime = 0;
+        let dangerTimer = 0;
+        let lastDangerCheck = Date.now();
+        
+        // ハイスコア管理
+        function loadHighScores() {
+            const stored = localStorage.getItem('ojisanHighScores');
+            return stored ? JSON.parse(stored) : [];
+        }
+        
+        function saveHighScore() {
+            const name = playerNameElement.value.trim();
+            if (!name) {
+                alert('名前を入力してください！');
+                return;
+            }
+            
+            const highScores = loadHighScores();
+            highScores.push({
+                name: name,
+                score: score,
+                date: new Date().toISOString()
+            });
+            
+            // スコアの高い順にソート
+            highScores.sort((a, b) => b.score - a.score);
+            
+            // 上位10件のみ保持
+            const topScores = highScores.slice(0, 10);
+            localStorage.setItem('ojisanHighScores', JSON.stringify(topScores));
+            
+            // フォームを非表示
+            highScoreFormElement.style.display = 'none';
+            playerNameElement.value = '';
+            
+            // ハイスコア表示を更新
+            displayHighScores();
+        }
+        
+        function displayHighScores() {
+            const highScores = loadHighScores();
+            scoreListElement.innerHTML = '';
+            
+            if (highScores.length === 0) {
+                scoreListElement.innerHTML = '<div style="color: #999;">まだスコアがありません</div>';
+                return;
+            }
+            
+            highScores.forEach((entry, index) => {
+                const scoreEntry = document.createElement('div');
+                scoreEntry.className = 'scoreEntry';
+                
+                const rank = document.createElement('span');
+                rank.className = 'rank';
+                rank.textContent = `${index + 1}位`;
+                
+                const playerInfo = document.createElement('span');
+                playerInfo.className = 'playerInfo';
+                playerInfo.textContent = entry.name;
+                
+                const scoreValue = document.createElement('span');
+                scoreValue.className = 'scoreValue';
+                scoreValue.textContent = `${entry.score}点`;
+                
+                scoreEntry.appendChild(rank);
+                scoreEntry.appendChild(playerInfo);
+                scoreEntry.appendChild(scoreValue);
+                scoreListElement.appendChild(scoreEntry);
+            });
+        }
+        
+        class Ojisan {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type;
+                this.radius = ojisanTypes[type].radius;
+                this.face = ojisanTypes[type].face;
+                this.vx = 0;
+                this.vy = 0;
+                this.merged = false;
+                this.landed = false;
+            }
+            
+            update() {
+                if (this.merged) return;
+                
+                // 重力適用
+                this.vy += GRAVITY;
+                
+                // 位置更新
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // 床との衝突
+                if (this.y + this.radius > 600) {
+                    this.y = 600 - this.radius;
+                    this.vy *= -BOUNCE_DAMPING;
+                    this.vx *= FRICTION;
+                    this.landed = true;
+                    
+                    // 小さな動きは停止
+                    if (Math.abs(this.vy) < 0.5) this.vy = 0;
+                    if (Math.abs(this.vx) < 0.5) this.vx = 0;
+                }
+                
+                // 壁との衝突
+                if (this.x - this.radius < 0) {
+                    this.x = this.radius;
+                    this.vx = Math.abs(this.vx) * BOUNCE_DAMPING;
+                }
+                if (this.x + this.radius > 400) {
+                    this.x = 400 - this.radius;
+                    this.vx = -Math.abs(this.vx) * BOUNCE_DAMPING;
+                }
+                
+                // 摩擦
+                this.vx *= FRICTION;
+            }
+            
+            draw() {
+                if (this.merged) return;
+                
+                // 影を描画
+                ctx.globalAlpha = 0.2;
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y + this.radius - 5, this.radius * 0.8, this.radius * 0.3, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+                
+                // おじさんの顔を描画
+                ctx.font = `${this.radius * 2}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.face, this.x, this.y);
+            }
+        }
+        
+        function handleCollisions() {
+            for (let i = 0; i < ojisans.length; i++) {
+                for (let j = i + 1; j < ojisans.length; j++) {
+                    const a = ojisans[i];
+                    const b = ojisans[j];
+                    
+                    if (a.merged || b.merged) continue;
+                    
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const minDistance = a.radius + b.radius;
+                    
+                    if (distance < minDistance) {
+                        // 同じタイプなら合体
+                        if (a.type === b.type && a.type < ojisanTypes.length - 1) {
+                            // 合体エフェクト
+                            const newX = (a.x + b.x) / 2;
+                            const newY = (a.y + b.y) / 2;
+                            
+                            a.merged = true;
+                            b.merged = true;
+                            
+                            // 新しいおじさんを作成
+                            const newOjisan = new Ojisan(newX, newY, a.type + 1);
+                            newOjisan.vy = -2;  // 少し跳ねる
+                            ojisans.push(newOjisan);
+                            
+                            // スコア加算
+                            score += ojisanTypes[a.type].points * 2;
+                            updateScore();
+                            
+                            // 合体したおじさんを削除
+                            setTimeout(() => {
+                                ojisans = ojisans.filter(o => !o.merged);
+                            }, 50);
+                        } else {
+                            // 物理的な衝突処理
+                            const overlap = minDistance - distance;
+                            const pushX = (dx / distance) * overlap * 0.5;
+                            const pushY = (dy / distance) * overlap * 0.5;
+                            
+                            a.x += pushX;
+                            a.y += pushY;
+                            b.x -= pushX;
+                            b.y -= pushY;
+                            
+                            // 速度の交換と減衰
+                            const tempVx = a.vx;
+                            const tempVy = a.vy;
+                            a.vx = b.vx * BOUNCE_DAMPING;
+                            a.vy = b.vy * BOUNCE_DAMPING;
+                            b.vx = tempVx * BOUNCE_DAMPING;
+                            b.vy = tempVy * BOUNCE_DAMPING;
+                        }
+                    }
+                }
+            }
+        }
+        
+        function checkGameOver() {
+            const currentTime = Date.now();
+            const deltaTime = currentTime - lastDangerCheck;
+            lastDangerCheck = currentTime;
+            
+            // デンジャーラインを超えているおじさんがいるかチェック
+            let inDanger = false;
+            for (let ojisan of ojisans) {
+                // 静止していて、デンジャーラインを超えている
+                if (Math.abs(ojisan.vy) < 0.5 && ojisan.y - ojisan.radius < DANGER_LINE_Y) {
+                    inDanger = true;
+                    break;
+                }
+            }
+            
+            const dangerWarningElement = document.getElementById('dangerWarning');
+            const dangerCountElement = document.getElementById('dangerCount');
+            
+            if (inDanger && !gameOver) {
+                // 危険状態の時間を加算
+                dangerTimer += deltaTime;
+                
+                // 警告表示
+                dangerWarningElement.style.display = 'block';
+                const remainingSeconds = Math.ceil((3000 - dangerTimer) / 1000);
+                dangerCountElement.textContent = Math.max(0, remainingSeconds);
+                
+                // 3秒経過したらゲームオーバー
+                if (dangerTimer >= 3000) {
+                    gameOver = true;
+                    gameOverElement.style.display = 'block';
+                    highScoreFormElement.style.display = 'block';
+                    dangerWarningElement.style.display = 'none';
+                    return true;
+                }
+            } else {
+                // 危険状態でなければタイマーリセット
+                dangerTimer = 0;
+                dangerWarningElement.style.display = 'none';
+            }
+            
+            return false;
+        }
+        
+        function updateScore() {
+            scoreElement.textContent = `スコア: ${score}`;
+        }
+        
+        function generateNextType() {
+            // より難しく：最初の5種類からランダムに選択（大きいのも出やすく）
+            const weights = [30, 25, 20, 15, 10];  // 各タイプの出現確率
+            const totalWeight = weights.reduce((a, b) => a + b, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (let i = 0; i < weights.length; i++) {
+                random -= weights[i];
+                if (random <= 0) {
+                    nextType = i;
+                    break;
+                }
+            }
+            
+            nextFaceElement.textContent = ojisanTypes[nextType].face;
+        }
+        
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // スケールを適用
+            ctx.save();
+            ctx.scale(canvas.scale, canvas.scale);
+            
+            // 背景グラデーション
+            const gradient = ctx.createLinearGradient(0, 0, 0, 600);
+            gradient.addColorStop(0, '#f0f0f0');
+            gradient.addColorStop(1, '#e0e0e0');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 400, 600);
+            
+            // デンジャーゾーン（赤い半透明エリア）
+            if (dangerTimer > 0) {
+                ctx.fillStyle = `rgba(255, 0, 0, ${0.1 + (dangerTimer / 3000) * 0.3})`;
+                ctx.fillRect(0, 0, 400, DANGER_LINE_Y);
+            }
+            
+            // デンジャーライン
+            ctx.strokeStyle = dangerTimer > 0 ? '#ff0000' : '#ff6666';
+            ctx.lineWidth = dangerTimer > 0 ? 5 : 3;
+            ctx.setLineDash([10, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, DANGER_LINE_Y);
+            ctx.lineTo(400, DANGER_LINE_Y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // "DANGER" テキスト
+            ctx.fillStyle = dangerTimer > 0 ? '#ff0000' : '#ff6666';
+            ctx.font = dangerTimer > 0 ? 'bold 16px Arial' : '12px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('DANGER LINE - 3秒でゲームオーバー', 5, DANGER_LINE_Y - 5);
+            
+            // 次のおじさんのプレビュー
+            if (!gameOver && canDrop) {
+                ctx.globalAlpha = 0.5;
+                const previewOjisan = ojisanTypes[nextType];
+                ctx.font = `${previewOjisan.radius * 2}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(previewOjisan.face, mouseX, DROP_LINE_Y);
+                ctx.globalAlpha = 1;
+            }
+            
+            // おじさんたちの更新
+            ojisans.forEach(ojisan => ojisan.update());
+            
+            // 衝突判定
+            handleCollisions();
+            
+            // おじさんたちの描画
+            ojisans.forEach(ojisan => ojisan.draw());
+            
+            // ゲームオーバーチェック
+            if (!gameOver) {
+                checkGameOver();
+            }
+            
+            // ドロップクールダウンチェック
+            if (!canDrop && Date.now() - lastDropTime > DROP_COOLDOWN) {
+                canDrop = true;
+            }
+            
+            ctx.restore();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // タッチ移動
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            mouseX = (touch.clientX - rect.left) / canvas.scale;
+            const maxX = 400 - ojisanTypes[nextType].radius;
+            const minX = ojisanTypes[nextType].radius;
+            mouseX = Math.max(minX, Math.min(maxX, mouseX));
+        });
+        
+        // マウス移動
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouseX = (e.clientX - rect.left) / canvas.scale;
+            const maxX = 400 - ojisanTypes[nextType].radius;
+            const minX = ojisanTypes[nextType].radius;
+            mouseX = Math.max(minX, Math.min(maxX, mouseX));
+        });
+        
+        // おじさんを落とす関数
+        function dropOjisan(clientX) {
+            if (gameOver || !canDrop) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = (clientX - rect.left) / canvas.scale;
+            
+            // おじさんを生成
+            const newOjisan = new Ojisan(x, DROP_LINE_Y, nextType);
+            ojisans.push(newOjisan);
+            
+            // クールダウン開始
+            canDrop = false;
+            lastDropTime = Date.now();
+            
+            // 次のおじさんを生成
+            generateNextType();
+        }
+        
+        // クリックで落とす
+        canvas.addEventListener('click', (e) => {
+            dropOjisan(e.clientX);
+        });
+        
+        // タッチで落とす
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (e.changedTouches.length > 0) {
+                dropOjisan(e.changedTouches[0].clientX);
+            }
+        });
+        
+        // Enterキーでスコア保存
+        playerNameElement.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                saveHighScore();
+            }
+        });
+        
+        // Enterキーでおじさんを落とす
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !gameOver && canDrop && document.activeElement !== playerNameElement) {
+                // マウス位置におじさんを生成
+                const newOjisan = new Ojisan(mouseX, DROP_LINE_Y, nextType);
+                ojisans.push(newOjisan);
+                
+                // クールダウン開始
+                canDrop = false;
+                lastDropTime = Date.now();
+                
+                // 次のおじさんを生成
+                generateNextType();
+            }
+        });
+        
+        function resetGame() {
+            ojisans = [];
+            score = 0;
+            gameOver = false;
+            canDrop = true;
+            lastDropTime = 0;
+            dangerTimer = 0;
+            lastDangerCheck = Date.now();
+            gameOverElement.style.display = 'none';
+            highScoreFormElement.style.display = 'none';
+            document.getElementById('dangerWarning').style.display = 'none';
+            updateScore();
+            generateNextType();
+        }
+        
+        // ゲーム開始
+        generateNextType();
+        displayHighScores();
+        gameLoop();
+    </script>
+</body>
+</html>
