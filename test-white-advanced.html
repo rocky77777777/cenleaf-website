@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 CENLEAF - 未来型AI×オートメーション</title>
+    <meta name="description" content="最先端Web技術で創り上げた、未来からやってきたようなCENLEAFのウェブサイト">
+    
+    <!-- ファビコン -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- OGPメタタグ -->
+    <meta property="og:title" content="CENLEAF - AI×自動化コンサルティング | 須崎純一">
+    <meta property="og:description" content="個人・小規模ビジネスの「集客〜販売」を自動運転化。オートウェビナーとAIで高単価ビジネスを構築するコンサルティングサービス。">
+    <meta property="og:image" content="https://cenleaf.com/images/ogp-banner.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://cenleaf.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="CENLEAF">
+    
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@suzakijunichi">
+    <meta name="twitter:creator" content="@suzakijunichi">
+    <meta name="twitter:title" content="CENLEAF - AI×自動化コンサルティング | 須崎純一">
+    <meta name="twitter:description" content="個人・小規模ビジネスの「集客〜販売」を自動運転化。オートウェビナーとAIで高単価ビジネスを構築するコンサルティングサービス。">
+    <meta name="twitter:image" content="https://cenleaf.com/images/ogp-banner.png">
+    
+    <!-- 最先端ライブラリ群 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/tengbao/vanta/dist/vanta.globe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css">
+    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            /* 白基調のカラーパレット */
+            --primary-blue: #0066ff;
+            --accent-cyan: #00bcd4;
+            --accent-purple: #7c4dff;
+            --light-bg: #ffffff;
+            --light-gray: #f8f9fa;
+            --border-color: #e0e0e0;
+            --text-dark: #212121;
+            --text-gray: #666666;
+            --gradient-start: #0066ff;
+            --gradient-end: #00bcd4;
+            --shadow-light: rgba(0, 102, 255, 0.1);
+            --shadow-medium: rgba(0, 102, 255, 0.2);
+            --accent-pink: #ff0080;
+            --accent-green: #00ff41;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            position: relative;
+            cursor: none;
+        }
+        
+        /* カスタムカーソル */
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            transition: all 0.1s ease;
+            z-index: 10000;
+            mix-blend-mode: difference;
+        }
+        
+        .custom-cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 102, 255, 0.1);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 9999;
+        }
+        
+        .custom-cursor.hover {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            mix-blend-mode: normal;
+        }
+        
+        /* 流体背景 */
+        #fluid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            opacity: 0.5;
+        }
+        
+        /* Three.js Canvas */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+        
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        /* ヘッダー */
+        .quantum-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 102, 255, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+            animation: logoGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 10px rgba(0, 102, 255, 0.5));
+            }
+            50% { 
+                filter: drop-shadow(0 0 20px rgba(0, 188, 212, 0.8));
+            }
+        }
+        
+        .quantum-nav {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        
+        .quantum-nav a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s;
+            padding: 5px 10px;
+        }
+        
+        .quantum-nav a:hover {
+            color: var(--primary-blue);
+        }
+        
+        .quantum-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+        
+        .quantum-nav a:hover::after {
+            width: 100%;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 100px 20px;
+            background: linear-gradient(180deg, 
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(248, 249, 250, 0.5) 50%,
+                rgba(255, 255, 255, 1) 100%);
+        }
+        
+        /* 3Dテキストコンテナ */
+        .hero-3d-container {
+            position: relative;
+            perspective: 1000px;
+            margin-bottom: 50px;
+        }
+        
+        /* モーフィングテキスト */
+        .morphing-text {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(60px, 10vw, 140px);
+            font-weight: 900;
+            text-align: center;
+            line-height: 1;
+            letter-spacing: 8px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float3D 6s ease-in-out infinite;
+        }
+        
+        @keyframes float3D {
+            0%, 100% {
+                transform: rotateX(0deg) rotateY(0deg) translateZ(0);
+            }
+            25% {
+                transform: rotateX(5deg) rotateY(10deg) translateZ(20px);
+            }
+            50% {
+                transform: rotateX(-5deg) rotateY(-5deg) translateZ(10px);
+            }
+            75% {
+                transform: rotateX(3deg) rotateY(-10deg) translateZ(15px);
+            }
+        }
+        
+        .morphing-text span {
+            display: inline-block;
+            position: relative;
+            background: linear-gradient(135deg, 
+                var(--primary-blue) 0%, 
+                var(--accent-cyan) 25%, 
+                var(--accent-purple) 50%, 
+                var(--accent-pink) 75%, 
+                var(--primary-blue) 100%);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 8s ease infinite, charFloat 3s ease-in-out infinite;
+            animation-delay: calc(var(--char-index) * 0.1s);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes charFloat {
+            0%, 100% { transform: translateY(0) rotateZ(0deg); }
+            25% { transform: translateY(-10px) rotateZ(-2deg); }
+            75% { transform: translateY(5px) rotateZ(2deg); }
+        }
+        
+        /* サブタイトル */
+        .hero-subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 24px;
+            color: var(--text-gray);
+            margin: 30px 0;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.5s;
+            text-align: center;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* パーティクルテキスト */
+        .particle-text {
+            position: relative;
+            font-size: 20px;
+            margin: 20px 0;
+            color: var(--text-gray);
+            overflow: hidden;
+        }
+        
+        .particle-text .word {
+            display: inline-block;
+            margin: 0 0.3em;
+            animation: wordWave 3s ease-in-out infinite;
+            animation-delay: calc(var(--word-index) * 0.2s);
+        }
+        
+        @keyframes wordWave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        /* インタラクティブボタン */
+        .hero-buttons {
+            display: flex;
+            gap: 30px;
+            margin-top: 50px;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .interactive-button {
+            padding: 20px 50px;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border-radius: 60px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .interactive-button.primary {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 102, 255, 0.3);
+        }
+        
+        .interactive-button.primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .interactive-button.primary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .interactive-button.primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(0, 102, 255, 0.4);
+        }
+        
+        .interactive-button.secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-blue);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+        
+        .interactive-button.secondary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            margin: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            animation: borderRotate 3s linear infinite;
+        }
+        
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .interactive-button.secondary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(0, 188, 212, 0.3);
+        }
+        
+        /* 浮遊オブジェクト */
+        .floating-objects {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .floating-shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: floatRandom 20s infinite ease-in-out;
+        }
+        
+        .floating-shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-cyan));
+            top: 10%;
+            left: 10%;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-duration: 15s;
+        }
+        
+        .floating-shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            top: 60%;
+            right: 10%;
+            border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+            animation-duration: 20s;
+            animation-delay: -5s;
+        }
+        
+        .floating-shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+            bottom: 20%;
+            left: 30%;
+            border-radius: 41% 59% 41% 59% / 41% 59% 41% 59%;
+            animation-duration: 18s;
+            animation-delay: -10s;
+        }
+        
+        @keyframes floatRandom {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            33% {
+                transform: translate(100px, -100px) rotate(120deg) scale(1.2);
+            }
+            66% {
+                transform: translate(-100px, 100px) rotate(240deg) scale(0.8);
+            }
+        }
+        
+        /* スクロールインジケーター */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 50px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .scroll-indicator::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 10px;
+            background: var(--primary-blue);
+            border-radius: 3px;
+            left: 50%;
+            top: 10px;
+            transform: translateX(-50%);
+            animation: scrollDot 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+        
+        @keyframes scrollDot {
+            0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(20px); opacity: 0; }
+        }
+        
+        /* データビジュアライゼーション */
+        .data-viz {
+            position: absolute;
+            top: 50%;
+            right: -100px;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 200px;
+            opacity: 0.3;
+        }
+        
+        .data-point {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            animation: dataFlow 3s infinite ease-in-out;
+        }
+        
+        .data-point:nth-child(1) { animation-delay: 0s; top: 20%; left: 20%; }
+        .data-point:nth-child(2) { animation-delay: 0.5s; top: 50%; left: 30%; }
+        .data-point:nth-child(3) { animation-delay: 1s; top: 80%; left: 50%; }
+        .data-point:nth-child(4) { animation-delay: 1.5s; top: 30%; left: 70%; }
+        .data-point:nth-child(5) { animation-delay: 2s; top: 60%; left: 80%; }
+        
+        @keyframes dataFlow {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(2);
+                opacity: 0.8;
+            }
+        }
+        
+        /* 機能セクション */
+        .feature-section {
+            padding: 120px 20px;
+            background: var(--light-gray);
+            position: relative;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 56px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 80px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 20px var(--shadow-light);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px var(--shadow-medium);
+            border-color: var(--primary-blue);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 36px;
+            box-shadow: 0 10px 30px var(--shadow-medium);
+        }
+        
+        .feature-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+        
+        .feature-description {
+            color: var(--text-gray);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        /* プロフィールセクション */
+        .profile-section {
+            padding: 120px 20px;
+            background: white;
+            position: relative;
+        }
+        
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .profile-image-container {
+            position: relative;
+        }
+        
+        .profile-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px var(--shadow-medium);
+        }
+        
+        .profile-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .profile-content h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .profile-title {
+            font-size: 24px;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+        
+        .profile-description {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow-light);
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-top: 5px;
+        }
+        
+        /* フッター */
+        .quantum-footer {
+            padding: 60px 20px 30px;
+            background: linear-gradient(180deg, var(--light-gray) 0%, white 100%);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-blue);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-gray);
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .quantum-header {
+                padding: 15px 20px;
+            }
+            
+            .quantum-nav {
+                display: none;
+            }
+            
+            .profile-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .morphing-text {
+                font-size: clamp(40px, 8vw, 80px);
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .custom-cursor,
+            .custom-cursor-follower {
+                display: none;
+            }
+            
+            body {
+                cursor: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- カスタムカーソル -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-follower"></div>
+    
+    <!-- 流体背景 -->
+    <canvas id="fluid-background"></canvas>
+    
+    <!-- Three.js Canvas -->
+    <canvas id="three-canvas"></canvas>
+    
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+    
+    <!-- ヘッダー -->
+    <header class="quantum-header">
+        <nav class="nav-container">
+            <div class="logo">CENLEAF</div>
+            <ul class="quantum-nav">
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#services">SERVICES</a></li>
+                <li><a href="#about">ABOUT</a></li>
+                <li><a href="#blog">BLOG</a></li>
+                <li><a href="#contact">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section" id="home">
+        <!-- 浮遊オブジェクト -->
+        <div class="floating-objects">
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+        </div>
+        
+        <!-- データビジュアライゼーション -->
+        <div class="data-viz">
+            <div class="data-point"></div>
+            <div class="data-point"></div>
+            <div class="data-point"></div>
+            <div class="data-point"></div>
+            <div class="data-point"></div>
+        </div>
+        
+        <!-- 3Dテキストコンテナ -->
+        <div class="hero-3d-container">
+            <h1 class="morphing-text" id="morphing-title">
+                <span style="--char-index: 0">C</span><span style="--char-index: 1">E</span><span style="--char-index: 2">N</span><span style="--char-index: 3">L</span><span style="--char-index: 4">E</span><span style="--char-index: 5">A</span><span style="--char-index: 6">F</span>
+            </h1>
+        </div>
+        
+        <!-- サブタイトル -->
+        <p class="hero-subtitle" id="glitch-subtitle">
+            AI × AUTOMATION × INNOVATION
+        </p>
+        
+        <!-- パーティクルテキスト -->
+        <div class="particle-text" id="particle-text">
+            <span class="word" style="--word-index: 0">集客から販売まで</span>
+            <span class="word" style="--word-index: 1">すべてを自動化</span>
+        </div>
+        
+        <!-- インタラクティブボタン -->
+        <div class="hero-buttons">
+            <a href="#contact" class="interactive-button primary">
+                <span>無料相談を予約</span>
+            </a>
+            <a href="#services" class="interactive-button secondary">
+                <span>サービス詳細</span>
+            </a>
+        </div>
+        
+        <!-- スクロールインジケーター -->
+        <div class="scroll-indicator"></div>
+    </section>
+    
+    <!-- 機能セクション -->
+    <section class="feature-section" id="services">
+        <h2 class="section-title">QUANTUM FEATURES</h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3 class="feature-title">AI Integration</h3>
+                <p class="feature-description">
+                    最新のAI技術を活用し、ビジネスプロセスを自動化。ChatGPT、Claude、Geminiなど、
+                    最適なAIを選定・実装します。
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Automation Flow</h3>
+                <p class="feature-description">
+                    Zapier、Make、n8nを駆使した完全自動化フロー構築。24時間365日、
+                    あなたの代わりに働くシステムを実現。
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Data Analytics</h3>
+                <p class="feature-description">
+                    リアルタイムデータ分析とKPIダッシュボード構築。数値に基づいた
+                    意思決定を可能にします。
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Webinar System</h3>
+                <p class="feature-description">
+                    オートウェビナーシステムの構築と最適化。集客から販売まで、
+                    全てを自動化する仕組みを提供。
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3 class="feature-title">Scale Support</h3>
+                <p class="feature-description">
+                    月商100万円から1000万円への成長支援。段階的な拡張戦略と
+                    実装サポートを提供します。
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3 class="feature-title">Innovation Lab</h3>
+                <p class="feature-description">
+                    最新技術の検証と実装。常に進化し続けるビジネスモデルの
+                    構築をサポートします。
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- プロフィールセクション -->
+    <section class="profile-section" id="about">
+        <div class="profile-container">
+            <div class="profile-image-container">
+                <div class="profile-image">
+                    <img src="images/profile/suzaki.jpg" alt="須崎純一">
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <h2>須崎 純一</h2>
+                <p class="profile-title">AI × 自動化コンサルタント</p>
+                <p class="profile-description">
+                    「いつかやりたいを今やろう」をモットーに、個人・小規模ビジネスの
+                    「集客〜販売」を自動運転化。オートウェビナーとAIで、
+                    あなたのビジネスを次のステージへ導きます。
+                </p>
+                
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">導入実績</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">4年</div>
+                        <div class="stat-label">全国ホテル暮らし</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">47</div>
+                        <div class="stat-label">都道府県制覇</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- フッター -->
+    <footer class="quantum-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>CENLEAF</h3>
+                <p style="color: var(--text-gray); line-height: 1.8;">
+                    AI×自動化で、ビジネスの未来を創造する
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Services</h3>
+                <ul class="footer-links">
+                    <li><a href="#ai">AI導入支援</a></li>
+                    <li><a href="#automation">業務自動化</a></li>
+                    <li><a href="#webinar">オートウェビナー構築</a></li>
+                    <li><a href="#consulting">コンサルティング</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="/blog">ブログ</a></li>
+                    <li><a href="/column">コラム</a></li>
+                    <li><a href="#case">導入事例</a></li>
+                    <li><a href="#faq">よくある質問</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <ul class="footer-links">
+                    <li><a href="https://twitter.com/suzakijunichi" target="_blank">Twitter</a></li>
+                    <li><a href="https://www.instagram.com/cenleaf/" target="_blank">Instagram</a></li>
+                    <li><a href="https://note.com/suzakijun1" target="_blank">note</a></li>
+                    <li><a href="#contact">お問い合わせ</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 CENLEAF. All rights reserved. | Powered by Quantum Technology</p>
+        </div>
+    </footer>
+    
+    <script>
+        // カスタムカーソル
+        const cursor = document.querySelector('.custom-cursor');
+        const follower = document.querySelector('.custom-cursor-follower');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                follower.style.left = e.clientX + 'px';
+                follower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+        
+        // ホバーエフェクト
+        const hoverElements = document.querySelectorAll('a, button, .interactive-button');
+        hoverElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+            });
+            element.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+            });
+        });
+        
+        // 高度な3D背景
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.getElementById('three-canvas'),
+            alpha: true,
+            antialias: true
+        });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        
+        // 複数の幾何学オブジェクト
+        const geometries = [
+            new THREE.IcosahedronGeometry(2, 1),
+            new THREE.OctahedronGeometry(1.5, 0),
+            new THREE.TetrahedronGeometry(1.8, 0),
+            new THREE.DodecahedronGeometry(1.6, 0)
+        ];
+        
+        const meshes = [];
+        geometries.forEach((geometry, index) => {
+            const material = new THREE.MeshBasicMaterial({
+                color: index % 2 === 0 ? 0x0066ff : 0x00bcd4,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.1
+            });
+            
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(
+                (Math.random() - 0.5) * 10,
+                (Math.random() - 0.5) * 10,
+                (Math.random() - 0.5) * 10
+            );
+            scene.add(mesh);
+            meshes.push(mesh);
+        });
+        
+        camera.position.z = 15;
+        
+        // マウス追従
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // カメラをマウスに追従
+            camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
+            camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+            
+            // メッシュの回転
+            meshes.forEach((mesh, index) => {
+                mesh.rotation.x += 0.001 * (index + 1);
+                mesh.rotation.y += 0.002 * (index + 1);
+                mesh.position.y = Math.sin(Date.now() * 0.001 + index) * 2;
+            });
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // パーティクル設定（インタラクティブ）
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: ['#0066ff', '#00bcd4', '#7c4dff']
+                },
+                shape: {
+                    type: ['circle', 'triangle', 'polygon'],
+                    polygon: {
+                        nb_sides: 5
+                    }
+                },
+                opacity: {
+                    value: 0.3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 2,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#00bcd4',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 3,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'bounce',
+                    bounce: false,
+                    attract: {
+                        enable: true,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: ['grab', 'bubble']
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 200,
+                        line_linked: {
+                            opacity: 0.5
+                        }
+                    },
+                    bubble: {
+                        distance: 200,
+                        size: 10,
+                        duration: 2,
+                        opacity: 0.8,
+                        speed: 3
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+        
+        // テキストモーフィング
+        const morphingTitle = document.getElementById('morphing-title');
+        const words = ['CENLEAF', 'INNOVATE', 'AUTOMATE', 'TRANSFORM'];
+        let currentWord = 0;
+        
+        setInterval(() => {
+            currentWord = (currentWord + 1) % words.length;
+            const word = words[currentWord];
+            let html = '';
+            for (let i = 0; i < word.length; i++) {
+                html += `<span style="--char-index: ${i}">${word[i]}</span>`;
+            }
+            morphingTitle.innerHTML = html;
+        }, 4000);
+        
+        // Baffle.js でグリッチエフェクト
+        const glitchText = baffle('#glitch-subtitle');
+        glitchText.set({
+            characters: '█▓▒░█▓▒░█▓▒░<>/',
+            speed: 50
+        });
+        
+        setInterval(() => {
+            glitchText.reveal(1000);
+            setTimeout(() => {
+                glitchText.start();
+            }, 4000);
+        }, 5000);
+        
+        // GSAP 高度なスクロールアニメーション
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // ヒーローセクションのパララックス
+        gsap.to('.floating-shape', {
+            scrollTrigger: {
+                trigger: '.hero-section',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1
+            },
+            y: -200,
+            rotation: 360,
+            ease: 'none'
+        });
+        
+        // 3Dテキストの視差効果
+        gsap.to('.morphing-text', {
+            scrollTrigger: {
+                trigger: '.hero-section',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1
+            },
+            y: -100,
+            scale: 0.8,
+            opacity: 0.5,
+            ease: 'power2.inOut'
+        });
+        
+        // フィーチャーカードの複雑なアニメーション
+        gsap.utils.toArray('.feature-card').forEach((card, i) => {
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            })
+            .from(card, {
+                y: 100,
+                opacity: 0,
+                rotationY: 30,
+                duration: 1,
+                delay: i * 0.1,
+                ease: 'back.out(1.7)'
+            })
+            .from(card.querySelector('.feature-icon'), {
+                scale: 0,
+                rotation: 360,
+                duration: 0.5,
+                ease: 'back.out(3)'
+            }, '-=0.5');
+        });
+        
+        // 流体シミュレーション風の背景
+        const fluidCanvas = document.getElementById('fluid-background');
+        const fluidCtx = fluidCanvas.getContext('2d');
+        fluidCanvas.width = window.innerWidth;
+        fluidCanvas.height = window.innerHeight;
+        
+        class FluidParticle {
+            constructor() {
+                this.x = Math.random() * fluidCanvas.width;
+                this.y = Math.random() * fluidCanvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 50 + 20;
+                this.color = Math.random() > 0.5 ? 'rgba(0, 102, 255, 0.02)' : 'rgba(0, 188, 212, 0.02)';
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < -this.radius) this.x = fluidCanvas.width + this.radius;
+                if (this.x > fluidCanvas.width + this.radius) this.x = -this.radius;
+                if (this.y < -this.radius) this.y = fluidCanvas.height + this.radius;
+                if (this.y > fluidCanvas.height + this.radius) this.y = -this.radius;
+            }
+            
+            draw() {
+                fluidCtx.beginPath();
+                const gradient = fluidCtx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+                gradient.addColorStop(0, this.color.replace('0.02', '0.05'));
+                gradient.addColorStop(1, this.color);
+                fluidCtx.fillStyle = gradient;
+                fluidCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                fluidCtx.fill();
+            }
+        }
+        
+        const fluidParticles = [];
+        for (let i = 0; i < 20; i++) {
+            fluidParticles.push(new FluidParticle());
+        }
+        
+        function animateFluid() {
+            fluidCtx.clearRect(0, 0, fluidCanvas.width, fluidCanvas.height);
+            fluidParticles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animateFluid);
+        }
+        
+        animateFluid();
+        
+        // Window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            fluidCanvas.width = window.innerWidth;
+            fluidCanvas.height = window.innerHeight;
+        });
+        
+        // スムーススクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
