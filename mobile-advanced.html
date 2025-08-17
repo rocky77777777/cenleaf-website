@@ -745,36 +745,6 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        /* フローティングボタン */
-        .floating-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: var(--gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: white;
-            font-size: 24px;
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
-            z-index: 100;
-            animation: floatPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes floatPulse {
-            0%, 100% { 
-                transform: translateY(0) scale(1);
-                box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
-            }
-            50% { 
-                transform: translateY(-10px) scale(1.05);
-                box-shadow: 0 15px 40px rgba(0, 212, 255, 0.6);
-            }
-        }
 
         /* スクロールアニメーション */
         .fade-in {
@@ -1068,8 +1038,6 @@
         <p>&copy; 2024 CENLEAF. All rights reserved.</p>
     </footer>
 
-    <!-- フローティングボタン -->
-    <a href="https://line.me/R/ti/p/%40cenleaf" class="floating-btn">💬</a>
 
     <script>
         // メニュー開閉
