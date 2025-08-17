@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENLEAF - Next Generation Digital Experience</title>
+    <meta name="description" content="最先端の3DビジュアルとWebGLテクノロジーで創造する次世代デジタル体験">
+    
+    <!-- ファビコン -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- Three.js と関連ライブラリ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/dist/esm/simplex-noise.js" type="module"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-white: #ffffff;
+            --primary-black: #000000;
+            --accent-blue: #0047ff;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* WebGL Canvas */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        /* パーティクル背景 */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.6;
+        }
+        
+        /* コンテンツラッパー */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* ナビゲーション */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 40px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-container.scrolled {
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-3d {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .logo-3d span {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .logo-3d:hover span {
+            animation: logoWave 0.5s ease forwards;
+            animation-delay: calc(var(--i) * 0.05s);
+        }
+        
+        @keyframes logoWave {
+            0%, 100% { transform: translateY(0) rotateX(0); }
+            50% { transform: translateY(-10px) rotateX(360deg); }
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+        
+        .nav-menu a {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-blue);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 100px 40px;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(48px, 8vw, 120px);
+            font-weight: 700;
+            line-height: 0.9;
+            letter-spacing: -3px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .hero-title .word {
+            display: inline-block;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float3D 6s ease-in-out infinite;
+            animation-delay: calc(var(--word-index) * 0.2s);
+        }
+        
+        @keyframes float3D {
+            0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+            25% { transform: translateY(-20px) rotateX(10deg) rotateY(5deg); }
+            50% { transform: translateY(0) rotateX(0) rotateY(-5deg); }
+            75% { transform: translateY(-10px) rotateX(-5deg) rotateY(3deg); }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #667eea 100%);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 8s ease infinite;
+        }
+        
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(18px, 2vw, 24px);
+            font-weight: 300;
+            color: #666;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 3Dボタン */
+        .cta-3d {
+            display: inline-block;
+            padding: 20px 50px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 100px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .cta-3d::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-3d:hover {
+            transform: translateY(-5px) rotateX(-10deg);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        }
+        
+        .cta-3d:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* 3D カード */
+        .services-section {
+            padding: 100px 40px;
+            position: relative;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+        }
+        
+        .section-title-3d {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+        
+        .cards-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .card-3d {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        
+        .card-3d::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(-5deg) rotateY(5deg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-3d:hover::before {
+            opacity: 0.05;
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(10deg); }
+        }
+        
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+        
+        .card-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* 3D テキストセクション */
+        .text-3d-section {
+            padding: 100px 40px;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .floating-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(24px, 4vw, 48px);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            transform-style: preserve-3d;
+            animation: textFloat 10s ease-in-out infinite;
+        }
+        
+        @keyframes textFloat {
+            0%, 100% {
+                transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0);
+            }
+            25% {
+                transform: perspective(1000px) rotateX(20deg) rotateY(10deg) translateZ(50px);
+            }
+            50% {
+                transform: perspective(1000px) rotateX(-10deg) rotateY(-20deg) translateZ(100px);
+            }
+            75% {
+                transform: perspective(1000px) rotateX(15deg) rotateY(15deg) translateZ(50px);
+            }
+        }
+        
+        /* パーティクルオーバーレイ */
+        .particle-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: particleFloat 20s infinite linear;
+        }
+        
+        @keyframes particleFloat {
+            from {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            to {
+                transform: translateY(-100vh) translateX(100px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* フッター */
+        .footer-3d {
+            padding: 60px 40px 30px;
+            background: linear-gradient(180deg, rgba(248, 249, 250, 0.9) 0%, rgba(255, 255, 255, 0.9) 100%);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-blue);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: clamp(36px, 10vw, 64px);
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ローディングアニメーション */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-cube {
+            width: 40px;
+            height: 40px;
+            transform-style: preserve-3d;
+            animation: rotateCube 2s infinite ease-in-out;
+        }
+        
+        @keyframes rotateCube {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+        
+        .loader-face {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.8;
+        }
+        
+        .loader-face:nth-child(1) { transform: translateZ(20px); }
+        .loader-face:nth-child(2) { transform: rotateY(90deg) translateZ(20px); }
+        .loader-face:nth-child(3) { transform: rotateY(180deg) translateZ(20px); }
+        .loader-face:nth-child(4) { transform: rotateY(-90deg) translateZ(20px); }
+        .loader-face:nth-child(5) { transform: rotateX(90deg) translateZ(20px); }
+        .loader-face:nth-child(6) { transform: rotateX(-90deg) translateZ(20px); }
+    </style>
+</head>
+<body>
+    <!-- ローディング画面 -->
+    <div class="loader" id="loader">
+        <div class="loader-cube">
+            <div class="loader-face"></div>
+            <div class="loader-face"></div>
+            <div class="loader-face"></div>
+            <div class="loader-face"></div>
+            <div class="loader-face"></div>
+            <div class="loader-face"></div>
+        </div>
+    </div>
+    
+    <!-- WebGL Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+    <canvas id="particle-canvas"></canvas>
+    
+    <!-- パーティクルオーバーレイ -->
+    <div class="particle-overlay" id="particleOverlay"></div>
+    
+    <!-- メインコンテンツ -->
+    <div class="content-wrapper">
+        <!-- ナビゲーション -->
+        <nav class="nav-container" id="navbar">
+            <div class="nav-wrapper">
+                <div class="logo-3d">
+                    <span style="--i:0">C</span><span style="--i:1">E</span><span style="--i:2">N</span><span style="--i:3">L</span><span style="--i:4">E</span><span style="--i:5">A</span><span style="--i:6">F</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home">HOME</a></li>
+                    <li><a href="#services">SERVICES</a></li>
+                    <li><a href="#about">ABOUT</a></li>
+                    <li><a href="#works">WORKS</a></li>
+                    <li><a href="#contact">CONTACT</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- ヒーローセクション -->
+        <section class="hero-section" id="home">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="word gradient-text" style="--word-index:0">DIGITAL</span>
+                    <span class="word gradient-text" style="--word-index:1">INNOVATION</span><br>
+                    <span class="word gradient-text" style="--word-index:2">EXPERIENCE</span>
+                </h1>
+                <p class="hero-subtitle">AI × AUTOMATION × 3D VISUALIZATION</p>
+                <a href="#contact" class="cta-3d">START YOUR PROJECT</a>
+            </div>
+        </section>
+        
+        <!-- サービスセクション -->
+        <section class="services-section" id="services">
+            <h2 class="section-title-3d gradient-text">OUR SERVICES</h2>
+            <div class="cards-container">
+                <div class="card-3d">
+                    <div class="card-icon">🚀</div>
+                    <h3 class="card-title">3D Web Experience</h3>
+                    <p class="card-description">
+                        最先端のWebGL技術を活用した没入型3Dウェブ体験を創造します。
+                        ユーザーを魅了するインタラクティブな空間を構築。
+                    </p>
+                </div>
+                
+                <div class="card-3d">
+                    <div class="card-icon">🤖</div>
+                    <h3 class="card-title">AI Integration</h3>
+                    <p class="card-description">
+                        GPT、Claude、Geminiなど最新AI技術をビジネスに統合。
+                        業務効率を飛躍的に向上させます。
+                    </p>
+                </div>
+                
+                <div class="card-3d">
+                    <div class="card-icon">⚡</div>
+                    <h3 class="card-title">Automation</h3>
+                    <p class="card-description">
+                        複雑な業務プロセスを完全自動化。24時間365日稼働する
+                        デジタルワークフォースを構築します。
+                    </p>
+                </div>
+                
+                <div class="card-3d">
+                    <div class="card-icon">💎</div>
+                    <h3 class="card-title">Creative Design</h3>
+                    <p class="card-description">
+                        ブランドの本質を表現する革新的なデザイン。
+                        視覚的インパクトと機能性を両立。
+                    </p>
+                </div>
+                
+                <div class="card-3d">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">Data Visualization</h3>
+                    <p class="card-description">
+                        複雑なデータを美しく直感的に可視化。
+                        意思決定を加速するダッシュボードを構築。
+                    </p>
+                </div>
+                
+                <div class="card-3d">
+                    <div class="card-icon">🎯</div>
+                    <h3 class="card-title">Marketing Tech</h3>
+                    <p class="card-description">
+                        最新のマーケティングテクノロジーで、
+                        顧客エンゲージメントを最大化します。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 3Dテキストセクション -->
+        <section class="text-3d-section">
+            <div class="floating-text gradient-text">
+                TRANSFORM YOUR DIGITAL PRESENCE
+            </div>
+        </section>
+        
+        <!-- フッター -->
+        <footer class="footer-3d">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CENLEAF</h3>
+                    <p style="color: #666; line-height: 1.8;">
+                        次世代のデジタル体験を創造する<br>
+                        クリエイティブスタジオ
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#web3d">3D Web Development</a></li>
+                        <li><a href="#ai">AI Solutions</a></li>
+                        <li><a href="#automation">Automation</a></li>
+                        <li><a href="#design">Creative Design</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#works">Portfolio</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://twitter.com/suzakijunichi" target="_blank">Twitter</a></li>
+                        <li><a href="https://www.instagram.com/cenleaf/" target="_blank">Instagram</a></li>
+                        <li><a href="https://github.com/cenleaf" target="_blank">GitHub</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 CENLEAF. Crafted with passion and precision.</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // ローディング制御
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1500);
+        });
+        
+        // スクロールでナビゲーションの見た目を変更
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // パーティクル生成
+        function createParticles() {
+            const overlay = document.getElementById('particleOverlay');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                overlay.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        // Three.js 3Dシーン
+        let scene, camera, renderer, particles, frameId;
+        let mouseX = 0, mouseY = 0;
+        let windowHalfX = window.innerWidth / 2;
+        let windowHalfY = window.innerHeight / 2;
+        
+        function init3D() {
+            // シーン作成
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0xffffff, 0.0003);
+            
+            // カメラ設定
+            camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                1,
+                2000
+            );
+            camera.position.z = 500;
+            
+            // レンダラー設定
+            renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('webgl-canvas'),
+                alpha: true,
+                antialias: true
+            });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // パーティクルシステム
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+            
+            for (let i = 0; i < 1000; i++) {
+                const x = Math.random() * 2000 - 1000;
+                const y = Math.random() * 2000 - 1000;
+                const z = Math.random() * 2000 - 1000;
+                
+                vertices.push(x, y, z);
+                
+                // グラデーションカラー
+                const color = new THREE.Color();
+                color.setHSL((i / 1000) * 0.5 + 0.5, 0.7, 0.5);
+                colors.push(color.r, color.g, color.b);
+            }
+            
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            
+            const material = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+            
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+            
+            // 複数の幾何学形状を追加
+            const shapes = [];
+            const geometries = [
+                new THREE.IcosahedronGeometry(50, 1),
+                new THREE.OctahedronGeometry(40, 0),
+                new THREE.TetrahedronGeometry(45, 0)
+            ];
+            
+            for (let i = 0; i < 5; i++) {
+                const geometry = geometries[i % geometries.length];
+                const material = new THREE.MeshBasicMaterial({
+                    color: new THREE.Color().setHSL(Math.random(), 0.7, 0.5),
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.x = (Math.random() - 0.5) * 600;
+                mesh.position.y = (Math.random() - 0.5) * 600;
+                mesh.position.z = (Math.random() - 0.5) * 600;
+                
+                shapes.push(mesh);
+                scene.add(mesh);
+            }
+            
+            // マウスイベント
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            
+            // アニメーション関数
+            function animate() {
+                frameId = requestAnimationFrame(animate);
+                
+                // カメラをマウスに追従
+                camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
+                camera.position.y += (-mouseY * 0.5 - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+                
+                // パーティクル回転
+                particles.rotation.x += 0.0005;
+                particles.rotation.y += 0.001;
+                
+                // 形状の回転
+                shapes.forEach((shape, i) => {
+                    shape.rotation.x += 0.01 * (i + 1);
+                    shape.rotation.y += 0.01 * (i + 1);
+                    shape.position.y = Math.sin(Date.now() * 0.001 + i) * 50;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+        }
+        
+        function onDocumentMouseMove(event) {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        }
+        
+        // パーティクルキャンバス（2D）
+        function initParticleCanvas() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 100;
+            
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = Math.random() * 2 + 1;
+                    this.color = `hsla(${Math.random() * 60 + 200}, 70%, 50%, 0.3)`;
+                }
+                
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+                
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+            }
+            
+            // パーティクル生成
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+            
+            // 接続線を描画
+            function drawConnections() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `hsla(220, 70%, 50%, ${0.2 * (1 - distance / 100)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                
+                drawConnections();
+                
+                requestAnimationFrame(animateParticles);
+            }
+            
+            animateParticles();
+        }
+        
+        // 初期化
+        init3D();
+        initParticleCanvas();
+        
+        // リサイズ対応
+        window.addEventListener('resize', () => {
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
+            
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            const canvas = document.getElementById('particle-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // GSAP スクロールアニメーション
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // カードの3Dアニメーション
+        gsap.utils.toArray('.card-3d').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 100,
+                opacity: 0,
+                rotationX: -30,
+                duration: 1,
+                delay: i * 0.1,
+                ease: 'power3.out'
+            });
+        });
+        
+        // フローティングテキストのアニメーション
+        gsap.to('.floating-text', {
+            scrollTrigger: {
+                trigger: '.text-3d-section',
+                start: 'top center',
+                end: 'bottom center',
+                scrub: 1
+            },
+            rotationY: 360,
+            scale: 1.2,
+            ease: 'none'
+        });
+        
+        // スムーススクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
