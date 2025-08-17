@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>おじさんスイカゲーム EPIC - 爽快進化版</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            overflow: hidden;
+        }
+        
+        #gameContainer {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        #scoreSection {
+            text-align: left;
+        }
+        
+        #score {
+            font-size: 32px;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+        }
+        
+        #multiplierDisplay {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: bold;
+        }
+        
+        #combo {
+            font-size: 18px;
+            color: #ffeb3b;
+            font-weight: bold;
+            margin-top: 5px;
+            min-height: 25px;
+        }
+        
+        #levelProgress {
+            text-align: center;
+        }
+        
+        #currentLevel {
+            font-size: 48px;
+            margin-bottom: 5px;
+        }
+        
+        #levelText {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        #progressBar {
+            width: 80px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            margin: 5px auto;
+            overflow: hidden;
+        }
+        
+        #progressFill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffeb3b, #ff9800);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        #gameCanvas {
+            border: 4px solid #333;
+            border-radius: 20px;
+            background: linear-gradient(to bottom, #ffffff, #f5f5f5);
+            display: block;
+            width: 100%;
+            cursor: crosshair;
+            position: relative;
+        }
+        
+        #specialMeter {
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #specialMeter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        #specialTitle {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        #specialBar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        #specialFill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffeb3b);
+            border-radius: 6px;
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        #specialButton {
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.5;
+        }
+        
+        #specialButton.ready {
+            opacity: 1;
+            background: rgba(255,255,255,0.9);
+            color: #ee5a24;
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        
+        #powerUpBox {
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        #powerUpTitle {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        #powerUpList {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .powerUpItem {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .powerUpItem:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .powerUpItem.active {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        #controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transition: all 0.3s;
+            transform: translate(-50%, -50%);
+        }
+        
+        .btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        #gameOverModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        #gameOverContent {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #gameOverContent::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #finalScore {
+            font-size: 56px;
+            font-weight: 900;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        #achievements {
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .achievement {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .floatingScore {
+            position: absolute;
+            font-size: 24px;
+            font-weight: 900;
+            pointer-events: none;
+            z-index: 100;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .screenShake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .slowMotion {
+            animation: slowMo 1s ease-out;
+        }
+        
+        @keyframes slowMo {
+            0% { filter: hue-rotate(0deg) saturate(1); }
+            50% { filter: hue-rotate(180deg) saturate(2); }
+            100% { filter: hue-rotate(0deg) saturate(1); }
+        }
+        
+        @media (max-width: 600px) {
+            #gameContainer {
+                border-radius: 0;
+                padding: 15px;
+                height: 100vh;
+                max-width: 100%;
+            }
+            
+            #score {
+                font-size: 28px;
+            }
+            
+            .btn {
+                font-size: 12px;
+                padding: 12px;
+            }
+        }
+        
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 50;
+        }
+        
+        #feverMode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255,0,0,0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        #feverMode.active {
+            opacity: 1;
+            animation: feverPulse 0.5s infinite alternate;
+        }
+        
+        @keyframes feverPulse {
+            0% { background: radial-gradient(circle, rgba(255,0,0,0.1) 0%, transparent 70%); }
+            100% { background: radial-gradient(circle, rgba(255,100,0,0.2) 0%, transparent 70%); }
+        }
+    </style>
+</head>
+<body>
+    <div id="feverMode"></div>
+    
+    <div id="gameContainer">
+        <div id="header">
+            <div id="scoreSection">
+                <div id="score">0</div>
+                <div id="multiplierDisplay">×1.0</div>
+                <div id="combo"></div>
+            </div>
+            <div id="levelProgress">
+                <div id="currentLevel">👶</div>
+                <div id="levelText">LEVEL 1</div>
+                <div id="progressBar">
+                    <div id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <canvas id="gameCanvas" width="400" height="600"></canvas>
+        
+        <div id="specialMeter">
+            <div id="specialTitle">🔥 SPECIAL ATTACK 🔥</div>
+            <div id="specialBar">
+                <div id="specialFill"></div>
+            </div>
+            <div id="specialButton" onclick="activateSpecial()">💥 BOOM! 💥</div>
+        </div>
+        
+        <div id="powerUpBox">
+            <div id="powerUpTitle">⚡ POWER-UPS ⚡</div>
+            <div id="powerUpList">
+                <div class="powerUpItem" data-type="freeze" title="時間停止">❄️</div>
+                <div class="powerUpItem" data-type="gravity" title="重力反転">🌍</div>
+                <div class="powerUpItem" data-type="magnet" title="磁力発動">🧲</div>
+                <div class="powerUpItem" data-type="double" title="倍率アップ">💎</div>
+            </div>
+        </div>
+        
+        <div id="controls">
+            <button class="btn" onclick="resetGame()">🔄 リセット</button>
+            <button class="btn" onclick="shareScore()">📤 シェア</button>
+            <button class="btn" onclick="toggleMusic()">🎵 音楽</button>
+        </div>
+    </div>
+    
+    <div id="gameOverModal">
+        <div id="gameOverContent">
+            <h2>🎮 GAME OVER! 🎮</h2>
+            <div id="finalScore">0</div>
+            <div id="achievements"></div>
+            <button class="btn" onclick="resetGame()" style="width: 100%; position: relative; z-index: 1;">
+                ⚡ RESTART ⚡
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // キャンバス設定
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 音楽とサウンド
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let musicEnabled = true;
+        
+        // サウンド生成関数
+        function playSound(frequency, duration, type = 'sine') {
+            if (!musicEnabled) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        // おじさんデータ（11段階）
+        const OJISAN_DATA = [
+            { emoji: '👶', radius: 16, level: 1, points: 1, name: 'ベビー' },
+            { emoji: '👦', radius: 20, level: 2, points: 3, name: 'キッズ' },
+            { emoji: '🧒', radius: 24, level: 3, points: 6, name: 'ジュニア' },
+            { emoji: '👨', radius: 28, level: 4, points: 10, name: 'ヤング' },
+            { emoji: '🧔', radius: 34, level: 5, points: 15, name: 'ビアード' },
+            { emoji: '👨‍🦰', radius: 40, level: 6, points: 21, name: 'レッド' },
+            { emoji: '👨‍🦱', radius: 46, level: 7, points: 28, name: 'カーリー' },
+            { emoji: '👨‍🦳', radius: 52, level: 8, points: 36, name: 'シルバー' },
+            { emoji: '👨‍🦲', radius: 58, level: 9, points: 45, name: 'ボールド' },
+            { emoji: '👴', radius: 66, level: 10, points: 55, name: 'マスター' },
+            { emoji: '🎅', radius: 76, level: 11, points: 66, name: 'レジェンド' }
+        ];
+        
+        // ゲーム変数
+        let ojisans = [];
+        let nextOjisanLevel = 1;
+        let score = 0;
+        let combo = 0;
+        let comboTimer = null;
+        let scoreMultiplier = 1.0;
+        let specialMeter = 0;
+        let gameOver = false;
+        let canDrop = true;
+        let dropX = 200;
+        let dropGuideX = 200;
+        let feverMode = false;
+        let feverTimer = 0;
+        let screenShakeIntensity = 0;
+        let particles = [];
+        
+        // パワーアップ
+        let activePowerUps = {};
+        let powerUpCooldowns = {};
+        
+        // 統計
+        let maxCombo = 0;
+        let mergeCount = 0;
+        let maxLevel = 1;
+        let epicMerges = 0;
+        
+        // おじさんクラス
+        class Ojisan {
+            constructor(x, y, data) {
+                this.x = x;
+                this.y = y;
+                this.vx = 0;
+                this.vy = 0;
+                this.data = data;
+                this.radius = data.radius;
+                this.merging = false;
+                this.landed = false;
+                this.glowing = false;
+                this.glowIntensity = 0;
+                this.trailParticles = [];
+            }
+            
+            update() {
+                if (this.merging || gameOver) return;
+                
+                // 重力（フィーバー中は軽く）
+                const gravity = feverMode ? 0.3 : 0.5;
+                this.vy += gravity;
+                if (this.vy > 12) this.vy = 12;
+                
+                // 磁力パワーアップ
+                if (activePowerUps.magnet) {
+                    for (let other of ojisans) {
+                        if (other !== this && other.data.level === this.data.level) {
+                            const dx = other.x - this.x;
+                            const dy = other.y - this.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            if (distance < 150) {
+                                this.vx += (dx / distance) * 0.2;
+                                this.vy += (dy / distance) * 0.2;
+                            }
+                        }
+                    }
+                }
+                
+                // 位置更新
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // 摩擦
+                this.vx *= 0.99;
+                
+                // 壁との衝突
+                if (this.x - this.radius <= 0) {
+                    this.x = this.radius;
+                    this.vx = Math.abs(this.vx) * 0.6;
+                    this.createWallEffect();
+                }
+                if (this.x + this.radius >= 400) {
+                    this.x = 400 - this.radius;
+                    this.vx = -Math.abs(this.vx) * 0.6;
+                    this.createWallEffect();
+                }
+                
+                // 床との衝突
+                if (this.y + this.radius >= 600) {
+                    this.y = 600 - this.radius;
+                    this.vy *= -0.3;
+                    this.vx *= 0.7;
+                    this.landed = true;
+                    this.createLandEffect();
+                    
+                    if (Math.abs(this.vy) < 0.5) {
+                        this.vy = 0;
+                    }
+                }
+                
+                // 光るエフェクト更新
+                if (this.glowing) {
+                    this.glowIntensity = Math.sin(Date.now() * 0.01) * 0.5 + 0.5;
+                }
+                
+                // 衝突判定
+                this.checkCollisions();
+            }
+            
+            checkCollisions() {
+                for (let other of ojisans) {
+                    if (other !== this && !other.merging && !this.merging) {
+                        const dx = this.x - other.x;
+                        const dy = this.y - other.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const minDistance = this.radius + other.radius;
+                        
+                        if (distance < minDistance) {
+                            if (this.data.level === other.data.level && 
+                                this.data.level < 11 && 
+                                this.landed && other.landed) {
+                                this.merge(other);
+                            } else {
+                                this.handlePhysicalCollision(other, dx, dy, distance, minDistance);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            handlePhysicalCollision(other, dx, dy, distance, minDistance) {
+                const overlap = minDistance - distance;
+                const pushX = (dx / distance) * overlap * 0.5;
+                const pushY = (dy / distance) * overlap * 0.5;
+                
+                this.x += pushX;
+                this.y += pushY;
+                other.x -= pushX;
+                other.y -= pushY;
+                
+                // 速度交換
+                const m1 = this.radius;
+                const m2 = other.radius;
+                const v1x = this.vx;
+                const v1y = this.vy;
+                const v2x = other.vx;
+                const v2y = other.vy;
+                
+                this.vx = (v1x * (m1 - m2) + 2 * m2 * v2x) / (m1 + m2) * 0.7;
+                this.vy = (v1y * (m1 - m2) + 2 * m2 * v2y) / (m1 + m2) * 0.7;
+                other.vx = (v2x * (m2 - m1) + 2 * m1 * v1x) / (m1 + m2) * 0.7;
+                other.vy = (v2y * (m2 - m1) + 2 * m1 * v1y) / (m1 + m2) * 0.7;
+                
+                this.landed = true;
+                other.landed = true;
+                
+                // 衝突音
+                playSound(200 + Math.random() * 100, 0.1);
+            }
+            
+            merge(other) {
+                if (this.merging || other.merging) return;
+                
+                this.merging = true;
+                other.merging = true;
+                
+                const newLevel = this.data.level + 1;
+                const newData = OJISAN_DATA[newLevel - 1];
+                const newX = (this.x + other.x) / 2;
+                const newY = (this.y + other.y) / 2;
+                
+                // コンボ更新
+                updateCombo();
+                
+                // スコア計算
+                let basePoints = newData.points;
+                let finalPoints = Math.floor(basePoints * scoreMultiplier * (1 + combo * 0.2));
+                
+                // フィーバーボーナス
+                if (feverMode) {
+                    finalPoints *= 2;
+                }
+                
+                score += finalPoints;
+                mergeCount++;
+                
+                if (newLevel > maxLevel) {
+                    maxLevel = newLevel;
+                    if (newLevel === 11) {
+                        epicMerges++;
+                        triggerEpicEffect();
+                    }
+                }
+                
+                // スペシャルメーター増加
+                specialMeter += 5 + combo;
+                if (specialMeter > 100) specialMeter = 100;
+                
+                // エフェクト生成
+                this.createMergeEffect(newX, newY, newLevel);
+                showFloatingScore(newX, newY, finalPoints);
+                
+                // サウンド
+                playSound(400 + newLevel * 50, 0.3, 'square');
+                
+                // 画面シェイク
+                if (newLevel >= 8) {
+                    triggerScreenShake(newLevel - 7);
+                }
+                
+                // 新おじさん生成
+                setTimeout(() => {
+                    ojisans = ojisans.filter(o => o !== this && o !== other);
+                    if (newLevel <= 11) {
+                        const newOjisan = new Ojisan(newX, newY, newData);
+                        newOjisan.vy = -2;
+                        newOjisan.glowing = newLevel >= 8;
+                        ojisans.push(newOjisan);
+                    }
+                    updateUI();
+                }, 100);
+            }
+            
+            createMergeEffect(x, y, level) {
+                // パーティクル爆発
+                for (let i = 0; i < 10 + level; i++) {
+                    const angle = (Math.PI * 2 / (10 + level)) * i;
+                    const speed = 3 + Math.random() * 2;
+                    particles.push({
+                        x: x,
+                        y: y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        life: 30 + Math.random() * 20,
+                        maxLife: 50,
+                        color: level >= 8 ? '#ffd700' : '#ff6b6b',
+                        size: 2 + Math.random() * 3
+                    });
+                }
+                
+                // レベル8以上でconfetti
+                if (level >= 8) {
+                    confetti({
+                        particleCount: 50,
+                        spread: 70,
+                        origin: { x: x / 400, y: y / 600 }
+                    });
+                }
+            }
+            
+            createWallEffect() {
+                for (let i = 0; i < 3; i++) {
+                    particles.push({
+                        x: this.x,
+                        y: this.y,
+                        vx: (Math.random() - 0.5) * 4,
+                        vy: -Math.random() * 3,
+                        life: 20,
+                        maxLife: 20,
+                        color: '#67a3ff',
+                        size: 1 + Math.random() * 2
+                    });
+                }
+            }
+            
+            createLandEffect() {
+                for (let i = 0; i < 5; i++) {
+                    particles.push({
+                        x: this.x + (Math.random() - 0.5) * this.radius,
+                        y: 600,
+                        vx: (Math.random() - 0.5) * 2,
+                        vy: -Math.random() * 2,
+                        life: 15,
+                        maxLife: 15,
+                        color: '#8b4513',
+                        size: 1 + Math.random()
+                    });
+                }
+            }
+            
+            draw() {
+                // 影
+                ctx.save();
+                ctx.globalAlpha = 0.2;
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.ellipse(this.x, 598, this.radius * 0.8, this.radius * 0.3, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+                
+                // グロー効果
+                if (this.glowing) {
+                    ctx.save();
+                    ctx.shadowBlur = 20;
+                    ctx.shadowColor = '#ffd700';
+                    ctx.globalAlpha = this.glowIntensity * 0.5;
+                    ctx.fillStyle = '#ffd700';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+                
+                // おじさん本体
+                ctx.font = `${this.radius * 2}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // フィーバー中の虹色エフェクト
+                if (feverMode) {
+                    ctx.save();
+                    const hue = (Date.now() * 0.1) % 360;
+                    ctx.filter = `hue-rotate(${hue}deg) saturate(1.5)`;
+                }
+                
+                ctx.fillText(this.data.emoji, this.x, this.y);
+                
+                if (feverMode) {
+                    ctx.restore();
+                }
+                
+                // マージ中エフェクト
+                if (this.merging) {
+                    ctx.strokeStyle = '#ffd700';
+                    ctx.lineWidth = 3;
+                    ctx.globalAlpha = 0.5;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                }
+            }
+        }
+        
+        // コンボ更新
+        function updateCombo() {
+            combo++;
+            if (combo > maxCombo) maxCombo = combo;
+            
+            clearTimeout(comboTimer);
+            comboTimer = setTimeout(() => {
+                combo = 0;
+                scoreMultiplier = 1.0;
+                document.getElementById('combo').textContent = '';
+                document.getElementById('multiplierDisplay').textContent = '×1.0';
+            }, 3000);
+            
+            // マルチプライヤー更新
+            scoreMultiplier = 1.0 + (combo - 1) * 0.1;
+            
+            if (combo >= 5 && !feverMode) {
+                triggerFeverMode();
+            }
+            
+            // UI更新
+            document.getElementById('combo').textContent = combo > 1 ? `${combo} COMBO! 🔥` : '';
+            document.getElementById('multiplierDisplay').textContent = `×${scoreMultiplier.toFixed(1)}`;
+        }
+        
+        // フィーバーモード
+        function triggerFeverMode() {
+            feverMode = true;
+            feverTimer = 5000; // 5秒間
+            document.getElementById('feverMode').classList.add('active');
+            
+            // フィーバー音
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => playSound(800 + i * 100, 0.2), i * 100);
+            }
+            
+            setTimeout(() => {
+                feverMode = false;
+                document.getElementById('feverMode').classList.remove('active');
+            }, 5000);
+        }
+        
+        // エピック効果
+        function triggerEpicEffect() {
+            triggerScreenShake(10);
+            
+            // 全画面confetti
+            confetti({
+                particleCount: 200,
+                spread: 360,
+                startVelocity: 30,
+                origin: { x: 0.5, y: 0.5 }
+            });
+            
+            // エピック音
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => playSound(400 + i * 50, 0.1), i * 50);
+            }
+        }
+        
+        // 画面シェイク
+        function triggerScreenShake(intensity) {
+            screenShakeIntensity = intensity;
+            document.getElementById('gameContainer').classList.add('screenShake');
+            setTimeout(() => {
+                document.getElementById('gameContainer').classList.remove('screenShake');
+                screenShakeIntensity = 0;
+            }, 500);
+        }
+        
+        // フローティングスコア
+        function showFloatingScore(x, y, points) {
+            const scoreEl = document.createElement('div');
+            scoreEl.className = 'floatingScore';
+            scoreEl.textContent = '+' + points.toLocaleString();
+            scoreEl.style.left = (canvas.offsetLeft + x) + 'px';
+            scoreEl.style.top = (canvas.offsetTop + y) + 'px';
+            
+            // コンボに応じて色変更
+            if (combo >= 5) {
+                scoreEl.style.color = '#ff6b6b';
+                scoreEl.style.fontSize = '32px';
+            } else if (combo >= 3) {
+                scoreEl.style.color = '#ffd700';
+                scoreEl.style.fontSize = '28px';
+            } else {
+                scoreEl.style.color = '#4caf50';
+            }
+            
+            document.getElementById('gameContainer').appendChild(scoreEl);
+            
+            anime({
+                targets: scoreEl,
+                translateY: -100,
+                scale: [1, 1.2, 1],
+                opacity: [1, 1, 0],
+                duration: 2000,
+                easing: 'easeOutQuart',
+                complete: () => scoreEl.remove()
+            });
+        }
+        
+        // スペシャル攻撃
+        function activateSpecial() {
+            if (specialMeter < 100) return;
+            
+            specialMeter = 0;
+            
+            // 全てのおじさんに衝撃波
+            for (let ojisan of ojisans) {
+                const dx = ojisan.x - 200;
+                const dy = ojisan.y - 300;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const force = 1000 / (distance + 1);
+                
+                ojisan.vx += (dx / distance) * force * 0.01;
+                ojisan.vy += (dy / distance) * force * 0.01;
+            }
+            
+            // エフェクト
+            triggerScreenShake(15);
+            confetti({
+                particleCount: 150,
+                spread: 360,
+                startVelocity: 25,
+                origin: { x: 0.5, y: 0.5 }
+            });
+            
+            // 爆発音
+            playSound(100, 0.5, 'sawtooth');
+            
+            updateUI();
+        }
+        
+        // パワーアップ
+        document.querySelectorAll('.powerUpItem').forEach(item => {
+            item.addEventListener('click', () => {
+                const type = item.dataset.type;
+                if (powerUpCooldowns[type] && Date.now() < powerUpCooldowns[type]) return;
+                
+                activePowerUp(type);
+                powerUpCooldowns[type] = Date.now() + 10000; // 10秒クールダウン
+            });
+        });
+        
+        function activePowerUp(type) {
+            switch(type) {
+                case 'freeze':
+                    // 時間停止（3秒）
+                    activePowerUps.freeze = true;
+                    setTimeout(() => delete activePowerUps.freeze, 3000);
+                    break;
+                case 'gravity':
+                    // 重力反転（5秒）
+                    activePowerUps.gravity = true;
+                    setTimeout(() => delete activePowerUps.gravity, 5000);
+                    break;
+                case 'magnet':
+                    // 磁力（7秒）
+                    activePowerUps.magnet = true;
+                    setTimeout(() => delete activePowerUps.magnet, 7000);
+                    break;
+                case 'double':
+                    // スコア倍率（10秒）
+                    scoreMultiplier *= 2;
+                    setTimeout(() => scoreMultiplier /= 2, 10000);
+                    break;
+            }
+            
+            playSound(600, 0.3);
+        }
+        
+        // パーティクル更新
+        function updateParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.1; // 重力
+                p.life--;
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                } else {
+                    // 描画
+                    ctx.save();
+                    ctx.globalAlpha = p.life / p.maxLife;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+        }
+        
+        // おじさんを落とす
+        function dropOjisan() {
+            if (!canDrop || gameOver || activePowerUps.freeze) return;
+            
+            const data = OJISAN_DATA[nextOjisanLevel - 1];
+            const ojisan = new Ojisan(dropX, 50, data);
+            ojisans.push(ojisan);
+            
+            // 次のおじさん
+            nextOjisanLevel = Math.floor(Math.random() * 5) + 1;
+            updateNextDisplay();
+            
+            canDrop = false;
+            setTimeout(() => {
+                canDrop = true;
+                checkGameOver();
+            }, 500);
+            
+            // ドロップ音
+            playSound(300, 0.1);
+        }
+        
+        function updateNextDisplay() {
+            const nextData = OJISAN_DATA[nextOjisanLevel - 1];
+            document.getElementById('currentLevel').textContent = nextData.emoji;
+            document.getElementById('levelText').textContent = `LEVEL ${nextData.level}`;
+            
+            // プログレスバー（レベル5でリセット）
+            const progress = ((nextOjisanLevel - 1) / 4) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+        
+        // ゲームオーバーチェック
+        function checkGameOver() {
+            for (let ojisan of ojisans) {
+                if (ojisan.y - ojisan.radius < 100 && Math.abs(ojisan.vy) < 0.5) {
+                    endGame();
+                    return;
+                }
+            }
+        }
+        
+        // ゲーム終了
+        function endGame() {
+            gameOver = true;
+            
+            document.getElementById('finalScore').textContent = score.toLocaleString();
+            
+            // 実績表示
+            const achievements = [];
+            if (maxCombo >= 10) achievements.push('🔥 マスターコンボ (10+ combo)');
+            if (epicMerges > 0) achievements.push('👑 レジェンド達成');
+            if (score >= 10000) achievements.push('💎 スコアマスター (10,000+)');
+            if (mergeCount >= 50) achievements.push('⚡ マージマニア (50+ merges)');
+            
+            const achievementDiv = document.getElementById('achievements');
+            achievementDiv.innerHTML = achievements.map(a => 
+                `<div class="achievement">${a}</div>`
+            ).join('');
+            
+            document.getElementById('gameOverModal').style.display = 'flex';
+            
+            // ゲームオーバー音
+            playSound(200, 1, 'triangle');
+        }
+        
+        // UI更新
+        function updateUI() {
+            document.getElementById('score').textContent = score.toLocaleString();
+            
+            // スペシャルメーター
+            document.getElementById('specialFill').style.width = specialMeter + '%';
+            const specialBtn = document.getElementById('specialButton');
+            specialBtn.classList.toggle('ready', specialMeter >= 100);
+        }
+        
+        // リセット
+        function resetGame() {
+            ojisans = [];
+            particles = [];
+            score = 0;
+            combo = 0;
+            maxCombo = 0;
+            mergeCount = 0;
+            maxLevel = 1;
+            epicMerges = 0;
+            scoreMultiplier = 1.0;
+            specialMeter = 0;
+            gameOver = false;
+            canDrop = true;
+            feverMode = false;
+            activePowerUps = {};
+            powerUpCooldowns = {};
+            nextOjisanLevel = 1;
+            
+            document.getElementById('gameOverModal').style.display = 'none';
+            document.getElementById('feverMode').classList.remove('active');
+            document.getElementById('combo').textContent = '';
+            document.getElementById('multiplierDisplay').textContent = '×1.0';
+            
+            updateNextDisplay();
+            updateUI();
+        }
+        
+        // シェア
+        function shareScore() {
+            const achievements = [];
+            if (maxCombo >= 10) achievements.push(`最大${maxCombo}コンボ`);
+            if (epicMerges > 0) achievements.push('レジェンド達成');
+            
+            const text = `おじさんスイカゲーム EPICで${score.toLocaleString()}点獲得！${achievements.length ? ' ' + achievements.join('・') : ''}\nhttps://cenleaf.com/game/ojisan-suika-epic.html`;
+            
+            if (navigator.share) {
+                navigator.share({ title: 'おじさんスイカゲーム EPIC', text: text });
+            } else {
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+            }
+        }
+        
+        // 音楽切り替え
+        function toggleMusic() {
+            musicEnabled = !musicEnabled;
+            document.querySelector('button[onclick="toggleMusic()"]').textContent = 
+                musicEnabled ? '🎵 音楽' : '🔇 音楽';
+        }
+        
+        // 操作
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            dropGuideX = (e.clientX - rect.left) / rect.width * 400;
+            dropGuideX = Math.max(40, Math.min(360, dropGuideX));
+        });
+        
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            dropX = (e.clientX - rect.left) / rect.width * 400;
+            dropX = Math.max(40, Math.min(360, dropX));
+            dropOjisan();
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            dropGuideX = (touch.clientX - rect.left) / rect.width * 400;
+            dropGuideX = Math.max(40, Math.min(360, dropGuideX));
+        });
+        
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            dropX = (touch.clientX - rect.left) / rect.width * 400;
+            dropX = Math.max(40, Math.min(360, dropX));
+            dropOjisan();
+        });
+        
+        // ゲームループ
+        function gameLoop() {
+            // 画面クリア
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 400, 600);
+            
+            // 背景エフェクト
+            if (feverMode) {
+                const gradient = ctx.createRadialGradient(200, 300, 0, 200, 300, 300);
+                gradient.addColorStop(0, 'rgba(255, 100, 100, 0.1)');
+                gradient.addColorStop(1, 'rgba(255, 200, 0, 0.05)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 400, 600);
+            }
+            
+            // 危険ライン
+            ctx.strokeStyle = feverMode ? '#ff0000' : 'rgba(255, 0, 0, 0.3)';
+            ctx.lineWidth = feverMode ? 4 : 2;
+            ctx.setLineDash([10, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, 100);
+            ctx.lineTo(400, 100);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // ドロップガイド
+            if (canDrop && !gameOver && !activePowerUps.freeze) {
+                ctx.strokeStyle = 'rgba(102, 126, 234, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(dropGuideX, 0);
+                ctx.lineTo(dropGuideX, 600);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // プレビュー（フィーバー中は虹色）
+                ctx.globalAlpha = 0.4;
+                if (feverMode) {
+                    const hue = (Date.now() * 0.2) % 360;
+                    ctx.filter = `hue-rotate(${hue}deg) saturate(2)`;
+                }
+                
+                const nextData = OJISAN_DATA[nextOjisanLevel - 1];
+                ctx.font = `${nextData.radius * 2}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(nextData.emoji, dropGuideX, 50);
+                
+                ctx.globalAlpha = 1;
+                ctx.filter = 'none';
+            }
+            
+            // おじさん更新・描画
+            if (!gameOver && !activePowerUps.freeze) {
+                ojisans.forEach(ojisan => ojisan.update());
+            }
+            ojisans.forEach(ojisan => ojisan.draw());
+            
+            // パーティクル更新
+            updateParticles();
+            
+            // 画面シェイク
+            if (screenShakeIntensity > 0) {
+                ctx.save();
+                const shakeX = (Math.random() - 0.5) * screenShakeIntensity;
+                const shakeY = (Math.random() - 0.5) * screenShakeIntensity;
+                ctx.translate(shakeX, shakeY);
+                screenShakeIntensity *= 0.9;
+                ctx.restore();
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // 初期化
+        updateNextDisplay();
+        updateUI();
+        gameLoop();
+    </script>
+</body>
+</html>
