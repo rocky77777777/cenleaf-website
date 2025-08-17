@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>おじさんスイカゲーム - 正統版</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+        }
+        
+        #gameContainer {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 480px;
+            width: 100%;
+        }
+        
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+        
+        #score {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        #nextInfo {
+            text-align: center;
+        }
+        
+        #nextLabel {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        #nextOjisan {
+            font-size: 36px;
+        }
+        
+        #gameCanvas {
+            border: 4px solid #333;
+            border-radius: 15px;
+            background: linear-gradient(to bottom, #ffffff, #f5f5f5);
+            display: block;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        #evolution {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        #evolutionTitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        #evolutionList {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .evolutionItem {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+        }
+        
+        .arrow {
+            color: #999;
+            font-size: 16px;
+            margin: 0 2px;
+        }
+        
+        #controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        #gameOverModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #gameOverContent {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        #finalScore {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .floatingScore {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: #4caf50;
+            pointer-events: none;
+            animation: floatUp 1.5s ease-out forwards;
+            z-index: 100;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-60px);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            #gameContainer {
+                border-radius: 0;
+                padding: 10px;
+                height: 100vh;
+                max-width: 100%;
+            }
+            
+            #score {
+                font-size: 24px;
+            }
+            
+            .btn {
+                font-size: 12px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="header">
+            <div id="score">0</div>
+            <div id="nextInfo">
+                <div id="nextLabel">NEXT</div>
+                <div id="nextOjisan">👶</div>
+            </div>
+        </div>
+        
+        <canvas id="gameCanvas" width="400" height="600"></canvas>
+        
+        <div id="evolution">
+            <div id="evolutionTitle">進化の順番</div>
+            <div id="evolutionList">
+                <span class="evolutionItem">👶</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">👦</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">🧒</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">👨</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">🧔</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">👨‍🦰</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">👨‍🦱</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">👨‍🦳</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">👨‍🦲</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">👴</span>
+                <span class="arrow">→</span>
+                <span class="evolutionItem">🎅</span>
+            </div>
+        </div>
+        
+        <div id="controls">
+            <button class="btn" onclick="resetGame()">🔄 リセット</button>
+            <button class="btn" onclick="shareScore()">📤 シェア</button>
+        </div>
+    </div>
+    
+    <div id="gameOverModal">
+        <div id="gameOverContent">
+            <h2 style="color: #ff3333;">ゲームオーバー！</h2>
+            <div id="finalScore">0</div>
+            <button class="btn" onclick="resetGame()" style="width: 100%;">
+                もう一度プレイ
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // キャンバス設定
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // スイカゲーム準拠のおじさんデータ（11段階）
+        const OJISAN_DATA = [
+            { emoji: '👶', radius: 16, level: 1, points: 0 },      // さくらんぼ相当
+            { emoji: '👦', radius: 20, level: 2, points: 1 },      // いちご相当
+            { emoji: '🧒', radius: 24, level: 3, points: 3 },      // ぶどう相当
+            { emoji: '👨', radius: 28, level: 4, points: 6 },      // みかん相当
+            { emoji: '🧔', radius: 34, level: 5, points: 10 },     // かき相当
+            { emoji: '👨‍🦰', radius: 40, level: 6, points: 15 },    // りんご相当
+            { emoji: '👨‍🦱', radius: 46, level: 7, points: 21 },    // なし相当
+            { emoji: '👨‍🦳', radius: 52, level: 8, points: 28 },    // もも相当
+            { emoji: '👨‍🦲', radius: 58, level: 9, points: 36 },    // パイナップル相当
+            { emoji: '👴', radius: 66, level: 10, points: 45 },    // メロン相当
+            { emoji: '🎅', radius: 76, level: 11, points: 55 }     // スイカ相当
+        ];
+        
+        // ゲーム変数
+        let ojisans = [];
+        let nextOjisanLevel = 1;
+        let score = 0;
+        let gameOver = false;
+        let canDrop = true;
+        let dropX = 200;
+        let dropGuideX = 200;
+        let highScore = parseInt(localStorage.getItem('ojisanProperHighScore') || '0');
+        
+        // おじさんクラス（スイカゲームの物理演算を再現）
+        class Ojisan {
+            constructor(x, y, data) {
+                this.x = x;
+                this.y = y;
+                this.vx = 0;
+                this.vy = 0;
+                this.data = data;
+                this.radius = data.radius;
+                this.merging = false;
+                this.landed = false;
+            }
+            
+            update() {
+                if (this.merging || gameOver) return;
+                
+                // スイカゲーム準拠の重力
+                this.vy += 0.5;
+                if (this.vy > 12) this.vy = 12; // 最大落下速度
+                
+                // 位置更新
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // 摩擦
+                this.vx *= 0.99;
+                
+                // 壁との衝突（バウンドあり）
+                if (this.x - this.radius <= 0) {
+                    this.x = this.radius;
+                    this.vx = Math.abs(this.vx) * 0.6;
+                }
+                if (this.x + this.radius >= 400) {
+                    this.x = 400 - this.radius;
+                    this.vx = -Math.abs(this.vx) * 0.6;
+                }
+                
+                // 床との衝突
+                if (this.y + this.radius >= 600) {
+                    this.y = 600 - this.radius;
+                    this.vy *= -0.3;
+                    this.vx *= 0.7;
+                    this.landed = true;
+                    
+                    if (Math.abs(this.vy) < 0.5) {
+                        this.vy = 0;
+                    }
+                }
+                
+                // 他のおじさんとの衝突
+                for (let other of ojisans) {
+                    if (other !== this && !other.merging && !this.merging) {
+                        const dx = this.x - other.x;
+                        const dy = this.y - other.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const minDistance = this.radius + other.radius;
+                        
+                        if (distance < minDistance) {
+                            // 同じレベルなら合体
+                            if (this.data.level === other.data.level && 
+                                this.data.level < 11 && 
+                                this.landed && other.landed) {
+                                this.merge(other);
+                            } else {
+                                // 押し出し処理
+                                const overlap = minDistance - distance;
+                                const pushX = (dx / distance) * overlap * 0.5;
+                                const pushY = (dy / distance) * overlap * 0.5;
+                                
+                                this.x += pushX;
+                                this.y += pushY;
+                                other.x -= pushX;
+                                other.y -= pushY;
+                                
+                                // 速度交換（質量を考慮）
+                                const m1 = this.radius;
+                                const m2 = other.radius;
+                                const v1x = this.vx;
+                                const v1y = this.vy;
+                                const v2x = other.vx;
+                                const v2y = other.vy;
+                                
+                                this.vx = (v1x * (m1 - m2) + 2 * m2 * v2x) / (m1 + m2) * 0.7;
+                                this.vy = (v1y * (m1 - m2) + 2 * m2 * v2y) / (m1 + m2) * 0.7;
+                                other.vx = (v2x * (m2 - m1) + 2 * m1 * v1x) / (m1 + m2) * 0.7;
+                                other.vy = (v2y * (m2 - m1) + 2 * m1 * v1y) / (m1 + m2) * 0.7;
+                                
+                                this.landed = true;
+                                other.landed = true;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            merge(other) {
+                if (this.merging || other.merging) return;
+                
+                this.merging = true;
+                other.merging = true;
+                
+                // 新しいおじさんを作成
+                const newLevel = this.data.level + 1;
+                const newData = OJISAN_DATA[newLevel - 1];
+                const newX = (this.x + other.x) / 2;
+                const newY = (this.y + other.y) / 2;
+                
+                // スコア計算（n(n+1)/2の公式）
+                const points = newData.points;
+                score += points;
+                
+                // スコア表示
+                showFloatingScore(newX, newY, points);
+                
+                // 合体エフェクト
+                createMergeEffect(newX, newY);
+                
+                // 古いおじさんを削除して新しいのを追加
+                setTimeout(() => {
+                    ojisans = ojisans.filter(o => o !== this && o !== other);
+                    if (newLevel <= 11) {
+                        const newOjisan = new Ojisan(newX, newY, newData);
+                        newOjisan.vy = -1; // 少し跳ねる
+                        ojisans.push(newOjisan);
+                    }
+                    updateUI();
+                }, 100);
+            }
+            
+            draw() {
+                // 影
+                ctx.save();
+                ctx.globalAlpha = 0.2;
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.ellipse(this.x, 598, this.radius * 0.8, this.radius * 0.3, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+                
+                // おじさん本体
+                ctx.font = `${this.radius * 2}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.data.emoji, this.x, this.y);
+                
+                // マージ中のエフェクト
+                if (this.merging) {
+                    ctx.strokeStyle = '#ffd700';
+                    ctx.lineWidth = 3;
+                    ctx.globalAlpha = 0.5;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                }
+            }
+        }
+        
+        // フローティングスコア表示
+        function showFloatingScore(x, y, points) {
+            const scoreEl = document.createElement('div');
+            scoreEl.className = 'floatingScore';
+            scoreEl.textContent = '+' + points;
+            scoreEl.style.left = (canvas.offsetLeft + x) + 'px';
+            scoreEl.style.top = (canvas.offsetTop + y) + 'px';
+            document.getElementById('gameContainer').appendChild(scoreEl);
+            
+            setTimeout(() => scoreEl.remove(), 1500);
+        }
+        
+        // 合体エフェクト
+        function createMergeEffect(x, y) {
+            // 簡単なパーティクルエフェクト
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    ctx.save();
+                    ctx.globalAlpha = 0.5 - i * 0.1;
+                    ctx.strokeStyle = '#ffd700';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 20 + i * 10, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.restore();
+                }, i * 50);
+            }
+        }
+        
+        // おじさんを落とす
+        function dropOjisan() {
+            if (!canDrop || gameOver) return;
+            
+            const data = OJISAN_DATA[nextOjisanLevel - 1];
+            const ojisan = new Ojisan(dropX, 50, data);
+            ojisans.push(ojisan);
+            
+            // 次のおじさん（レベル1-5のランダム）
+            nextOjisanLevel = Math.floor(Math.random() * 5) + 1;
+            document.getElementById('nextOjisan').textContent = OJISAN_DATA[nextOjisanLevel - 1].emoji;
+            
+            canDrop = false;
+            setTimeout(() => {
+                canDrop = true;
+                checkGameOver();
+            }, 500);
+        }
+        
+        // ゲームオーバーチェック（スイカゲーム準拠）
+        function checkGameOver() {
+            // ラインを超えて2秒経過したらゲームオーバー
+            for (let ojisan of ojisans) {
+                if (ojisan.y - ojisan.radius < 100 && Math.abs(ojisan.vy) < 0.5) {
+                    endGame();
+                    return;
+                }
+            }
+        }
+        
+        // ゲーム終了
+        function endGame() {
+            gameOver = true;
+            
+            document.getElementById('finalScore').textContent = score.toLocaleString();
+            
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('ojisanProperHighScore', highScore);
+            }
+            
+            document.getElementById('gameOverModal').style.display = 'flex';
+        }
+        
+        // UI更新
+        function updateUI() {
+            document.getElementById('score').textContent = score.toLocaleString();
+        }
+        
+        // リセット
+        function resetGame() {
+            ojisans = [];
+            score = 0;
+            gameOver = false;
+            canDrop = true;
+            nextOjisanLevel = 1;
+            
+            document.getElementById('nextOjisan').textContent = OJISAN_DATA[0].emoji;
+            document.getElementById('gameOverModal').style.display = 'none';
+            
+            updateUI();
+        }
+        
+        // シェア
+        function shareScore() {
+            const text = `おじさんスイカゲームで${score}点獲得！\nhttps://cenleaf.com/game/ojisan-suika-proper.html`;
+            if (navigator.share) {
+                navigator.share({ title: 'おじさんスイカゲーム', text: text });
+            } else {
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+            }
+        }
+        
+        // 操作
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            dropGuideX = (e.clientX - rect.left) / rect.width * 400;
+            dropGuideX = Math.max(40, Math.min(360, dropGuideX));
+        });
+        
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            dropX = (e.clientX - rect.left) / rect.width * 400;
+            dropX = Math.max(40, Math.min(360, dropX));
+            dropOjisan();
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            dropGuideX = (touch.clientX - rect.left) / rect.width * 400;
+            dropGuideX = Math.max(40, Math.min(360, dropGuideX));
+        });
+        
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            dropX = (touch.clientX - rect.left) / rect.width * 400;
+            dropX = Math.max(40, Math.min(360, dropX));
+            dropOjisan();
+        });
+        
+        // ゲームループ
+        function gameLoop() {
+            // 画面クリア
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 400, 600);
+            
+            // グラデーション背景
+            const gradient = ctx.createLinearGradient(0, 0, 0, 600);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
+            gradient.addColorStop(1, 'rgba(240, 240, 240, 0.5)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 400, 600);
+            
+            // 危険ライン（スイカゲーム準拠）
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, 100);
+            ctx.lineTo(400, 100);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // ドロップガイド
+            if (canDrop && !gameOver) {
+                ctx.strokeStyle = 'rgba(102, 126, 234, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(dropGuideX, 0);
+                ctx.lineTo(dropGuideX, 600);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // プレビュー
+                ctx.globalAlpha = 0.3;
+                ctx.font = `${OJISAN_DATA[nextOjisanLevel - 1].radius * 2}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(OJISAN_DATA[nextOjisanLevel - 1].emoji, dropGuideX, 50);
+                ctx.globalAlpha = 1;
+            }
+            
+            // おじさん更新・描画
+            if (!gameOver) {
+                ojisans.forEach(ojisan => ojisan.update());
+            }
+            ojisans.forEach(ojisan => ojisan.draw());
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // ゲーム開始
+        gameLoop();
+        updateUI();
+    </script>
+</body>
+</html>
