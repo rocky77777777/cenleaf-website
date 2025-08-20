@@ -620,7 +620,7 @@
             displayPosts(sortedPosts);
         }
 
-        // displayPosts関数を拡張（元のシンプルな表示を維持）
+        // displayPosts関数を拡張（トラッキング機能を追加しつつ元の表示を完全に維持）
         const originalDisplayPosts = displayPosts;
         displayPosts = function(posts) {
             currentFilteredPosts = posts;
@@ -642,14 +642,11 @@
                     (typeof post.category === 'object' ? post.category.name : post.category) : 
                     '未分類';
                 
-                // ビュー数の取得（人気順ソート用）
-                const views = getArticleViews(post.id);
-                const viewsDisplay = views > 0 ? ` (👁 ${views})` : '';
-                
+                // トラッキングのためのonclickを追加（表示は変更しない）
                 return `
                     <a href="${href}" class="blog-card" onclick="trackArticleView('${post.id}', '${post.title.replace(/'/g, "\\'")}')">
                         <span class="category">${categoryName}</span>
-                        <h2 class="blog-title">${post.title}${viewsDisplay}</h2>
+                        <h2 class="blog-title">${post.title}</h2>
                     </a>
                 `;
             }).join('');
