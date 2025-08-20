@@ -36,13 +36,31 @@
     // PCと判定された場合、リダイレクト
     if (isPC && window.location.pathname.includes('mobile-advanced.html')) {
         console.log('🖥️ PC detected! Redirecting to desktop site...');
-        // 即座にリダイレクト
-        window.location.replace('https://cenleaf.com/');
+        // 即座にリダイレクト（www付きに統一）
+        window.location.replace('https://www.cenleaf.com/');
     } else {
         console.log('📱 Mobile/Tablet detected or already on correct page');
     }
 })();
     </script>
+    
+    <!-- HTTPSリダイレクトとwww統一 -->
+    <script>
+        (function() {
+            // HTTPSへのリダイレクト（HTTPでアクセスされた場合）
+            if (location.protocol !== 'https:') {
+                location.replace('https:' + window.location.href.substring(window.location.protocol.length));
+                return;
+            }
+            
+            // www.cenleaf.comへのリダイレクト（SSL証明書との整合性のため）
+            if (window.location.hostname === 'cenleaf.com') {
+                window.location.replace('https://www.cenleaf.com' + window.location.pathname + window.location.search);
+                return;
+            }
+        })();
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
