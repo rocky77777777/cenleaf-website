@@ -29,23 +29,6 @@
     <meta name="twitter:description" content="個人・小規模ビジネスの「集客〜販売」を自動運転化。オートウェビナーとAIで高単価ビジネスを構築するコンサルティングサービス。">
     <meta name="twitter:image" content="https://cenleaf.com/images/ogp-banner.png">
     
-    <!-- HTTPSリダイレクト -->
-    <script>
-        (function() {
-            // HTTPSへのリダイレクト（HTTPでアクセスされた場合）
-            if (location.protocol !== 'https:') {
-                location.replace('https:' + window.location.href.substring(window.location.protocol.length));
-                return;
-            }
-            
-            // www.cenleaf.comからcenleaf.comへのリダイレクト（DNSレコードがcenleaf.comのみのため）
-            if (window.location.hostname === 'www.cenleaf.com') {
-                window.location.replace('https://cenleaf.com' + window.location.pathname + window.location.search);
-                return;
-            }
-        })();
-    </script>
-    
     <!-- モバイルデバイス判定とリダイレクト -->
     <script>
         (function() {

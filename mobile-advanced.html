@@ -44,23 +44,6 @@
 })();
     </script>
     
-    <!-- HTTPSリダイレクト -->
-    <script>
-        (function() {
-            // HTTPSへのリダイレクト（HTTPでアクセスされた場合）
-            if (location.protocol !== 'https:') {
-                location.replace('https:' + window.location.href.substring(window.location.protocol.length));
-                return;
-            }
-            
-            // www.cenleaf.comからcenleaf.comへのリダイレクト（DNSレコードがcenleaf.comのみのため）
-            if (window.location.hostname === 'www.cenleaf.com') {
-                window.location.replace('https://cenleaf.com' + window.location.pathname + window.location.search);
-                return;
-            }
-        })();
-    </script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
