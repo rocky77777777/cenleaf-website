@@ -260,6 +260,34 @@
             margin-left: 5px;
         }
 
+        /* ソートボタン */
+        .sort-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .sort-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .sort-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .sort-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
         /* レスポンシブ */
         @media (max-width: 768px) {
             .blog-grid {
@@ -283,6 +311,10 @@
                 padding: 8px 16px;
                 font-size: 13px;
             }
+            
+            .sort-container {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -303,6 +335,13 @@
         <!-- カテゴリーフィルター -->
         <div id="category-filter" class="category-filter">
             <!-- カテゴリーボタンは動的に生成されます -->
+        </div>
+
+        <!-- ソートボタン -->
+        <div class="sort-container">
+            <button class="sort-btn active" onclick="sortArticles('newest')">🆕 新着順</button>
+            <button class="sort-btn" onclick="sortArticles('popular')">🔥 人気順</button>
+            <button class="sort-btn" onclick="sortArticles('random')">🎲 ランダム</button>
         </div>
 
         <!-- ブログ記事コンテナ -->
@@ -516,6 +555,116 @@
                 }, 2000);
             }
         }
+
+        // アクセス数をトラッキング（ローカルストレージ使用）
+        function trackArticleView(articleId, articleTitle) {
+            const viewsKey = 'article_views';
+            let views = JSON.parse(localStorage.getItem(viewsKey) || '{}');
+            
+            if (!views[articleId]) {
+                views[articleId] = {
+                    id: articleId,
+                    title: articleTitle,
+                    count: 0,
+                    lastViewed: null
+                };
+            }
+            
+            views[articleId].count++;
+            views[articleId].lastViewed = new Date().toISOString();
+            
+            localStorage.setItem(viewsKey, JSON.stringify(views));
+        }
+
+        // 記事のビュー数を取得
+        function getArticleViews(articleId) {
+            const views = JSON.parse(localStorage.getItem('article_views') || '{}');
+            return views[articleId] ? views[articleId].count : 0;
+        }
+
+        // ソート機能
+        let currentSort = 'newest';
+        let currentFilteredPosts = [];
+
+        function sortArticles(sortType) {
+            // ボタンのアクティブ状態を更新
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            currentSort = sortType;
+            let sortedPosts = [...currentFilteredPosts];
+            
+            switch(sortType) {
+                case 'newest':
+                    // 新着順（デフォルト）
+                    sortedPosts.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+                    break;
+                
+                case 'popular':
+                    // 人気順（ビュー数でソート）
+                    sortedPosts.sort((a, b) => {
+                        const viewsA = getArticleViews(a.id);
+                        const viewsB = getArticleViews(b.id);
+                        return viewsB - viewsA;
+                    });
+                    break;
+                
+                case 'random':
+                    // ランダム表示
+                    sortedPosts.sort(() => Math.random() - 0.5);
+                    break;
+            }
+            
+            displayPosts(sortedPosts);
+        }
+
+        // displayPosts関数を更新してビュー数を表示
+        function displayPostsWithViews(posts) {
+            const blogGrid = document.getElementById('blog-grid');
+            
+            if (posts.length === 0) {
+                blogGrid.innerHTML = '<div class="error">該当する記事がありません</div>';
+                return;
+            }
+            
+            blogGrid.innerHTML = posts.map(post => {
+                const date = new Date(post.publishedAt);
+                const formattedDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+                const views = getArticleViews(post.id);
+                const viewsDisplay = views > 0 ? `<span class="view-count">👁 ${views}</span>` : '';
+                
+                return `
+                    <article class="blog-card">
+                        <div class="card-content">
+                            <a href="article.html?id=${post.id}" onclick="trackArticleView('${post.id}', '${post.title.replace(/'/g, "\\'")}')" class="card-link">
+                                <h2 class="card-title">${post.title}</h2>
+                                <p class="card-excerpt">
+                                    ${post.content ? 
+                                        post.content.replace(/<[^>]*>/g, '').substring(0, 100) + '...' : 
+                                        '内容を読む...'}
+                                </p>
+                            </a>
+                            <div class="card-footer">
+                                <span class="card-date">${formattedDate}</span>
+                                ${viewsDisplay}
+                                ${post.category ? 
+                                    `<span class="card-category">${post.category.name || post.category}</span>` : 
+                                    ''}
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // 元のdisplayPosts関数を置き換え
+        const originalDisplayPosts = displayPosts;
+        displayPosts = function(posts) {
+            currentFilteredPosts = posts;
+            displayPostsWithViews(posts);
+        };
 
         // ページ読み込み時に記事を取得
         fetchPosts();

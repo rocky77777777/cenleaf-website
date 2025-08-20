@@ -923,6 +923,35 @@
             return content;
         }
 
+        // アクセス数をトラッキング
+        function trackArticleView(articleId, articleTitle) {
+            const viewsKey = 'article_views';
+            let views = JSON.parse(localStorage.getItem(viewsKey) || '{}');
+            
+            if (!views[articleId]) {
+                views[articleId] = {
+                    id: articleId,
+                    title: articleTitle,
+                    count: 0,
+                    lastViewed: null
+                };
+            }
+            
+            views[articleId].count++;
+            views[articleId].lastViewed = new Date().toISOString();
+            
+            localStorage.setItem(viewsKey, JSON.stringify(views));
+            
+            // Google Analyticsにもイベント送信
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'page_view', {
+                    page_title: articleTitle,
+                    page_location: window.location.href,
+                    article_id: articleId
+                });
+            }
+        }
+
         // 記事を表示
         function displayArticle(article) {
             const content = document.getElementById('content');
@@ -1348,6 +1377,8 @@
             
             displayArticle(article);
             showRelatedArticles(article);
+            // ビューをトラッキング
+            trackArticleView(article.id, article.title);
         }
 
         // ページ読み込み時に記事を取得
