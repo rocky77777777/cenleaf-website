@@ -620,43 +620,37 @@
             displayPosts(sortedPosts);
         }
 
-        // displayPosts関数を拡張してビュー数を表示
+        // displayPosts関数を拡張（元のシンプルな表示を維持）
         const originalDisplayPosts = displayPosts;
         displayPosts = function(posts) {
             currentFilteredPosts = posts;
             const blogGrid = document.getElementById('blog-grid');
             
             if (posts.length === 0) {
-                blogGrid.innerHTML = '<div class="error">該当する記事がありません</div>';
+                blogGrid.innerHTML = '<div class="error">記事が見つかりませんでした</div>';
                 return;
             }
-            
+
             blogGrid.innerHTML = posts.map(post => {
-                const date = new Date(post.publishedAt);
-                const formattedDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+                // 常にarticle.htmlを使用（ヘッドレスCMSの正しい使い方）
+                // slugがある場合はslug、ない場合はIDを使用
+                const param = post.slug ? `slug=${post.slug}` : `id=${post.id}`;
+                const href = `/blog/article.html?${param}`;
+                
+                // カテゴリーの表示処理
+                const categoryName = post.category ? 
+                    (typeof post.category === 'object' ? post.category.name : post.category) : 
+                    '未分類';
+                
+                // ビュー数の取得（人気順ソート用）
                 const views = getArticleViews(post.id);
-                const viewsDisplay = views > 0 ? `<span class="view-count" style="margin-left: 10px; opacity: 0.8;">👁 ${views}</span>` : '';
+                const viewsDisplay = views > 0 ? ` (👁 ${views})` : '';
                 
                 return `
-                    <article class="blog-card">
-                        <div class="card-content">
-                            <a href="article.html?id=${post.id}" onclick="trackArticleView('${post.id}', '${post.title.replace(/'/g, "\\'")}')" class="card-link">
-                                <h2 class="card-title">${post.title}</h2>
-                                <p class="card-excerpt">
-                                    ${post.content ? 
-                                        post.content.replace(/<[^>]*>/g, '').substring(0, 100) + '...' : 
-                                        '内容を読む...'}
-                                </p>
-                            </a>
-                            <div class="card-footer">
-                                <span class="card-date">${formattedDate}</span>
-                                ${viewsDisplay}
-                                ${post.category ? 
-                                    `<span class="card-category">${post.category.name || post.category}</span>` : 
-                                    ''}
-                            </div>
-                        </div>
-                    </article>
+                    <a href="${href}" class="blog-card" onclick="trackArticleView('${post.id}', '${post.title.replace(/'/g, "\\'")}')">
+                        <span class="category">${categoryName}</span>
+                        <h2 class="blog-title">${post.title}${viewsDisplay}</h2>
+                    </a>
                 `;
             }).join('');
         };
