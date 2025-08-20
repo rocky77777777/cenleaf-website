@@ -620,8 +620,10 @@
             displayPosts(sortedPosts);
         }
 
-        // displayPosts関数を更新してビュー数を表示
-        function displayPostsWithViews(posts) {
+        // displayPosts関数を拡張してビュー数を表示
+        const originalDisplayPosts = displayPosts;
+        displayPosts = function(posts) {
+            currentFilteredPosts = posts;
             const blogGrid = document.getElementById('blog-grid');
             
             if (posts.length === 0) {
@@ -633,7 +635,7 @@
                 const date = new Date(post.publishedAt);
                 const formattedDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
                 const views = getArticleViews(post.id);
-                const viewsDisplay = views > 0 ? `<span class="view-count">👁 ${views}</span>` : '';
+                const viewsDisplay = views > 0 ? `<span class="view-count" style="margin-left: 10px; opacity: 0.8;">👁 ${views}</span>` : '';
                 
                 return `
                     <article class="blog-card">
@@ -657,13 +659,6 @@
                     </article>
                 `;
             }).join('');
-        }
-
-        // 元のdisplayPosts関数を置き換え
-        const originalDisplayPosts = displayPosts;
-        displayPosts = function(posts) {
-            currentFilteredPosts = posts;
-            displayPostsWithViews(posts);
         };
 
         // ページ読み込み時に記事を取得
