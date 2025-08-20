@@ -1,23 +1,13 @@
-// Google Analytics 4 トラッキングコード
-// CENLEAF用測定ID
-const GA_MEASUREMENT_ID = 'G-B2PX7E1PP5'; // cenleaf.com用GA4測定ID
+// Google Analytics 4 追加トラッキング機能
+// 注: メインのgtag.jsは各HTMLファイルに直接埋め込み済み
 
-// Google Analytics gtag.js の読み込み
+// このファイルは追加のトラッキング機能のみを提供
 (function() {
-    // gtag.jsスクリプトの動的読み込み
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(script);
-
-    // gtag設定
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', GA_MEASUREMENT_ID, {
-        page_path: window.location.pathname,
-        page_title: document.title
-    });
+    // gtag関数が存在することを確認
+    if (typeof gtag !== 'function') {
+        console.warn('Google Analytics gtag function not found. Additional tracking disabled.');
+        return;
+    }
 
     // カスタムイベントの送信例
     window.trackEvent = function(eventName, parameters) {
