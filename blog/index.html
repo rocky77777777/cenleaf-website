@@ -411,6 +411,18 @@
                 すべて<span class="article-count">(${nonColumnCount})</span>
             </button>`;
 
+            // 四国旅行記カテゴリーを手動で追加
+            const shikokuCount = posts.filter(post => {
+                const title = post.title || '';
+                return title.includes('四国') || title.includes('高知') || title.includes('徳島') || title.includes('香川') || title.includes('愛媛');
+            }).length;
+            
+            if (shikokuCount > 0) {
+                filterHTML += `<button class="category-btn" data-category="四国旅行記" onclick="filterByCategory('四国旅行記')">
+                    🗾 四国旅行記<span class="article-count">(${shikokuCount})</span>
+                </button>`;
+            }
+
             // 各カテゴリーのボタンを追加（コラムを最後に配置）
             Object.entries(categories).sort((a, b) => {
                 // コラムは最後に配置
@@ -442,7 +454,13 @@
 
             // 記事をフィルタリング
             let filteredPosts = allPosts;
-            if (category !== 'すべて') {
+            if (category === '四国旅行記') {
+                // 四国旅行記：タイトルに四国関連キーワードが含まれる記事
+                filteredPosts = allPosts.filter(post => {
+                    const title = post.title || '';
+                    return title.includes('四国') || title.includes('高知') || title.includes('徳島') || title.includes('香川') || title.includes('愛媛');
+                });
+            } else if (category !== 'すべて') {
                 filteredPosts = allPosts.filter(post => {
                     const categoryName = post.category ? 
                         (typeof post.category === 'object' ? post.category.name : post.category) : 
