@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>四国旅行記 | CENLEAF BLOG</title>
+    <meta name="description" content="須崎純一の四国旅行記 - バイク一周から高知SUP体験まで">
+    
+    <!-- ファビコン -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 50%, #fff8dc 100%);
+            color: #333333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+            line-height: 1.8;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* 四国らしいヘッダー */
+        .header {
+            background: linear-gradient(135deg, #2e7d32 0%, #1976d2 50%, #f57c00 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border: 2px solid white;
+            border-radius: 25px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #2e7d32;
+        }
+
+        /* 四国地図風ナビゲーション */
+        .shikoku-nav {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .prefecture-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prefecture-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .prefecture-card:hover::before {
+            left: 100%;
+        }
+
+        .prefecture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .tokushima { border-top: 4px solid #ff9800; }
+        .kagawa { border-top: 4px solid #4caf50; }
+        .ehime { border-top: 4px solid #2196f3; }
+        .kochi { border-top: 4px solid #f44336; }
+
+        .prefecture-card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .prefecture-card .emoji {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .prefecture-card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 記事一覧 */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        }
+
+        .article-image {
+            height: 200px;
+            background: linear-gradient(135deg, #81c784, #4fc3f7);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .article-content {
+            padding: 25px;
+        }
+
+        .article-content h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .article-content .date {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .article-content p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin: 10px 5px 0 0;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .shikoku-nav {
+                grid-template-columns: 1fr;
+            }
+            
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* ローディングアニメーション */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #2e7d32;
+            font-size: 18px;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <header class="header">
+            <h1>🗾 四国旅行記</h1>
+            <p>バイク一周から高知SUP体験まで - 須崎純一の四国冒険譚</p>
+            <a href="/blog/" class="back-btn">← ブログ一覧に戻る</a>
+        </header>
+
+        <!-- 四国4県ナビゲーション -->
+        <section class="shikoku-nav">
+            <div class="prefecture-card tokushima" onclick="filterByPrefecture('tokushima')">
+                <span class="emoji">🌊</span>
+                <h3>徳島県</h3>
+                <p>阿波踊り・鳴門海峡</p>
+            </div>
+            <div class="prefecture-card kagawa" onclick="filterByPrefecture('kagawa')">
+                <span class="emoji">🍜</span>
+                <h3>香川県</h3>
+                <p>讃岐うどん・小豆島</p>
+            </div>
+            <div class="prefecture-card ehime" onclick="filterByPrefecture('ehime')">
+                <span class="emoji">🏔️</span>
+                <h3>愛媛県</h3>
+                <p>道後温泉・松山城</p>
+            </div>
+            <div class="prefecture-card kochi" onclick="filterByPrefecture('kochi')">
+                <span class="emoji">🏄‍♂️</span>
+                <h3>高知県</h3>
+                <p>四万十川・桂浜</p>
+            </div>
+        </section>
+
+        <!-- 記事一覧 -->
+        <section class="articles-section">
+            <div id="loading" class="loading">四国旅行記事を読み込み中</div>
+            <div id="articles-grid" class="articles-grid" style="display: none;"></div>
+        </section>
+    </div>
+
+    <script>
+        // 四国関連の記事データ（実際はmicroCMSから取得）
+        const shikokuArticles = [
+            {
+                id: 'shikoku-travel-day3-kochi',
+                title: '四国旅行3日目 - 高知で出会った「自由」と仕事の新しいカタチ',
+                date: '2024-08-24',
+                prefecture: 'kochi',
+                excerpt: '桂浜の龍馬像の前で30分ボーッとしてた。四万十川でのSUP体験とウツボの唐揚げ。',
+                emoji: '🏄‍♂️'
+            },
+            {
+                id: 'shikoku-bike-day1',
+                title: '【四国バイク一周】まさかの初日から阿波踊り遭遇！徳島グルメも完全制覇した話',
+                date: '2024-08-20',
+                prefecture: 'tokushima',
+                excerpt: '徳島に着いたら、いきなり阿波踊りに遭遇。ワーケーション×バイク旅の新しいスタイル発見。',
+                emoji: '🏍️'
+            }
+            // 他の記事も追加予定
+        ];
+
+        let currentFilter = 'all';
+
+        // ページ読み込み時の処理
+        document.addEventListener('DOMContentLoaded', function() {
+            // 2秒後に記事を表示（実際のAPI呼び出しをシミュレート）
+            setTimeout(() => {
+                displayArticles();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('articles-grid').style.display = 'grid';
+            }, 1000);
+        });
+
+        // 記事を表示する関数
+        function displayArticles(filter = 'all') {
+            const articlesGrid = document.getElementById('articles-grid');
+            const filteredArticles = filter === 'all' 
+                ? shikokuArticles 
+                : shikokuArticles.filter(article => article.prefecture === filter);
+
+            articlesGrid.innerHTML = filteredArticles.map(article => `
+                <article class="article-card" onclick="openArticle('${article.id}')">
+                    <div class="article-image">
+                        ${article.emoji}
+                    </div>
+                    <div class="article-content">
+                        <h3>${article.title}</h3>
+                        <div class="date">${new Date(article.date).toLocaleDateString('ja-JP')}</div>
+                        <p>${article.excerpt}</p>
+                        <span class="tag">${getPrefectureName(article.prefecture)}</span>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // 県別フィルター
+        function filterByPrefecture(prefecture) {
+            currentFilter = prefecture;
+            displayArticles(prefecture);
+            
+            // アクティブな県をハイライト
+            document.querySelectorAll('.prefecture-card').forEach(card => {
+                card.style.opacity = '0.6';
+            });
+            document.querySelector(`.${prefecture}`).style.opacity = '1';
+        }
+
+        // 県名を取得
+        function getPrefectureName(prefecture) {
+            const names = {
+                'tokushima': '徳島県',
+                'kagawa': '香川県', 
+                'ehime': '愛媛県',
+                'kochi': '高知県'
+            };
+            return names[prefecture] || '四国';
+        }
+
+        // 記事を開く
+        function openArticle(articleId) {
+            window.location.href = `/blog/article.html?slug=${articleId}`;
+        }
+    </script>
+</body>
+</html>
