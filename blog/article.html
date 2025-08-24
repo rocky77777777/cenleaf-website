@@ -372,37 +372,39 @@
 
         .article-content h2 {
             font-size: 26px;
-            color: #ffffff;
+            color: #333;
             margin: 50px 0 25px;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, #007acc 0%, #005a99 100%);
-            border-radius: 8px;
+            padding: 0 0 12px 0;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            border-radius: 0;
             position: relative;
-            box-shadow: 0 4px 12px rgba(0, 122, 204, 0.2);
-            font-weight: bold;
+            box-shadow: none;
+            font-weight: 600;
         }
 
         .article-content h2::before {
-            content: "📝";
-            margin-right: 10px;
-            font-size: 20px;
+            content: "";
+            margin-right: 0;
+            font-size: 0;
         }
 
         .article-content h3 {
             font-size: 22px;
-            color: #007acc;
+            color: #333;
             margin: 35px 0 18px;
-            padding: 12px 0 12px 20px;
-            border-left: 5px solid #007acc;
-            background: linear-gradient(90deg, rgba(0, 122, 204, 0.08) 0%, transparent 100%);
+            padding: 0 0 0 12px;
+            border-left: 2px solid #ddd;
+            background: none;
             position: relative;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .article-content h3::before {
-            content: "💡";
-            margin-right: 8px;
-            font-size: 16px;
+            content: "";
+            margin-right: 0;
+            font-size: 0;
         }
 
         .article-content p {
@@ -514,6 +516,30 @@
             border-radius: 3px;
             font-family: 'Courier New', monospace;
             color: #d63384;
+        }
+
+        /* microCMSのインラインスタイルを上書き */
+        .article-content h2[style] {
+            background-color: transparent !important;
+            background: none !important;
+            border: none !important;
+            border-bottom: 1px solid #e0e0e0 !important;
+            padding: 0 0 12px 0 !important;
+            color: #333 !important;
+        }
+
+        .article-content h3[style] {
+            background: none !important;
+            border: none !important;
+            border-left: 2px solid #ddd !important;
+            padding: 0 0 0 12px !important;
+            color: #333 !important;
+        }
+
+        .article-content h4[style] {
+            background: none !important;
+            border: none !important;
+            color: #333 !important;
         }
 
         /* CTA */
