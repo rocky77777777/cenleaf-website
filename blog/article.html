@@ -1109,13 +1109,21 @@
         async function fetchArticle() {
             const articleInfo = getArticleId();
             
+            console.log('🔍 URL解析結果:', {
+                'URL': window.location.href,
+                'パス': window.location.pathname,
+                'クエリ': window.location.search,
+                '記事情報': articleInfo
+            });
+            
             if (!articleInfo) {
-                displayError('記事が指定されていません。');
+                console.error('❌ 記事が指定されていません');
+                displayError('記事が指定されていません。URLを確認してください。');
                 return;
             }
             
             try {
-                console.log('記事を取得中...', articleInfo);
+                console.log('📡 記事を取得中...', articleInfo);
                 
                 let url;
                 if (articleInfo.type === 'slug') {

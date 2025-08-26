@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>リダイレクト中... | CENLEAF BLOG</title>
     <script>
-        // すぐにarticle.htmlにリダイレクト
-        const slug = window.location.pathname.split('/').pop().replace('.html', '');
-        const newUrl = `/blog/article.html?slug=${slug}`;
-        window.location.replace(newUrl);
+        // 即座にリダイレクト（0ms）
+        window.location.replace('/blog/article.html?slug=llmo-ai-search-optimization');
     </script>
     <noscript>
         <meta http-equiv="refresh" content="0; url=/blog/article.html?slug=llmo-ai-search-optimization">
