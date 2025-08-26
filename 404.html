@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENLEAF - ページが見つかりません</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #ffffff;
+            color: #333333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #007acc;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #007acc;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #007acc;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background: #005a99;
+        }
+        
+        #loading {
+            margin-top: 30px;
+            color: #007acc;
+            font-style: italic;
+        }
+        
+        #redirect-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007acc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">CENLEAF</div>
+        <h1>ページが見つかりません</h1>
+        <p>お探しのページは存在しないか、移動された可能性があります。</p>
+        
+        <div id="redirect-info" style="display: none;">
+            <h3>ブログ記事をお探しですか？</h3>
+            <p>記事URLを自動的に変換しています...</p>
+            <div id="loading">🔄 リダイレクト中...</div>
+        </div>
+        
+        <a href="/" class="btn">ホームに戻る</a>
+        <a href="/blog/" class="btn">ブログ一覧</a>
+    </div>
+
+    <script>
+        // 現在のパスを取得
+        const currentPath = window.location.pathname;
+        console.log('Current path:', currentPath);
+        
+        // /blog/[slug] 形式のパスをチェック
+        const blogMatch = currentPath.match(/^\/blog\/([^\/]+)\/?$/);
+        
+        if (blogMatch && blogMatch[1] !== 'index') {
+            const slug = blogMatch[1];
+            console.log('Blog slug detected:', slug);
+            
+            // リダイレクト情報を表示
+            document.getElementById('redirect-info').style.display = 'block';
+            
+            // 記事が存在するかチェックしてからリダイレクト
+            setTimeout(() => {
+                const redirectUrl = `/blog/article.html?slug=${slug}`;
+                console.log('Redirecting to:', redirectUrl);
+                window.location.replace(redirectUrl);
+            }, 1500);
+        }
+        
+        // その他の404エラーの場合は通常の404ページを表示
+    </script>
+</body>
+</html>

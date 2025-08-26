@@ -762,11 +762,20 @@
                 return { type: 'id', value: id };
             }
             
-            // パスから記事IDを取得する場合（/blog/article-id.html形式）
+            // パスから記事スラッグを取得（/blog/slug形式に対応）
             const path = window.location.pathname;
-            const match = path.match(/\/blog\/([^\/]+)\.html$/);
-            if (match && match[1] !== 'article') {
-                return { type: 'slug', value: match[1] };
+            
+            // /blog/article-slug 形式をチェック（拡張子なし）
+            const pathMatch = path.match(/\/blog\/([^\/]+)$/);
+            if (pathMatch && pathMatch[1] !== 'article' && pathMatch[1] !== 'index') {
+                console.log('パスからスラッグを検出:', pathMatch[1]);
+                return { type: 'slug', value: pathMatch[1] };
+            }
+            
+            // 従来の /blog/article-id.html 形式もサポート
+            const htmlMatch = path.match(/\/blog\/([^\/]+)\.html$/);
+            if (htmlMatch && htmlMatch[1] !== 'article') {
+                return { type: 'slug', value: htmlMatch[1] };
             }
             
             return null;
