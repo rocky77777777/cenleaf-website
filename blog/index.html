@@ -491,10 +491,10 @@
             }
 
             blogGrid.innerHTML = posts.map(post => {
-                // 常にarticle.htmlを使用（ヘッドレスCMSの正しい使い方）
-                // slugがある場合はslug、ない場合はIDを使用
-                const param = post.slug ? `slug=${post.slug}` : `id=${post.id}`;
-                const href = `/blog/article.html?${param}`;
+                // slugがある場合は短いURL、ない場合は従来形式
+                const href = post.slug 
+                    ? `/blog/${post.slug}` 
+                    : `/blog/article.html?id=${post.id}`;
                 
                 // カテゴリーの表示処理
                 const categoryName = post.category ? 
@@ -651,10 +651,10 @@
             }
 
             blogGrid.innerHTML = posts.map(post => {
-                // 常にarticle.htmlを使用（ヘッドレスCMSの正しい使い方）
-                // slugがある場合はslug、ない場合はIDを使用
-                const param = post.slug ? `slug=${post.slug}` : `id=${post.id}`;
-                const href = `/blog/article.html?${param}`;
+                // slugがある場合は短いURL、ない場合は従来形式
+                const href = post.slug 
+                    ? `/blog/${post.slug}` 
+                    : `/blog/article.html?id=${post.id}`;
                 
                 // カテゴリーの表示処理
                 const categoryName = post.category ? 

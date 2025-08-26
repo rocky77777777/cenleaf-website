@@ -107,12 +107,10 @@
             // リダイレクト情報を表示
             document.getElementById('redirect-info').style.display = 'block';
             
-            // 記事が存在するかチェックしてからリダイレクト
-            setTimeout(() => {
-                const redirectUrl = `/blog/article.html?slug=${slug}`;
-                console.log('Redirecting to:', redirectUrl);
-                window.location.replace(redirectUrl);
-            }, 1500);
+            // 即座にリダイレクト（待ち時間を短縮）
+            const redirectUrl = `/blog/article.html?slug=${slug}`;
+            console.log('Redirecting to:', redirectUrl);
+            window.location.replace(redirectUrl);
         }
         
         // その他の404エラーの場合は通常の404ページを表示
