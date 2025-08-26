@@ -9,7 +9,7 @@
 
 # Configuration
 wp-config.php
-.htaccess
+# .htaccess # コメントアウト - URL書き換えルールのため管理対象にする
 
 # Content
 /wp-content/uploads/

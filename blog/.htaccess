@@ -1,0 +1,12 @@
+# blogディレクトリ用のURL書き換えルール
+
+RewriteEngine On
+
+# 既存のファイル（index.html, column.html等）はそのまま
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# /blog/[slug] を article.html?slug=[slug] に書き換え
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)/?$ article.html?slug=$1 [L,QSA]
