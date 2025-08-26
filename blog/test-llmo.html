@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLMO記事テスト | CENLEAF</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .info { background: #f0f8ff; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+        h1, h2 { color: #333; }
+        .content { margin-top: 30px; padding: 20px; background: #fafafa; }
+    </style>
+</head>
+<body>
+    <h1>LLMO記事テスト</h1>
+    
+    <div id="status" class="info">
+        <p>🔄 記事を取得中...</p>
+    </div>
+    
+    <div id="debug" class="info">
+        <h3>デバッグ情報</h3>
+        <pre id="debug-info">読み込み中...</pre>
+    </div>
+    
+    <div id="article-content" class="content" style="display: none;">
+        <h2 id="article-title"></h2>
+        <div id="article-body"></div>
+    </div>
+
+    <script>
+        // 設定
+        const SERVICE_ID = 'cenleaf';
+        const ENDPOINT = 'blogs';
+        const API_KEY = 'gfvzXw58nnvw3daLCbWS9z22SMKeIhxa1KWw';
+        const TARGET_SLUG = 'llmo-ai-search-optimization';
+
+        // デバッグ情報を表示
+        function updateDebug(info) {
+            document.getElementById('debug-info').textContent = JSON.stringify(info, null, 2);
+        }
+
+        // ステータス更新
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `info ${type}`;
+            statusDiv.innerHTML = `<p>${message}</p>`;
+        }
+
+        // 記事を表示
+        function displayArticle(article) {
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-body').innerHTML = article.content;
+            document.getElementById('article-content').style.display = 'block';
+        }
+
+        // 記事取得テスト
+        async function testFetchArticle() {
+            try {
+                updateStatus('📡 microCMSに接続中...');
+                
+                // 方法1: 全記事を取得してslugでフィルタ
+                const allArticlesUrl = `https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?limit=100`;
+                
+                updateDebug({
+                    'テスト方法': '全記事取得 → slugでフィルタ',
+                    'URL': allArticlesUrl,
+                    'ターゲットslug': TARGET_SLUG
+                });
+
+                const response = await fetch(allArticlesUrl, {
+                    headers: {
+                        'X-MICROCMS-API-KEY': API_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                updateStatus('✅ API接続成功！記事を検索中...');
+                
+                updateDebug({
+                    'API接続': '成功',
+                    '取得記事数': data.contents.length,
+                    '全記事のslug': data.contents.map(item => item.slug),
+                    'フィルタ結果': data.contents.filter(item => item.slug === TARGET_SLUG).length
+                });
+
+                // slugで記事を検索
+                const article = data.contents.find(item => item.slug === TARGET_SLUG);
+                
+                if (article) {
+                    updateStatus('🎉 記事が見つかりました！', 'success');
+                    displayArticle(article);
+                    
+                    updateDebug({
+                        '記事発見': '成功',
+                        '記事ID': article.id,
+                        '記事タイトル': article.title,
+                        '記事slug': article.slug,
+                        'コンテンツ長': article.content.length
+                    });
+                } else {
+                    updateStatus('❌ 指定されたslugの記事が見つかりません', 'error');
+                    
+                    updateDebug({
+                        '記事発見': '失敗',
+                        'ターゲットslug': TARGET_SLUG,
+                        '利用可能なslug': data.contents.map(item => item.slug)
+                    });
+                }
+
+            } catch (error) {
+                updateStatus(`❌ エラー: ${error.message}`, 'error');
+                
+                updateDebug({
+                    'エラー': error.message,
+                    'スタック': error.stack
+                });
+            }
+        }
+
+        // 実行
+        testFetchArticle();
+    </script>
+</body>
+</html>

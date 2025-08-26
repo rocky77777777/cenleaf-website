@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記事読み込み中... | CENLEAF BLOG</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #ffffff;
+            color: #333333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header {
+            padding: 20px 0;
+            border-bottom: 2px solid #007acc;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007acc;
+            text-decoration: none;
+        }
+        .nav-btn {
+            background: #007acc;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .nav-btn:hover { background: #005a99; }
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .article {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            margin: 40px 0;
+        }
+        .article h1 {
+            color: #007acc;
+            font-size: 28px;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 15px;
+        }
+        .article h2 {
+            color: #007acc;
+            font-size: 24px;
+            margin: 40px 0 20px 0;
+            padding: 10px;
+            background: #f0f8ff;
+            border-left: 4px solid #007acc;
+        }
+        .article h3 {
+            color: #333;
+            font-size: 20px;
+            margin: 30px 0 15px 0;
+            padding-left: 10px;
+            border-left: 3px solid #007acc;
+        }
+        .article p { margin-bottom: 15px; }
+        .article ul, .article ol {
+            margin: 15px 0 15px 30px;
+        }
+        .article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .article th, .article td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .article th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        .meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .debug {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="logo">CENLEAF</a>
+            <a href="/blog/" class="nav-btn">ブログ一覧</a>
+        </header>
+
+        <div id="loading" class="loading">
+            <p>🔄 記事を読み込んでいます...</p>
+        </div>
+
+        <div id="error-message" style="display: none;"></div>
+        <div id="debug-info" class="debug" style="display: none;"></div>
+        <div id="article-content" style="display: none;"></div>
+    </div>
+
+    <script>
+        // 設定
+        const SERVICE_ID = 'cenleaf';
+        const ENDPOINT = 'blogs';
+        const API_KEY = 'gfvzXw58nnvw3daLCbWS9z22SMKeIhxa1KWw';
+
+        // デバッグ情報表示
+        function showDebug(info) {
+            const debugDiv = document.getElementById('debug-info');
+            debugDiv.style.display = 'block';
+            debugDiv.innerHTML = '<pre>' + JSON.stringify(info, null, 2) + '</pre>';
+        }
+
+        // エラー表示
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.className = 'error';
+            errorDiv.innerHTML = '<h3>エラー</h3><p>' + message + '</p>';
+            errorDiv.style.display = 'block';
+        }
+
+        // URL解析
+        function getSlugFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('slug');
+            
+            if (slug) {
+                return slug;
+            }
+            
+            // パスから取得
+            const path = window.location.pathname;
+            const match = path.match(/\/blog\/([^\/]+)$/);
+            if (match && match[1] !== 'article' && match[1] !== 'index') {
+                return match[1];
+            }
+            
+            return null;
+        }
+
+        // 記事表示
+        function displayArticle(article) {
+            document.getElementById('loading').style.display = 'none';
+            
+            const contentDiv = document.getElementById('article-content');
+            contentDiv.innerHTML = `
+                <article class="article">
+                    <h1>${article.title}</h1>
+                    <div class="meta">
+                        公開日: ${new Date(article.publishedAt || article.createdAt).toLocaleDateString('ja-JP')}
+                        ${article.category ? ` | カテゴリ: ${article.category.name}` : ''}
+                    </div>
+                    <div class="content">${article.content}</div>
+                </article>
+            `;
+            contentDiv.style.display = 'block';
+            
+            // タイトル更新
+            document.title = article.title + ' | CENLEAF BLOG';
+        }
+
+        // メイン処理
+        async function main() {
+            try {
+                const slug = getSlugFromUrl();
+                
+                showDebug({
+                    'URL': window.location.href,
+                    'パス': window.location.pathname,
+                    'クエリ': window.location.search,
+                    '解析されたslug': slug
+                });
+                
+                if (!slug) {
+                    showError('記事が指定されていません。URLにslugパラメータを含めてください。');
+                    return;
+                }
+                
+                // microCMSから全記事を取得
+                console.log('📡 microCMSから記事を取得中...');
+                const response = await fetch(`https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?limit=100`, {
+                    headers: {
+                        'X-MICROCMS-API-KEY': API_KEY
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API エラー: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ API取得成功:', data);
+                
+                // slugで検索
+                const article = data.contents.find(item => item.slug === slug);
+                
+                showDebug({
+                    'API取得': '成功',
+                    '総記事数': data.contents.length,
+                    '検索slug': slug,
+                    '記事発見': !!article,
+                    '利用可能なslug': data.contents.slice(0, 10).map(item => item.slug)
+                });
+                
+                if (article) {
+                    console.log('🎉 記事が見つかりました:', article);
+                    displayArticle(article);
+                } else {
+                    showError(`記事が見つかりません。slug="${slug}" の記事は存在しません。`);
+                }
+                
+            } catch (error) {
+                console.error('❌ エラー:', error);
+                showError(error.message);
+                showDebug({
+                    'エラー': error.message,
+                    'スタック': error.stack
+                });
+            }
+        }
+
+        // 実行
+        main();
+    </script>
+</body>
+</html>
