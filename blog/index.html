@@ -498,11 +498,6 @@
         <div class="content-wrapper">
             <!-- メインコンテンツ -->
             <div class="main-content">
-                <!-- カテゴリーフィルター -->
-                <div id="category-filter" class="category-filter">
-                    <!-- カテゴリーボタンは動的に生成されます -->
-                </div>
-
                 <!-- ソートボタン -->
                 <div class="sort-container">
                     <button class="sort-btn active" onclick="sortArticles('newest')">🆕 新着順</button>
@@ -853,8 +848,8 @@
                     console.log('記事タイトル一覧:', data.contents.map(post => post.title));
                     // 記事を保存
                     allPosts = data.contents;
-                    // カテゴリーフィルターを作成
-                    createCategoryFilter(allPosts);
+                    // カテゴリーフィルターを作成（非表示）
+                    // createCategoryFilter(allPosts);
                     // サイドバーのカテゴリー一覧を作成
                     createSidebarCategories(allPosts);
                     // デフォルトで「すべて」フィルターを適用（コラムを除外）
@@ -866,7 +861,7 @@
                     setTimeout(() => {
                         console.log('🔄 デモデータを表示中...');
                         allPosts = demoData;
-                        createCategoryFilter(allPosts);
+                        // createCategoryFilter(allPosts);
                         createSidebarCategories(allPosts);
                         filterByCategory('すべて');
                     }, 2000);
