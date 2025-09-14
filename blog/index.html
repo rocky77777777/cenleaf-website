@@ -114,6 +114,152 @@
             margin: 0 auto;
         }
 
+        /* 2カラムレイアウト */
+        .content-wrapper {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 20px;
+        }
+
+        /* カテゴリーウィジェット */
+        .category-widget {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e9ecef;
+        }
+
+        .category-widget h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #007acc;
+            font-weight: bold;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-group {
+            margin-bottom: 24px;
+        }
+
+        .category-group-title {
+            font-size: 14px;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .category-item {
+            margin-bottom: 8px;
+        }
+
+        .category-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: #ffffff;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .category-link:hover {
+            background: #007acc;
+            color: #ffffff;
+            transform: translateX(4px);
+            border-color: #007acc;
+        }
+
+        .category-link.active {
+            background: #007acc;
+            color: #ffffff;
+            border-color: #007acc;
+        }
+
+        .category-name {
+            font-size: 15px;
+        }
+
+        .category-count {
+            background: #e9ecef;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .category-link:hover .category-count,
+        .category-link.active .category-count {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        /* 人気タグウィジェット */
+        .tags-widget {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e9ecef;
+        }
+
+        .tags-widget h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #007acc;
+            font-weight: bold;
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-item {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #666;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .tag-item:hover {
+            background: #007acc;
+            color: #ffffff;
+            border-color: #007acc;
+            transform: translateY(-2px);
+        }
+
         /* ヘッダー */
         .header {
             padding: 20px 0;
@@ -171,8 +317,8 @@
         /* ブログカード */
         .blog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
             margin-bottom: 50px;
         }
 
@@ -289,6 +435,22 @@
         }
 
         /* レスポンシブ */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                margin-top: 40px;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+        }
+
         @media (max-width: 768px) {
             .blog-grid {
                 grid-template-columns: 1fr;
@@ -332,22 +494,46 @@
         <!-- タイトル -->
         <h1>CENLEAF BLOG</h1>
 
+        <!-- コンテンツエリア -->
+        <div class="content-wrapper">
+            <!-- メインコンテンツ -->
+            <div class="main-content">
+                <!-- カテゴリーフィルター -->
+                <div id="category-filter" class="category-filter">
+                    <!-- カテゴリーボタンは動的に生成されます -->
+                </div>
 
-        <!-- カテゴリーフィルター -->
-        <div id="category-filter" class="category-filter">
-            <!-- カテゴリーボタンは動的に生成されます -->
-        </div>
+                <!-- ソートボタン -->
+                <div class="sort-container">
+                    <button class="sort-btn active" onclick="sortArticles('newest')">🆕 新着順</button>
+                    <button class="sort-btn" onclick="sortArticles('popular')">🔥 人気順</button>
+                    <button class="sort-btn" onclick="sortArticles('random')">🎲 ランダム</button>
+                </div>
 
-        <!-- ソートボタン -->
-        <div class="sort-container">
-            <button class="sort-btn active" onclick="sortArticles('newest')">🆕 新着順</button>
-            <button class="sort-btn" onclick="sortArticles('popular')">🔥 人気順</button>
-            <button class="sort-btn" onclick="sortArticles('random')">🎲 ランダム</button>
-        </div>
+                <!-- ブログ記事コンテナ -->
+                <div id="blog-grid" class="blog-grid">
+                    <div class="loading">記事を読み込み中...</div>
+                </div>
+            </div>
 
-        <!-- ブログ記事コンテナ -->
-        <div id="blog-grid" class="blog-grid">
-            <div class="loading">記事を読み込み中...</div>
+            <!-- サイドバー -->
+            <aside class="sidebar">
+                <!-- カテゴリー一覧 -->
+                <div class="category-widget">
+                    <h3>📂 カテゴリー</h3>
+                    <ul class="category-list" id="category-list">
+                        <!-- カテゴリーがここに動的に追加されます -->
+                    </ul>
+                </div>
+
+                <!-- 人気タグ -->
+                <div class="tags-widget">
+                    <h3>🏷️ 人気タグ</h3>
+                    <div class="tag-cloud" id="tag-cloud">
+                        <!-- タグがここに動的に追加されます -->
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 
@@ -547,6 +733,8 @@
                     allPosts = data.contents;
                     // カテゴリーフィルターを作成
                     createCategoryFilter(allPosts);
+                    // サイドバーのカテゴリー一覧を作成
+                    createSidebarCategories(allPosts);
                     // デフォルトで「すべて」フィルターを適用（コラムを除外）
                     filterByCategory('すべて');
                 } else {
@@ -557,6 +745,7 @@
                         console.log('🔄 デモデータを表示中...');
                         allPosts = demoData;
                         createCategoryFilter(allPosts);
+                        createSidebarCategories(allPosts);
                         filterByCategory('すべて');
                     }, 2000);
                 }
