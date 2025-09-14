@@ -1233,6 +1233,20 @@
         function enhanceArticleContent(content) {
             // ステップリストの自動変換は無効化（元のテキストをそのまま保持）
 
+            // 画像URLを自動的にimgタグに変換
+            // パターン1: [image:URL] 形式
+            content = content.replace(/\[image:(https?:\/\/[^\]]+)\]/g, function(match, imageUrl) {
+                return `<img src="${imageUrl}" alt="記事内画像" style="width: 100%; max-width: 800px; margin: 20px 0;">`;
+            });
+
+            // パターン2: [image:URL|alt:説明文] 形式
+            content = content.replace(/\[image:(https?:\/\/[^\|]+)\|alt:([^\]]+)\]/g, function(match, imageUrl, altText) {
+                return `<div style="text-align: center; margin: 40px 0;">
+                    <img src="${imageUrl}" alt="${altText}" style="width: 100%; max-width: 800px;">
+                    <p style="color: #666; font-size: 14px; margin-top: 10px;">${altText}</p>
+                </div>`;
+            });
+
             // YouTube URLを自動的にiframeに変換
             // パターン1: [youtube:動画ID] 形式
             content = content.replace(/\[youtube:([a-zA-Z0-9_-]+)\]/g, function(match, videoId) {
