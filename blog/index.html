@@ -573,6 +573,118 @@
             }
         ];
 
+        // サイドバーのカテゴリー一覧を作成
+        function createSidebarCategories(posts) {
+            const categoryList = document.getElementById('category-list');
+            if (!categoryList) return; // 要素が存在しない場合はスキップ
+
+            // カテゴリーを集計
+            const categoryCount = {};
+            posts.forEach(post => {
+                const categoryName = post.category ?
+                    (typeof post.category === 'object' ? post.category.name : post.category) :
+                    '未分類';
+                if (categoryName !== 'コラム') { // コラムを除外
+                    categoryCount[categoryName] = (categoryCount[categoryName] || 0) + 1;
+                }
+            });
+
+            // カテゴリーをグループ分け
+            const categories = {
+                'マーケティング': [],
+                'AI・自動化': [],
+                'ビジネス': [],
+                'その他': []
+            };
+
+            // カテゴリーを適切なグループに分類
+            Object.keys(categoryCount).forEach(categoryName => {
+                const item = {
+                    name: categoryName,
+                    count: categoryCount[categoryName]
+                };
+
+                if (categoryName.includes('マーケティング') || categoryName.includes('ウェビナー') || categoryName.includes('セミナー')) {
+                    categories['マーケティング'].push(item);
+                } else if (categoryName.includes('AI') || categoryName.includes('自動化') || categoryName.includes('クローン')) {
+                    categories['AI・自動化'].push(item);
+                } else if (categoryName.includes('ビジネス') || categoryName.includes('起業') || categoryName.includes('経営')) {
+                    categories['ビジネス'].push(item);
+                } else {
+                    categories['その他'].push(item);
+                }
+            });
+
+            // HTMLを生成
+            let html = '';
+
+            // 現在のカテゴリーを取得
+            const currentCategory = getCurrentCategory();
+
+            Object.keys(categories).forEach(groupName => {
+                if (categories[groupName].length > 0) {
+                    html += `<div class="category-group">`;
+                    html += `<div class="category-group-title">${groupName}</div>`;
+
+                    categories[groupName].sort((a, b) => b.count - a.count).forEach(category => {
+                        const isActive = currentCategory === category.name ? 'active' : '';
+                        html += `
+                            <div class="category-item">
+                                <a href="javascript:void(0)" onclick="filterByCategory('${category.name}')" class="category-link ${isActive}">
+                                    <span class="category-name">${category.name}</span>
+                                    <span class="category-count">${category.count}</span>
+                                </a>
+                            </div>
+                        `;
+                    });
+
+                    html += `</div>`;
+                }
+            });
+
+            // すべてのカテゴリーを表示するリンクを追加
+            const totalCount = Object.values(categoryCount).reduce((sum, count) => sum + count, 0);
+            const isAllActive = currentCategory === 'すべて' ? 'active' : '';
+            html += `
+                <div class="category-item" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #dee2e6;">
+                    <a href="javascript:void(0)" onclick="filterByCategory('すべて')" class="category-link ${isAllActive}" style="${isAllActive ? 'background: #007acc; color: white;' : ''}">
+                        <span class="category-name">すべての記事</span>
+                        <span class="category-count" style="${isAllActive ? 'background: rgba(255,255,255,0.3); color: white;' : ''}">${totalCount}</span>
+                    </a>
+                </div>
+            `;
+
+            categoryList.innerHTML = html;
+
+            // 人気タグも生成
+            createPopularTags();
+        }
+
+        // 現在のカテゴリーを取得
+        function getCurrentCategory() {
+            const activeBtn = document.querySelector('.category-btn.active');
+            return activeBtn ? activeBtn.dataset.category : 'すべて';
+        }
+
+        // 人気タグを表示
+        function createPopularTags() {
+            const tagCloud = document.getElementById('tag-cloud');
+            if (!tagCloud) return; // 要素が存在しない場合はスキップ
+
+            const popularTags = [
+                'AI活用', 'ChatGPT', 'マーケティング自動化', 'ウェビナー',
+                'メルマガ', 'セールスファネル', 'コンテンツ作成',
+                'リード獲得', 'オンラインビジネス', 'DX'
+            ];
+
+            let html = '';
+            popularTags.forEach(tag => {
+                html += `<a href="/blog/?tag=${encodeURIComponent(tag)}" class="tag-item">${tag}</a>`;
+            });
+
+            tagCloud.innerHTML = html;
+        }
+
         // カテゴリーフィルターを作成
         function createCategoryFilter(posts) {
             const filterContainer = document.getElementById('category-filter');
@@ -628,6 +740,16 @@
         // カテゴリーでフィルタリング
         function filterByCategory(category) {
             currentCategory = category;
+
+            // サイドバーのアクティブ状態を更新
+            document.querySelectorAll('.category-link').forEach(link => {
+                link.classList.remove('active');
+                // リンク内のテキストとカテゴリー名を比較
+                const categoryName = link.querySelector('.category-name');
+                if (categoryName && categoryName.textContent === category) {
+                    link.classList.add('active');
+                }
+            });
             
             // ボタンのアクティブ状態を更新
             document.querySelectorAll('.category-btn').forEach(btn => {
