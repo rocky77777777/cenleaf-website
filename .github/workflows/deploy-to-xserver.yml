@@ -1,0 +1,38 @@
+name: Deploy to Xserver
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # 手動実行も可能にする
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Xserver via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: sv7749.xserver.jp
+          username: cenleaf
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./
+          server-dir: public_html/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.github/**
+            **/README.md
+            **/package*.json
+            **/.DS_Store
+            **/backup/**
+            **/docs/**
+            **/tools/**
+            **/FTP情報
+            **/サイトマップ.md
