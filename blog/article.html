@@ -28,14 +28,156 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             overflow-x: hidden;
             word-wrap: break-word;
         }
 
+        /* 2カラムレイアウト */
+        .content-wrapper {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            max-width: 800px;
+        }
+
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 20px;
+        }
+
+        /* カテゴリーウィジェット */
+        .category-widget {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e9ecef;
+        }
+
+        .category-widget h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #007acc;
+            font-weight: bold;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-group {
+            margin-bottom: 24px;
+        }
+
+        .category-group-title {
+            font-size: 14px;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .category-item {
+            margin-bottom: 8px;
+        }
+
+        .category-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: #ffffff;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .category-link:hover {
+            background: #007acc;
+            color: #ffffff;
+            transform: translateX(4px);
+            border-color: #007acc;
+        }
+
+        .category-name {
+            font-size: 15px;
+        }
+
+        .category-count {
+            background: #e9ecef;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .category-link:hover .category-count {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        /* 人気タグウィジェット */
+        .tags-widget {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e9ecef;
+        }
+
+        .tags-widget h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #007acc;
+            font-weight: bold;
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-item {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #666;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .tag-item:hover {
+            background: #007acc;
+            color: #ffffff;
+            border-color: #007acc;
+            transform: translateY(-2px);
+        }
+
         /* ヘッダー */
         .header {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px 0;
             border-bottom: 2px solid #007acc;
             margin-bottom: 40px;
@@ -796,6 +938,22 @@
         }
 
         /* レスポンシブ */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                margin-top: 40px;
+            }
+
+            .main-content {
+                max-width: 100%;
+            }
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 24px;
@@ -835,16 +993,38 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- ヘッダー -->
-        <div class="header">
-            <a href="/" class="logo">CENLEAF</a>
-            <a href="/blog/" class="back-btn">ブログ一覧へ</a>
-        </div>
+    <!-- ヘッダー -->
+    <div class="header">
+        <a href="/" class="logo">CENLEAF</a>
+        <a href="/blog/" class="back-btn">ブログ一覧へ</a>
+    </div>
 
+    <div class="container">
         <!-- コンテンツエリア -->
-        <div id="content">
-            <div class="loading">記事を読み込み中</div>
+        <div class="content-wrapper">
+            <!-- メインコンテンツ -->
+            <div class="main-content" id="content">
+                <div class="loading">記事を読み込み中</div>
+            </div>
+
+            <!-- サイドバー -->
+            <aside class="sidebar" id="sidebar" style="display: none;">
+                <!-- カテゴリー一覧 -->
+                <div class="category-widget">
+                    <h3>📂 カテゴリー</h3>
+                    <ul class="category-list" id="category-list">
+                        <!-- カテゴリーがここに動的に追加されます -->
+                    </ul>
+                </div>
+
+                <!-- 人気タグ -->
+                <div class="tags-widget">
+                    <h3>🏷️ 人気タグ</h3>
+                    <div class="tag-cloud" id="tag-cloud">
+                        <!-- タグがここに動的に追加されます -->
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 
@@ -1068,6 +1248,152 @@
             return content;
         }
 
+        // カテゴリー一覧を取得して表示
+        async function loadCategories() {
+            try {
+                // microCMSから全記事を取得してカテゴリーを集計
+                const response = await fetch(`https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?limit=100`, {
+                    headers: {
+                        'X-MICROCMS-API-KEY': API_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch articles');
+                }
+
+                const data = await response.json();
+                const categoryCount = {};
+                const categoryMap = {};
+
+                // カテゴリーごとに記事数を集計
+                data.contents.forEach(article => {
+                    if (article.category) {
+                        const categoryName = typeof article.category === 'object' ? article.category.name : article.category;
+                        const categoryId = typeof article.category === 'object' ? article.category.id : article.category;
+
+                        if (!categoryCount[categoryName]) {
+                            categoryCount[categoryName] = 0;
+                            categoryMap[categoryName] = categoryId;
+                        }
+                        categoryCount[categoryName]++;
+                    }
+                });
+
+                // カテゴリーをグループ分け
+                const categories = {
+                    'マーケティング': [],
+                    'AI・自動化': [],
+                    'ビジネス': [],
+                    'その他': []
+                };
+
+                // カテゴリーを適切なグループに分類
+                Object.keys(categoryCount).forEach(categoryName => {
+                    const item = {
+                        name: categoryName,
+                        count: categoryCount[categoryName],
+                        id: categoryMap[categoryName]
+                    };
+
+                    if (categoryName.includes('マーケティング') || categoryName.includes('ウェビナー') || categoryName.includes('セミナー')) {
+                        categories['マーケティング'].push(item);
+                    } else if (categoryName.includes('AI') || categoryName.includes('自動化') || categoryName.includes('クローン')) {
+                        categories['AI・自動化'].push(item);
+                    } else if (categoryName.includes('ビジネス') || categoryName.includes('起業') || categoryName.includes('経営')) {
+                        categories['ビジネス'].push(item);
+                    } else {
+                        categories['その他'].push(item);
+                    }
+                });
+
+                // HTMLを生成
+                const categoryList = document.getElementById('category-list');
+                let html = '';
+
+                Object.keys(categories).forEach(groupName => {
+                    if (categories[groupName].length > 0) {
+                        html += `<div class="category-group">`;
+                        html += `<div class="category-group-title">${groupName}</div>`;
+
+                        categories[groupName].sort((a, b) => b.count - a.count).forEach(category => {
+                            html += `
+                                <div class="category-item">
+                                    <a href="/blog/?category=${encodeURIComponent(category.name)}" class="category-link">
+                                        <span class="category-name">${category.name}</span>
+                                        <span class="category-count">${category.count}</span>
+                                    </a>
+                                </div>
+                            `;
+                        });
+
+                        html += `</div>`;
+                    }
+                });
+
+                // すべてのカテゴリーを表示するリンクを追加
+                html += `
+                    <div class="category-item" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #dee2e6;">
+                        <a href="/blog/" class="category-link" style="background: #007acc; color: white;">
+                            <span class="category-name">すべての記事</span>
+                            <span class="category-count" style="background: rgba(255,255,255,0.3); color: white;">${data.totalCount || data.contents.length}</span>
+                        </a>
+                    </div>
+                `;
+
+                categoryList.innerHTML = html;
+
+                // 人気タグも生成
+                loadPopularTags();
+
+            } catch (error) {
+                console.error('カテゴリー取得エラー:', error);
+
+                // エラー時はデフォルトのカテゴリーを表示
+                const categoryList = document.getElementById('category-list');
+                categoryList.innerHTML = `
+                    <div class="category-group">
+                        <div class="category-group-title">カテゴリー</div>
+                        <div class="category-item">
+                            <a href="/blog/?category=AIマーケティング" class="category-link">
+                                <span class="category-name">AIマーケティング</span>
+                                <span class="category-count">8</span>
+                            </a>
+                        </div>
+                        <div class="category-item">
+                            <a href="/blog/?category=オートウェビナー" class="category-link">
+                                <span class="category-name">オートウェビナー</span>
+                                <span class="category-count">5</span>
+                            </a>
+                        </div>
+                        <div class="category-item">
+                            <a href="/blog/?category=AIクローン" class="category-link">
+                                <span class="category-name">AIクローン</span>
+                                <span class="category-count">3</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // 人気タグを表示
+        function loadPopularTags() {
+            const tagCloud = document.getElementById('tag-cloud');
+            const popularTags = [
+                'AI活用', 'ChatGPT', 'マーケティング自動化', 'ウェビナー',
+                'メルマガ', 'セールスファネル', 'コンテンツ作成',
+                'リード獲得', 'オンラインビジネス', 'DX'
+            ];
+
+            let html = '';
+            popularTags.forEach(tag => {
+                html += `<a href="/blog/?tag=${encodeURIComponent(tag)}" class="tag-item">${tag}</a>`;
+            });
+
+            tagCloud.innerHTML = html;
+        }
+
         // アクセス数をトラッキング
         function trackArticleView(articleId, articleTitle) {
             const viewsKey = 'article_views';
@@ -1100,6 +1426,10 @@
         // 記事を表示
         function displayArticle(article) {
             const content = document.getElementById('content');
+
+            // サイドバーを表示
+            document.getElementById('sidebar').style.display = 'block';
+            loadCategories();
             
             // SEOメタタグを動的に更新
             updateSEOMetaTags(article);
