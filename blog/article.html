@@ -1232,17 +1232,54 @@
         // 記事内容を読みやすく構造化する関数
         function enhanceArticleContent(content) {
             // ステップリストの自動変換は無効化（元のテキストをそのまま保持）
-            
+
+            // YouTube URLを自動的にiframeに変換
+            // パターン1: [youtube:動画ID] 形式
+            content = content.replace(/\[youtube:([a-zA-Z0-9_-]+)\]/g, function(match, videoId) {
+                return `<div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/${videoId}"
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                    </iframe>
+                </div>`;
+            });
+
+            // パターン2: YouTubeのURLを自動検出してiframeに変換
+            content = content.replace(/<p>https:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)[^<]*<\/p>/g, function(match, www, videoId) {
+                return `<div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/${videoId}"
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                    </iframe>
+                </div>`;
+            });
+
+            // パターン3: youtu.be形式のURLも対応
+            content = content.replace(/<p>https:\/\/youtu\.be\/([a-zA-Z0-9_-]+)[^<]*<\/p>/g, function(match, videoId) {
+                return `<div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/${videoId}"
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                    </iframe>
+                </div>`;
+            });
+
             // メリットを含むセクションをハイライトボックスに変換
-            content = content.replace(/(メリット[^<]*?)(<br\s*\/?>|\n)([^<]+)/g, 
+            content = content.replace(/(メリット[^<]*?)(<br\s*\/?>|\n)([^<]+)/g,
                 '<div class="highlight-box"><h4>✨ $1</h4><p>$3</p></div>');
 
             // 重要なポイントをハイライトボックスで囲む
-            content = content.replace(/(重要なのは[^<]+)/g, 
+            content = content.replace(/(重要なのは[^<]+)/g,
                 '<div class="highlight-box"><h4>💡 重要ポイント</h4><p>$1</p></div>');
 
             // 結論セクションをCTAボックスに変換
-            content = content.replace(/(まとめ|結論)[^<]*?(<br\s*\/?>|\n)([^<]+)/gi, 
+            content = content.replace(/(まとめ|結論)[^<]*?(<br\s*\/?>|\n)([^<]+)/gi,
                 '<div class="cta-box"><h4>📝 まとめ</h4><p>$3</p></div>');
 
             return content;
