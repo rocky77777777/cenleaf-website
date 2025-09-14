@@ -847,6 +847,15 @@
                 if (data.contents && data.contents.length > 0) {
                     console.log('🎉 microCMSの記事を表示します');
                     console.log('記事タイトル一覧:', data.contents.map(post => post.title));
+                    // 日付フィールドを確認
+                    if (data.contents.length > 0) {
+                        const sample = data.contents[0];
+                        console.log('📅 日付フィールドの確認:', {
+                            publishedAt: sample.publishedAt,
+                            createdAt: sample.createdAt,
+                            updatedAt: sample.updatedAt
+                        });
+                    }
                     // 記事を保存
                     allPosts = data.contents;
                     // カテゴリーフィルターを作成（非表示）
@@ -934,7 +943,32 @@
             switch(sortType) {
                 case 'newest':
                     // 新着順（デフォルト）
-                    sortedPosts.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+                    console.log('🔄 新着順でソート中...');
+                    console.log('ソート前の記事数:', sortedPosts.length);
+
+                    sortedPosts.sort((a, b) => {
+                        // microCMSの日付フィールドを複数チェック
+                        const dateA = new Date(a.publishedAt || a.createdAt || a.updatedAt || '2020-01-01');
+                        const dateB = new Date(b.publishedAt || b.createdAt || b.updatedAt || '2020-01-01');
+
+                        // NaNチェック
+                        if (isNaN(dateA.getTime())) {
+                            console.warn('⚠️ 無効な日付:', a.title, a.publishedAt, a.createdAt);
+                            return 1;
+                        }
+                        if (isNaN(dateB.getTime())) {
+                            console.warn('⚠️ 無効な日付:', b.title, b.publishedAt, b.createdAt);
+                            return -1;
+                        }
+
+                        return dateB - dateA;
+                    });
+
+                    console.log('✔️ 新着順ソート完了');
+                    console.log('ソート後のトップ記3件:', sortedPosts.slice(0, 3).map(p => ({
+                        title: p.title,
+                        date: p.publishedAt || p.createdAt || p.updatedAt
+                    })));
                     break;
                 
                 case 'popular':
