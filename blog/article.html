@@ -409,6 +409,50 @@
             }
         }
 
+        /* YouTube動画埋め込みスタイル */
+        .article-content .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9のアスペクト比 */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin: 30px 0;
+            background: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .article-content .video-container iframe,
+        .article-content .video-container object,
+        .article-content .video-container embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        /* 通常のiframe（YouTube以外）のスタイル */
+        .article-content iframe {
+            max-width: 100%;
+            margin: 25px 0;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* YouTube埋め込みの説明文 */
+        .article-content .video-caption {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: -20px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
         /* レスポンシブ対応 */
         @media (max-width: 768px) {
             .article-content .pros-cons {
