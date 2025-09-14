@@ -19,10 +19,11 @@ jobs:
           server: sv7749.xserver.jp
           username: cenleaf
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
+          protocol: ftps
           port: 21
           local-dir: ./
           server-dir: public_html/
+          dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
