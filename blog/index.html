@@ -500,9 +500,9 @@
             <div class="main-content">
                 <!-- ソートボタン -->
                 <div class="sort-container">
-                    <button class="sort-btn active" onclick="sortArticles('newest')">🆕 新着順</button>
-                    <button class="sort-btn" onclick="sortArticles('popular')">🔥 人気順</button>
-                    <button class="sort-btn" onclick="sortArticles('random')">🎲 ランダム</button>
+                    <button class="sort-btn active" onclick="sortArticles('newest', this)">🆕 新着順</button>
+                    <button class="sort-btn" onclick="sortArticles('popular', this)">🔥 人気順</button>
+                    <button class="sort-btn" onclick="sortArticles('random', this)">🎲 ランダム</button>
                 </div>
 
                 <!-- ブログ記事コンテナ -->
@@ -780,7 +780,8 @@
                 });
             }
 
-            // 記事を表示
+            // currentFilteredPostsを更新してから表示
+            currentFilteredPosts = filteredPosts;
             displayPosts(filteredPosts);
         }
 
@@ -911,13 +912,22 @@
         let currentSort = 'newest';
         let currentFilteredPosts = [];
 
-        function sortArticles(sortType) {
+        function sortArticles(sortType, buttonElement) {
+            // currentFilteredPostsが空の場合は現在のフィルターを再適用
+            if (!currentFilteredPosts || currentFilteredPosts.length === 0) {
+                const currentCategory = getCurrentCategory();
+                filterByCategory(currentCategory);
+                return;
+            }
+
             // ボタンのアクティブ状態を更新
             document.querySelectorAll('.sort-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
-            
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            }
+
             currentSort = sortType;
             let sortedPosts = [...currentFilteredPosts];
             
