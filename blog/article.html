@@ -345,17 +345,81 @@
             text-decoration: none;
         }
 
+        /* テーブルスタイル */
+        .article-content table {
+            width: 100%;
+            margin: 25px 0;
+            border-collapse: collapse;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .article-content table thead {
+            background: linear-gradient(135deg, #007acc 0%, #005a99 100%);
+            color: #ffffff;
+        }
+
+        .article-content table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #005a99;
+        }
+
+        .article-content table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .article-content table tbody tr:hover {
+            background: #f8f9fa;
+            transition: background 0.2s ease;
+        }
+
+        .article-content table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* テーブル内のリンク */
+        .article-content table a {
+            color: #007acc;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .article-content table a:hover {
+            text-decoration: underline;
+        }
+
+        /* モバイル用テーブルスタイル */
+        @media (max-width: 768px) {
+            .article-content table {
+                font-size: 12px;
+            }
+
+            .article-content table th,
+            .article-content table td {
+                padding: 10px;
+            }
+        }
+
         /* レスポンシブ対応 */
         @media (max-width: 768px) {
             .article-content .pros-cons {
                 grid-template-columns: 1fr;
             }
-            
+
             .article-content .step-item {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .article-content .step-number {
                 margin-right: 0;
                 margin-bottom: 10px;
