@@ -21,7 +21,6 @@ jobs:
         server-dir: /cenleaf.com/public_html/
         protocol: ftps
         port: 21
-        dangerous-clean-slate: true
         exclude: |
           **/.git*
           **/.git*/**
