@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ミニチュア新世界</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- three.js の canvas を入れる全画面コンテナ（§9.1） -->
+  <div id="app"></div>
+
+  <!-- 作品タイトル（左上・小さく） -->
+  <div id="title">ミニチュア新世界<span class="sub">― 下町ジオラマ ―</span></div>
+
+  <!-- 操作ボタン群＋凡例（右上） -->
+  <div id="controls">
+    <div class="btn-row">
+      <!-- 起動は夜がデフォルトなので、押すと昼になる文言で開始（§9 UI.init の規約） -->
+      <button id="btn-night" type="button">☀ 昼にする</button>
+      <button id="btn-reset" type="button">視点リセット</button>
+      <button id="btn-walk" type="button">🚶 歩行者目線</button>
+      <button id="btn-lookup" type="button">🔭 見上げ</button>
+      <button id="btn-explore" type="button">🎮 散策モード</button>
+    </div>
+    <!-- 凡例は ui.js が動的生成（色チップ＋ラベル） -->
+    <div id="legend"></div>
+  </div>
+
+  <!-- 操作ヒント（数秒で薄くなる：ui.js / css 側で制御） -->
+  <div id="hint">ドラッグで回転・ホイールでズーム ／ 建物をクリックで情報</div>
+
+  <!-- 情報パネル（初期は .hidden で非表示） -->
+  <div id="info-panel" class="hidden">
+    <button id="info-close" type="button" aria-label="閉じる">×</button>
+    <h2 id="info-name"></h2>
+    <p id="info-body"></p>
+  </div>
+
+  <!-- 1) ライブラリ（先に・この順／§11 厳守） -->
+  <script src="lib/three.min.js"></script>
+  <script src="lib/OrbitControls.js"></script>
+  <!-- 2) 自前モジュール（依存順／§11 厳守） -->
+  <script src="js/scene.js"></script>
+  <script src="js/textures.js"></script>
+  <script src="js/tower.js"></script>
+  <script src="js/buildings.js"></script>
+  <script src="js/props.js"></script>
+  <script src="js/interaction.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/explore.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

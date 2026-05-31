@@ -1,0 +1,375 @@
+/* =========================================================
+   ミニチュア新世界 — UI スタイル
+   §9.3 デザイン規約準拠:
+   - three.js の上に重ねる HTML/CSS
+   - 半透明の濃いパネル rgba(20,22,28,.82) ＋白文字、角丸12px、薄い枠
+   - border-left のアクセント縦線は禁止 → 種別は丸チップ(色)＋アイコンで区別
+   - フォント system-ui、余白十分、アニメは最小（パネルのフェードのみ）
+   - 過度なグラデ背景・ネオンUI・紫×青配色は避ける（落ち着いた下町の夜）
+   ========================================================= */
+
+/* ---- リセット & ベース ---- */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;            /* キャンバス全画面・スクロールバー禁止 */
+  background: #0a0e1a;         /* 初期描画前の地色（夜空に近い濃紺） */
+  color: #f2f4f8;
+  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---- キャンバス全画面コンテナ（§9.1 #app: fixed, inset0, z0） ---- */
+#app {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* three.js が挿入する canvas を確実にフィット */
+#app canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  /* 掴み感（OrbitControls）。interaction.js がホバー時 pointer に差し替える */
+  cursor: grab;
+}
+#app canvas:active {
+  cursor: grabbing;
+}
+
+/* =========================================================
+   タイトル（左上・小さく / §9.1 #title）
+   ========================================================= */
+#title {
+  position: fixed;
+  top: 16px;
+  left: 18px;
+  z-index: 10;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fdf6ec;
+  /* ネオンっぽくしすぎず、夜景で読めるよう軽い影のみ */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65), 0 0 1px rgba(0, 0, 0, 0.9);
+  pointer-events: none;        /* 視点操作の邪魔をしない */
+  user-select: none;
+}
+#title .sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #ffb877;             /* ほんのり提灯色のアクセント（控えめ） */
+  opacity: 0.85;
+}
+
+/* =========================================================
+   操作ボタン群＋凡例（右上 / §9.1 #controls）
+   ========================================================= */
+#controls {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: min(92vw, 340px);
+}
+
+.btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ボタン: 半透明ダーク・薄枠・控えめ。border-left なし */
+#controls button {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(20, 22, 28, 0.82);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #f2f4f8;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 9px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.06s ease;
+  white-space: nowrap;
+}
+#controls button:hover {
+  background: rgba(34, 38, 48, 0.9);
+  border-color: rgba(255, 255, 255, 0.26);
+}
+#controls button:active {
+  transform: translateY(1px);
+}
+#controls button:focus-visible {
+  outline: 2px solid #ffb347;   /* 暖色のアクセント（ランドマーク色と統一） */
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   凡例（#legend）色チップ＋ラベル。ui.js が項目を生成
+   ========================================================= */
+#legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 11px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(20, 22, 28, 0.82);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.2;
+  user-select: none;
+}
+.legend-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #aab2c0;
+  margin-bottom: 1px;
+  text-transform: none;
+}
+/* 1項目: 丸チップ + アイコン + ラベル（クリックで City.focusOn） */
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: -3px -5px;
+  border-radius: 8px;
+  color: #e9edf4;
+  transition: background 0.15s ease;
+}
+.legend-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+.legend-item .chip {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;          /* 区別は「丸チップ」で（border-left 禁止の代替） */
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35) inset;
+}
+.legend-item .ico {
+  flex: none;
+  font-size: 13px;
+  line-height: 1;
+  width: 16px;
+  text-align: center;
+}
+.legend-item .lab {
+  white-space: nowrap;
+}
+
+/* =========================================================
+   操作ヒント（#hint）数秒で薄くなる
+   ========================================================= */
+#hint {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(20, 22, 28, 0.7);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: #d6dce6;
+  pointer-events: none;
+  user-select: none;
+  /* 表示後 6秒かけてフェードアウト（ui.js でも .faded を付与） */
+  opacity: 0.96;
+  transition: opacity 1.4s ease;
+}
+#hint.faded {
+  opacity: 0;
+}
+
+/* =========================================================
+   情報パネル（§9.1 #info-panel：右下・.hidden で非表示）
+   ========================================================= */
+#info-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  width: min(92vw, 340px);
+  padding: 18px 18px 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(20, 22, 28, 0.86);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+  /* パネル種別のアクセントは「上の丸ドット」で表現（border-left/border-top 帯は使わない） */
+  /* フェードイン（アニメは最小） */
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+/* 非表示（共通 .hidden は display:none） */
+.hidden {
+  display: none !important;
+}
+
+/* 種別を示す小さな丸ドット（パネル左上に浮かべる：縦線ではなく点） */
+#info-panel::before {
+  content: "";
+  position: absolute;
+  top: 21px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;        /* パネル枠線上に半分かかる小さなドット */
+  border-radius: 50%;
+  background: #888f9c;         /* 既定色。kind クラスで上書き */
+  box-shadow: 0 0 0 3px rgba(20, 22, 28, 0.86);
+}
+
+#info-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cfd5df;
+  font-size: 20px;
+  line-height: 1;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+#info-close:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+#info-close:focus-visible {
+  outline: 2px solid #ffb347;
+  outline-offset: 2px;
+}
+
+#info-name {
+  margin: 2px 34px 8px 6px;    /* 右は×ボタン分、左はドット分の余白 */
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+#info-body {
+  margin: 0 2px 0 6px;
+  font-size: 13.5px;
+  line-height: 1.78;
+  color: #dce1ea;
+  white-space: pre-line;       /* §9 契約：本文の改行 \n をそのまま表示 */
+}
+
+/* =========================================================
+   kind 別アクセント色（§9.1 / §9.2）
+   見出し文字色 と パネル上ドット色 を切替（背景帯・縦線は使わない）
+   ========================================================= */
+.k-landmark #info-name { color: #ffc777; }   /* 🗼 ランドマーク 暖色 */
+.k-landmark::before    { background: #ffb347; }
+
+.k-shop #info-name { color: #ff7a7a; }        /* 🏮 商店・店 赤 */
+.k-shop::before    { background: #e04a4a; }
+
+.k-statue #info-name { color: #e7c560; }      /* 🧸 像 金 */
+.k-statue::before    { background: #d9b34a; }
+
+.k-street #info-name { color: #84a9e0; }      /* 🛣 通り 青 */
+.k-street::before    { background: #5a86c4; }
+
+.k-sign #info-name { color: #79d6c6; }        /* 看板・名物 */
+.k-sign::before    { background: #3fb9a6; }
+
+.k-prop #info-name { color: #ff9e6b; }        /* 提灯など */
+.k-prop::before    { background: #ff7a3c; }
+
+/* =========================================================
+   レスポンシブ：モバイル幅で崩れない（§9.3）
+   ========================================================= */
+@media (max-width: 560px) {
+  #title {
+    font-size: 16px;
+    top: 12px;
+    left: 14px;
+  }
+  #title .sub { font-size: 10px; }
+
+  #controls {
+    top: 10px;
+    right: 10px;
+    gap: 8px;
+  }
+  #controls button {
+    font-size: 12px;
+    padding: 8px 11px;
+  }
+  #legend {
+    font-size: 11px;
+    padding: 9px 11px;
+  }
+
+  #info-panel {
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: auto;               /* 左右いっぱいに（min(92vw,340px) 相当を維持） */
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  #hint {
+    font-size: 11.5px;
+    padding: 7px 13px;
+    bottom: 12px;
+    width: max-content;
+    max-width: 92vw;
+    text-align: center;
+  }
+}
+
+/* アニメ削減設定の尊重 */
+@media (prefers-reduced-motion: reduce) {
+  #info-panel,
+  #hint,
+  #controls button,
+  .legend-item,
+  #info-close {
+    transition: none;
+  }
+}
