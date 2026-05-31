@@ -1,9 +1,7 @@
 name: Deploy to Xserver
 
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch:  # 手動実行のみ。自動push連動は停止（本番上書き事故の再発防止）
 
 jobs:
   deploy:
